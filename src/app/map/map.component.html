@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="text-center">
+        <h3>
+          <div #gmap style="width:100%;height:400px"></div>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form class="form-horizontal" novalidate="">
+        <div class="mb-3">
+          <label for="address">Full address</label>
+          <div class="input-group">
+            <input class="form-control" [(ngModel)]="address_string" id="address_string" name="address_string" placeholder="Address" type="text">
+            <div class="invalid-feedback">
+              Please enter the address.
+            </div>
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-primary" (click)="findLocation()">Search</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>  
+  </div>
+</div>
+<br>
+
+<app-form [formResult]="formResult" [formHidden]="formHidden"></app-form>
