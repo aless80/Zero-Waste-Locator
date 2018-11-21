@@ -1,7 +1,5 @@
 # GmapsNg7
 
-## **Work in progress!**
-
 ## What this App is about
 
 I am into [Zero Waste](https://www.goingzerowaste.com/zero-waste-1/) lifestyle. In brief, Zero Waste for me is about reducing consumption, in particular plastic products. 
@@ -9,7 +7,7 @@ I moved to Oslo in Norway, I realized it takes time to learn where plastic-free 
 
 For this reason I am implementing this app where users can search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up. 
 
-### Progress 
+### Progress report
 
 This is a MEAN app () and it is still under development. The frontend using Google Maps API is not complete but it works. When you click on a marker two components appear with information on the store and some dummy products. I am setting up the NodeJS backened, MongoDB database, service layer, so that The idea is to store results searched in the embedded Google Maps to the MongoDB database.  
 
