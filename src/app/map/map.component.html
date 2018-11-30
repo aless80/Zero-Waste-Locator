@@ -16,7 +16,7 @@
         <div class="mb-3">
           <label for="address">Full address</label>
           <div class="input-group">
-            <input class="form-control" [(ngModel)]="address_string" id="address_string" name="address_string" placeholder="Address" type="text">
+            <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text">
             <div class="invalid-feedback">
               Please enter the address.
             </div>
@@ -28,7 +28,9 @@
       </form>
     </div>  
   </div>
-</div>
-<br>
 
-<app-form [formResult]="formResult" [formHidden]="formHidden"></app-form>
+</div>
+
+<hr class="mb-4">
+<app-form [formChanged]="formChanged" [formResult]="formResult"></app-form>
+

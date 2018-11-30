@@ -13,6 +13,8 @@ This is a MEAN app () and it is still under development. The frontend using Goog
 
 This project usesthe Google Maps API in Angular CLI 7.0.6, NodeJS 8.10.0, Angular: 7.0.4. I am developing in Linux using MongoDB v3.4.17. 
 
+NB: This app does not use agm-core for Google Maps as described in many tutorials. I initially took that approach but I could not find enough documentation to extend it and implement functionalities such as InfoWindow or callbacks from markers.
+
 ## Installation
 
 Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. 
@@ -20,6 +22,14 @@ Install node, npm, mongoDB, Angular CLI, and see the standard [generated README]
 Get a google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html
 
 I will write a more thorough guide in the future. 
+
+<!--
+npm i --save-dev babel-cli babel-preset-env
+npm i cors --save
+npm i mongoose --save
+npm i express --save
+-->
+
 
 ## Launching the app
 
@@ -34,6 +44,8 @@ Launch NodeJS for the backend:
 Launch Angular for the frontend:
 
 ```ng serve```
+
+Open your browser at http://localhost:4200/
 
 ## Some references
 
@@ -50,7 +62,7 @@ Here are some references I am using to develop MEAN applications:
 
 [Post on stackoverflow about Google Maps' infowindow](https://stackoverflow.com/a/31496676/3592827)
 
-
+[Create a MEAN Stack Google Map App](https://scotch.io/tutorials/making-mean-apps-with-google-maps-part-i)
 
 ## Generated README
 

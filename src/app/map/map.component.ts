@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViewChild } from '@angular/core';
 //import { FormComponent }  from '../form/form.component';
+import { StoreService } from '../services/store.service';
+import { Store } from '../models/store.model';
+
+import { Subscription } from 'rxjs'; //to unsubscribe
 
 //TODO: do not run search when empty address
 //TODO: decide many markers or only one. then probably clear form when second search
@@ -8,35 +12,45 @@ import { ViewChild } from '@angular/core';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
 })
+
 export class MapComponent implements OnInit {
   @ViewChild('gmap') gmapElement: any;
   map: google.maps.Map;
   geocoder: any;
-  latitude:number = 59.935;
-  longitude:number = 10.79;
-  address_string: string;
-  componentRestrictions: string = "NO"; //restrict search to Norway
-
-  //isTracking: true;
-  currentLat: any;
-  currentLong: any;
-
   curr_marker: google.maps.Marker;
   markers: any[] = [];
   selectedMarkerIndex: number;
-  //marker_types: string[];
   infowindow: google.maps.InfoWindow = new google.maps.InfoWindow;
 
-  formResult: any;
+  //Default settings for map and search. They can be removed
+  default_latitude:number = 49.935;
+  default_longitude:number = 10.79;
+  search_string: string;
+  componentRestrictions: string = "NO"; //restrict search to Norway
 
-  ngOnInit() {}
+  //Location tracker
+  currentLat: any;
+  currentLong: any;
+  //isTracking: true;
 
-  ngAfterContentInit() {
+  //marker_types: string[];
+  stores: Store[];
+  storeListSub: Subscription;  //to unsubscribe
+  
+  //data passed between map and form
+  formResult: Store;
+  formChanged: boolean = false;
+  formResultTEST: Store;
+  constructor(private storeService: StoreService){}
+
+  ngOnInit() { 
+    //Load stores
+    this.getStores();
     //Create the map
     var mapProp = {
-      center: new google.maps.LatLng(49.935, 10.79),
+      center: new google.maps.LatLng(this.default_latitude, this.default_longitude),
       zoom: 10,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -48,9 +62,9 @@ export class MapComponent implements OnInit {
     //Find current location
     this.findMe()
     //Default location for search
-    this.address_string = 'Bjerregaards gate 60C, 0174 Oslo';
+    this.search_string = 'Bjerregaards gate 60C, 0174 Oslo';
     //Default form
-    this.formResult = {
+    /*this.formResult = {
       address: 'Bjerregaards gate 60C, 0174 Oslo, Norway',
       url: 'https://www.google.com/maps/search/?api=1&query='+ encodeURI('Bjerregaards gate 60C, 0174 Oslo'),
       locality: 'Oslo',
@@ -61,7 +75,17 @@ export class MapComponent implements OnInit {
       lat:'59.9267819',
       lng: '10.748087599999963'
     };
+    this.formChanged = !this.formChanged*/  
   }
+  //Unsubscribe from service
+  ngOnDestroy() {
+    console.log('ngOnDestroy')
+    this.storeListSub.unsubscribe();
+  }
+  
+
+
+
 
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
   findMe() {
@@ -75,7 +99,7 @@ export class MapComponent implements OnInit {
     }
   }
   showCurrentPosition(position, icon?: string, title?: string) {
-    if (icon == undefined) icon = 'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
+    if (icon == undefined) icon =     'https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png';
     if (title == undefined) title = 'No title';
 
     this.currentLat = position.coords.latitude;
@@ -106,29 +130,46 @@ export class MapComponent implements OnInit {
     if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
     //TODO: do not run if no address
     this.geocoder.geocode({
-      'address': this.address_string,
+      'address': this.search_string,
       'region': 'no', //region bias to Norway
       'componentRestrictions': {country: this.componentRestrictions} //country restriction to Norway
     }, (results, status) => {
-      console.log('findLocation results[0]:',results[0]);
+      console.log('findLocation status:',status,' results[0]:',results[0]);
       if (status == google.maps.GeocoderStatus.OK) {
         this.map.setCenter(results[0].geometry.location);
-        this.setTempMarker(results[0], undefined, 'Search result')
-      } else {
-        alert('Geocode was not successful for the following reason: ' + status);
+        //this.setTempMarker(results[0], undefined, 'Search result');
+        var store = this.storeService.result2Store(results[0]);
+        //Pass data to form component TODO:review when more search
+        /*this.formResult = {
+          address: 'address, 0174 Oslo, Norway',
+          //url: 'https://www.google.com/maps/search/?api=1&query='+ encodeURI('Bjerregaards gate 60C, 0174 Oslo'),
+          locality: 'hey',
+          //route: 'hey',
+          street_num: '',
+          zip: '',
+          country: 'Norway',
+          coords: [59.666,10.666],
+          descr: 'hey',
+          type:, '',
+          username: 'hey'
+        };*/
+        this.formResult = this.storeService.result2Store(results[0]);
+        this.formChanged = !this.formChanged;
+        console.log(this.formChanged)
+        this.setTempMarker(store, undefined, 'Search result');    
       }
     })
+    
   }
- 
-  setTempMarker(result, icon?: string, title?: string){
+
+  setTempMarker(store_obj, icon?: string, title?: string){
     //TODO: check if point already exists!
     var marker = new google.maps.Marker({
-      position: result.geometry.location,
+      position: new google.maps.LatLng(store_obj.coords[0], store_obj.coords[1]),
       map: this.map,
       title: title,
-      icon: icon,
-      //content: undefined
-    })
+      icon: icon
+    });
     //Create markerinfo object
     /*var markerinfo = {
       //'markerind': this.markers.length,
@@ -136,7 +177,7 @@ export class MapComponent implements OnInit {
       'formatted_address': result.formatted_address
     }*/
     //Add InfoWindow with listeners to marker
-    //https://stackoverflow.com/questions/31494380/google-maps-change-content-of-infowindow    
+    //https://stackoverflow.com/questions/31494380/google-maps-change-content-of-infowindow 
     //Create the node shown in marker's InfoWindow
     var iwdiv = document.createElement('div');
     iwdiv.id='node';
@@ -146,7 +187,6 @@ export class MapComponent implements OnInit {
     var input1 = document.createElement('input');
     input1.id = 'input1';
     input1.type = 'text';
-    //input1.value = markerinfo.markertype;
     input1.value = 'some type';
     input1.style.width = '200px';
     var input2 = document.createElement('input');
@@ -165,8 +205,7 @@ export class MapComponent implements OnInit {
     div.appendChild(document.createElement('br'));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
-    //iwdiv.appendChild(document.createTextNode(markerinfo.formatted_address));
-    iwdiv.appendChild(document.createTextNode(result.formatted_address));
+    iwdiv.appendChild(document.createTextNode(store_obj.descr));
     iwdiv.appendChild(document.createElement('br'));
     iwdiv.appendChild(div);
     //Click listener to marker to set and open InfoWindow
@@ -175,48 +214,13 @@ export class MapComponent implements OnInit {
       //this.infowindow.setContent(marker.content);
       this.infowindow.setContent(iwdiv);
       this.infowindow.open(this.map, marker);
-      console.log('marker: ',marker)
+      /*console.log('marker: ',marker)
       console.log('this.infowindow: ',this.infowindow)
-      console.log('result: ',result)
+      console.log('store_obj: ',store_obj)
       console.log('this: ',this)
       console.log('this.selectedMarkerIndex: ',this.selectedMarkerIndex)
-      
-      
-      //Pass data to form component
-      //this.formResult =  {address: markerinfo.formatted_address};
-      this.formResult = {
-        formatted_address: result.formatted_address,
-        url: 'https://www.google.com/maps/search/?api=1&query='+ encodeURI(result.formatted_address),
-        locality: '',
-        route: '',
-        street_number: '',
-        postal_code: '',
-        country: '',
-        lat:result.geometry.location.lat(),
-        lng:result.geometry.location.lng()        
-      };
-      for (var i = 0; i < result.address_components.length; i++) {
-        if (result.address_components[i].types.includes("route")) {
-          this.formResult.route = result.address_components[i].long_name
-          this.formResult.address = this.formResult.route
-        }
-        if (result.address_components[i].types.includes("street_number")) {
-          this.formResult.street_number = result.address_components[i].short_name
-          this.formResult.address += ', ' + this.formResult.street_number;
-        }
-        if (result.address_components[i].types.includes("locality"))
-          this.formResult.locality = result.address_components[i].long_name
-        if (result.address_components[i].types.includes("administrative_area_level_1"))
-          this.formResult.adm_area_level_1 = result.address_components[i].long_name
-        if (result.address_components[i].types.includes("postal_code"))
-          this.formResult.postal_code = result.address_components[i].short_name
-        if (result.address_components[i].types.includes("country"))
-          this.formResult.country = result.address_components[i].long_name
-      };
-      console.log('this.formResult: ', this.formResult)
-    });    
-    console.log('marker: ', marker)
-
+      */
+    });
     //Push marker to markers
     this.markers.push(marker);
     //Close InfoWindow
@@ -248,6 +252,54 @@ export class MapComponent implements OnInit {
     this.markers.splice(markerind,1)
     console.log('deleteMarker after: ',this.markers)
   }
+
+  ///API calls through service
+  // Fetches all documents.
+  getStoresV1() {
+    this.storeService
+      .getStores()
+      .subscribe((data: Store[]) => {
+        this.stores = data;
+        this.updateMap();
+        },
+        err => { console.error(err); }
+      );    
+  }
+  getStores() {
+    this.storeListSub = this.storeService
+      .getStores()
+      .subscribe(
+        (data: Store[]) => {
+          this.stores = data;
+          this.updateMap();
+        },
+        err => { console.error(err); }
+      );
+  }
+  updateMap(){
+    this.stores.forEach(element => {
+      //console.log('updateMap: ',element)
+      this.setTempMarker(element, 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png', element.descr);
+    });    
+  }
+  // Deletes the selected document and refreshes the document view.
+  deleteStore(id) {
+    this.storeService.deleteStore(id).subscribe(() => {
+      this.getStores();
+    });
+  }
+  /*
+  //Adds a document
+  Question: after storage will I have to get the ID somehow so that I can update it?
+  addStore() {
+    this.storeService
+      .addStore(lat, lng, location, address, street_num, zip, country, descr, username)
+      .subscribe()
+  }
+  // Redirects to the /edit route.
+  editStore(id) {
+    this.router.navigate([`/edit/${id}`]);
+  }*/
 
   /// Maybe useful later
   /*setMapOnAll(map) {

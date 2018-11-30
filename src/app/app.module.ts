@@ -5,16 +5,21 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { FormComponent } from './form/form.component';
 import { StoreService } from './services/store.service';
-
+import { SaveComponent } from './save/save.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    FormComponent
+    FormComponent,
+    SaveComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [StoreService],
   bootstrap: [AppComponent]
