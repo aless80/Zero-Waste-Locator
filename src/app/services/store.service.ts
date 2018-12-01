@@ -17,19 +17,16 @@ export class StoreService {
   constructor(private http: HttpClient) { }
 
 
-   // Fetches all documents.
-  geocodeCallback() {
-    var url = `${this.uri}/${this.collection}/geocallback`
-    console.log('service geocodeCallback: ',url)
-    var out = this.http.get(url);
-    return out
-  }
-
+  // Call node-geocoder
   geocodePromise() {
+    //maybe use something like:
+    //import { map } from 'rxjs/operators/'
+    //var out = this.http.get(url).pipe(map(res => res.json()))
     var url = `${this.uri}/${this.collection}/geopromise`
     console.log('service geocodePromise: ',url)
-    var out = this.http.get(url);
-    console.log('service out: ',out) //promise
+    var out = this.http.get(url)
+      //.subscribe(response => console.log('service geocodePromise subscribe: ',response))
+      //console.log('service out: ',out) //promise
     return out
   }
   
@@ -49,10 +46,9 @@ export class StoreService {
 
   // Creates a new document.
   addStore(store) {
-    const newstore = {
-      lat: store.lat,
-      lng: store.lng,
-      location: store.location,  // [Long; Lat]
+    /*const newstore = {
+      coords: [store.lat, store.lng],
+      location: store.location,
       address: store.address,
       street_num: store.street_num,
       zip: store.zip,
@@ -62,6 +58,11 @@ export class StoreService {
       username: store.username
     };
     return this.http.post(`${this.uri}/${this.collection}/add`, newstore);
+    */
+    var url = `${this.uri}/${this.collection}/add`
+    console.log('store.service addStore:',url)
+    console.log('addStore',store)
+    return this.http.post(url, store);
   }
 
   // Updates an existing document.

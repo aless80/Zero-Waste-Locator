@@ -63,29 +63,30 @@ export class MapComponent implements OnInit {
     this.findMe()
     //Default location for search
     this.search_string = 'Bjerregaards gate 60C, 0174 Oslo';
-    //Default form
-    /*this.formResult = {
-      address: 'Bjerregaards gate 60C, 0174 Oslo, Norway',
-      url: 'https://www.google.com/maps/search/?api=1&query='+ encodeURI('Bjerregaards gate 60C, 0174 Oslo'),
-      locality: 'Oslo',
-      route: 'Bjerregaards gate',
-      street_number: '60C',
-      postal_code: '0174',
-      country: 'Norway',
-      lat:'59.9267819',
-      lng: '10.748087599999963'
-    };
-    this.formChanged = !this.formChanged*/  
   }
-  //Unsubscribe from service
+  
   ngOnDestroy() {
+    //Unsubscribe from service
     console.log('ngOnDestroy')
     this.storeListSub.unsubscribe();
   }
   
 
-
-
+  ///Trying geocoding using in node-geocoder in backend
+  testgeocode: any;
+  geocode(){
+    //this.testgeocode = this.storeService.geocodeCallback()
+    console.log('map geocode')
+    this.storeService
+      .geocodePromise()
+      .subscribe(res => {
+          console.log('map geocode.subscribe res:',res)
+          this.testgeocode = res[0]
+        },
+        err => { console.error('map err:',err); },
+        () => {console.log('Completed') }
+      );
+  }
 
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
   findMe() {
@@ -140,19 +141,6 @@ export class MapComponent implements OnInit {
         //this.setTempMarker(results[0], undefined, 'Search result');
         var store = this.storeService.result2Store(results[0]);
         //Pass data to form component TODO:review when more search
-        /*this.formResult = {
-          address: 'address, 0174 Oslo, Norway',
-          //url: 'https://www.google.com/maps/search/?api=1&query='+ encodeURI('Bjerregaards gate 60C, 0174 Oslo'),
-          locality: 'hey',
-          //route: 'hey',
-          street_num: '',
-          zip: '',
-          country: 'Norway',
-          coords: [59.666,10.666],
-          descr: 'hey',
-          type:, '',
-          username: 'hey'
-        };*/
         this.formResult = this.storeService.result2Store(results[0]);
         this.formChanged = !this.formChanged;
         console.log(this.formChanged)

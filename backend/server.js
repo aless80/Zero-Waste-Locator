@@ -7,7 +7,6 @@ import Store from './models/store';
 const app = express();
 const router = express.Router();
 
-
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -18,6 +17,36 @@ const connection = mongoose.connection;
 
 connection.once('open', () => {
     console.log('MongoDB database connection established successfully!');
+});
+
+
+
+
+
+
+
+
+///Trying to use node-geocoder
+var NodeGeocoder = require('node-geocoder');
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: 'YOUR API KEY ENABLED FOR SERVER USE',
+  formatter: null
+};
+var geocoder = NodeGeocoder(options);
+// geocoding using node-geocoder
+router.route('/stores/geopromise').get((request, response) => {
+  var promise = geocoder.geocode('29 champs elysée paris')
+  .then(res => {
+      console.log('Geocoding successful:' + res[0]);
+    },reason => {
+      console.log('rejected',reason)
+    })
+  .catch(err => {
+    console.log('Geocoding failed\n' + err);
+  });
+  response.json(promise)
 });
 
 
@@ -46,6 +75,8 @@ router.route('/stores/:id').get((req, res) => {
 
 // Adds a document.
 router.route('/stores/add').post((req, res) => {
+  console.log(req)
+  console.log(req.body)
   let store = new Store(req.body);
   store.save()
     .then(store => {

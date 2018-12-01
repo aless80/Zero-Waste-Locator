@@ -29,8 +29,16 @@
     </div>  
   </div>
 
-</div>
+  <!-- I am considering to move the search to its own component, as a sibling component of the map one. Now it is a child of the maps component. This works
+  <br>
+  <app-save (search)="findLocation($event)"></app-save>
+  -->
 
+  <!-- I am trying to use node-geocoder. I cannot get the testgeocode variable yet-->
+  <button type="submit" class="btn btn-primary" (click)="geocode()">call node-geocoder</button>
+  testgeocode:{{testgeocode}}
+
+</div>
 <hr class="mb-4">
 <app-form [formChanged]="formChanged" [formResult]="formResult"></app-form>
 

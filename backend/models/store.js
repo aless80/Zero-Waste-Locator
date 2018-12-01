@@ -3,9 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 //Issue changed to -> Store
 let Store = new Schema({
-    //lat: {type: Number, required: true},
-    //lng: {type: Number, required: true},
-    coords: {type: [Number], required: true}, // [Long, Lat]
+    coords: {type: [Number], required: true},
     address: {type: String, required: true},
     street_num: {type: String},
     locality: {type: String},
