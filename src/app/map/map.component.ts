@@ -43,6 +43,10 @@ export class MapComponent implements OnInit {
   formResult: Store;
   formChanged: boolean = false;
   formResultTEST: Store;
+
+  //message component
+  msgText: string = '';
+
   constructor(private storeService: StoreService){}
 
   ngOnInit() { 
@@ -75,17 +79,27 @@ export class MapComponent implements OnInit {
   ///Trying geocoding using in node-geocoder in backend
   testgeocode: any;
   geocode(){
-    //this.testgeocode = this.storeService.geocodeCallback()
-    console.log('map geocode')
-    this.storeService
+    console.log('map geocode clicked')
+    var out = this.storeService
       .geocodePromise()
-      .subscribe(res => {
+    console.log('map geocode out:',out)
+    out.subscribe(res => {
           console.log('map geocode.subscribe res:',res)
-          this.testgeocode = res[0]
+          this.testgeocode = res;
+          this.showAlert('Store geocoded'+res)
         },
-        err => { console.error('map err:',err); },
-        () => {console.log('Completed') }
+        err => console.error('map err:',err),
+        () => console.log('Completed')
       );
+  }
+  //try to subscribe in service
+  geocode2(){
+    console.log('map geocode2 clicked')
+    this.storeService
+      .geocodePromise2( callback => {3
+        this.testgeocode = this.storeService.test;
+        console.log('map geocode2 this.storeService.test',this.storeService.test)
+      });
   }
 
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
@@ -140,10 +154,10 @@ export class MapComponent implements OnInit {
         this.map.setCenter(results[0].geometry.location);
         //this.setTempMarker(results[0], undefined, 'Search result');
         var store = this.storeService.result2Store(results[0]);
-        //Pass data to form component TODO:review when more search
+        //Pass data to form component TODO:review when more than one search result
         this.formResult = this.storeService.result2Store(results[0]);
-        this.formChanged = !this.formChanged;
-        console.log(this.formChanged)
+        console.log('this.formResult:',this.formResult)
+this.formChanged = !this.formChanged;
         this.setTempMarker(store, undefined, 'Search result');    
       }
     })
@@ -181,12 +195,12 @@ export class MapComponent implements OnInit {
     input2.id = 'input2';
     input2.type = 'submit';
     var anchor = document.createElement('a');
-    anchor.href = '#';
+    anchor.href = '#'; //this.removeMarker(store_obj._id)
     anchor.text='Remove';
     this.selectedMarkerIndex = this.markers.length;
     //Click listeners in elements of marker's InfoWindow
     input2.addEventListener('click',() => this.submitForm(this.selectedMarkerIndex));
-    anchor.addEventListener('click',() => this.removeMarker(this.selectedMarkerIndex));
+    anchor.addEventListener('click',() => this.removeMarker(store_obj._id)); //this.selectedMarkerIndex
     //Build everything together in iwdiv element
     div.appendChild(input1);
     div.appendChild(input2);
@@ -202,12 +216,13 @@ export class MapComponent implements OnInit {
       //this.infowindow.setContent(marker.content);
       this.infowindow.setContent(iwdiv);
       this.infowindow.open(this.map, marker);
-      /*console.log('marker: ',marker)
+      console.log('this: ',this)
+      console.log('marker: ',marker)
       console.log('this.infowindow: ',this.infowindow)
       console.log('store_obj: ',store_obj)
       console.log('this: ',this)
       console.log('this.selectedMarkerIndex: ',this.selectedMarkerIndex)
-      */
+      
     });
     //Push marker to markers
     this.markers.push(marker);
@@ -225,13 +240,16 @@ export class MapComponent implements OnInit {
     console.log('this.markers: ',this.markers);
     console.log('this.markers[markerind].content: ',this.markers[markerind].content);
   }
-  removeMarker(markerind) {
-    console.log('removeCoordinate: ',markerind);
+  removeMarker(_id) {
+    var markerind = this.selectedMarkerIndex
+    this.storeService
+      .deleteStore(_id)
+      .subscribe(
+        res => console.log,
+        err => console.error(err)
+      )
     this.markers[markerind].setMap(null);
-    console.log('this.markers: ',this.markers);
-    console.log('this.markers[markerind]: ',this.markers[markerind]);
   }
-  
   editMarkerInfo(markerind) {
     console.log('editMarkerInfo: ',markerind);
   }
@@ -250,7 +268,7 @@ export class MapComponent implements OnInit {
         this.stores = data;
         this.updateMap();
         },
-        err => { console.error(err); }
+        err => console.error(err)
       );    
   }
   getStores() {
@@ -259,9 +277,11 @@ export class MapComponent implements OnInit {
       .subscribe(
         (data: Store[]) => {
           this.stores = data;
+          console.log('data',data)
+          this.showAlert('getStores'+data)
           this.updateMap();
         },
-        err => { console.error(err); }
+        err => console.error(err)
       );
   }
   updateMap(){
@@ -272,9 +292,20 @@ export class MapComponent implements OnInit {
   }
   // Deletes the selected document and refreshes the document view.
   deleteStore(id) {
-    this.storeService.deleteStore(id).subscribe(() => {
-      this.getStores();
-    });
+    this.storeService.deleteStore(id)
+      .subscribe(() => {
+        this.getStores();
+        this.showAlert('Store deleted')
+      });
+  }
+
+  showAlert(text: string) : void {
+    if (this.msgText != '') return;
+    this.msgText = text;
+    setTimeout(() => {
+      this.msgText = '';
+    }, 2000
+    )
   }
   /*
   //Adds a document

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '../models/store.model';
+import { map } from 'rxjs/operators';
+import { callbackify } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -16,27 +18,35 @@ export class StoreService {
 
   constructor(private http: HttpClient) { }
 
-
+  
   // Call node-geocoder
   geocodePromise() {
-    //maybe use something like:
-    //import { map } from 'rxjs/operators/'
-    //var out = this.http.get(url).pipe(map(res => res.json()))
     var url = `${this.uri}/${this.collection}/geopromise`
     console.log('service geocodePromise: ',url)
     var out = this.http.get(url)
+      //.pipe(map(res => res[0])) //res.json() not working
       //.subscribe(response => console.log('service geocodePromise subscribe: ',response))
-      //console.log('service out: ',out) //promise
+      console.log('service out: ',out) //promise
     return out
   }
-  
+  //Try to subscribe here in service
+  test: any;
+  geocodePromise2(callback: (receiver) => void) {
+    var url = `${this.uri}/${this.collection}/geopromise`
+    console.log('service geocodePromise2: ',url)
+    return this.http.get(url)
+      .subscribe(test => {
+        this.test = test;
+        callback(this.test)
+        console.log(this.test);
+      });
+  }
   
 
 
   // Fetches all documents.
   getStores() {
-    var stores = this.http.get(`${this.uri}/${this.collection}`);
-    return stores
+    return this.http.get(`${this.uri}/${this.collection}`);
   }
 
   // Fetches a single document by _id.
@@ -57,12 +67,10 @@ export class StoreService {
       type: store.type,
       username: store.username
     };
-    return this.http.post(`${this.uri}/${this.collection}/add`, newstore);
+    console.log('store.service addStore:',`${this.uri}/${this.collection}/add`)
+    console.log('store.service addStore',store)
     */
-    var url = `${this.uri}/${this.collection}/add`
-    console.log('store.service addStore:',url)
-    console.log('addStore',store)
-    return this.http.post(url, store);
+    return this.http.post(`${this.uri}/${this.collection}/add`, store);
   }
 
   // Updates an existing document.

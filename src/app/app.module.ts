@@ -8,13 +8,15 @@ import { StoreService } from './services/store.service';
 import { SaveComponent } from './save/save.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MessageComponent } from './message/message.component';
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     FormComponent,
     SaveComponent,
-    NavbarComponent
+    NavbarComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
