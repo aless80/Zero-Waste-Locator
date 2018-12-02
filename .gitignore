@@ -2,7 +2,7 @@
 
 /src/index.html
 /backend/data
-/backend/node_modules
+
 
 # compiled output
 /dist
