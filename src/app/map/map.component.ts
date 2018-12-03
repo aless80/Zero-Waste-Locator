@@ -42,14 +42,6 @@ export class MapComponent implements OnInit {
   formResult: Store;
   formChanged: boolean = false;
   formResultTEST: Store;
-<<<<<<< HEAD
-
-  //message component
-  msgText: string = '';
-
-  constructor(private storeService: StoreService){}
-=======
->>>>>>> newbranch
 
   //message component
   msgText: string = '';
@@ -170,12 +162,7 @@ export class MapComponent implements OnInit {
         this.formResult = this.storeService.result2Store(results[0]);
         console.log('this.formResult:',this.formResult)
 this.formChanged = !this.formChanged;
-<<<<<<< HEAD
-        this.setTempMarker(store, undefined, 'Search result');    
-=======
         this.setTempMarker(store, undefined, 'Search result');
-        this.success('Success!!')
->>>>>>> newbranch
       }
     })
     
