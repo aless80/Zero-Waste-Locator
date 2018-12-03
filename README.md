@@ -2,7 +2,7 @@
 
 ## What this App is about
 
-I am into [Zero Waste](https://www.goingzerowaste.com/zero-waste-1/) lifestyle. In brief, Zero Waste for me is about reducing consumption, in particular plastic products. 
+I try to live a [Zero Waste](https://www.goingzerowaste.com/zero-waste-1/) lifestyle. In brief, Zero Waste for me is about reducing consumption, in particular plastic products. 
 I moved to Oslo in Norway, I realized it takes time to learn where plastic-free products are sold. 
 
 For this reason I am implementing this app where users can search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up. 
@@ -17,11 +17,18 @@ NB: This app does not use agm-core for Google Maps as described in many tutorial
 
 ## Installation
 
-Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. 
+Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. Install the node and Angular dependencies with:
 
-Get a google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html
+```
+npm install
+ng build
+```
 
-I will write a more thorough guide in the future. 
+Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
+
+Set up a Google Maps API key for using it on a server. This can be used for geocoding from the server backend through [npm-geocoder](https://www.npmjs.com/package/node-geocoder). See the [backend/server.js](backend/server.js) file. 
+
+I will soon clean up things and give both options to the user. 
 
 <!--
 npm i --save-dev babel-cli babel-preset-env

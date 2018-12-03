@@ -3,9 +3,8 @@ import { ViewChild } from '@angular/core';
 //import { FormComponent }  from '../form/form.component';
 import { StoreService } from '../services/store.service';
 import { Store } from '../models/store.model';
-
 import { Subscription } from 'rxjs'; //to unsubscribe
-
+import { AlertService } from '../services/alert.service';
 //TODO: do not run search when empty address
 //TODO: decide many markers or only one. then probably clear form when second search
 
@@ -47,8 +46,13 @@ export class MapComponent implements OnInit {
   //message component
   msgText: string = '';
 
-  constructor(private storeService: StoreService){}
+  constructor(
+    private storeService: StoreService,
+    private alertService: AlertService){}
 
+  success(message: string) { 
+      this.alertService.success(message);
+  }
   ngOnInit() { 
     //Load stores
     this.getStores();
@@ -158,7 +162,7 @@ export class MapComponent implements OnInit {
         this.formResult = this.storeService.result2Store(results[0]);
         console.log('this.formResult:',this.formResult)
 this.formChanged = !this.formChanged;
-        this.setTempMarker(store, undefined, 'Search result');    
+        this.setTempMarker(store, undefined, 'Search result');
       }
     })
     
