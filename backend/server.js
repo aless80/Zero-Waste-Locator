@@ -7,7 +7,6 @@ import Store from './models/store';
 const app = express();
 const router = express.Router();
 
-
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -18,6 +17,43 @@ const connection = mongoose.connection;
 
 connection.once('open', () => {
     console.log('MongoDB database connection established successfully!');
+});
+
+
+
+
+
+/*
+Ja probleem is dat de code al klaar is voordat de promise resolved
+Probeer eens de promise te returnen in de get functie
+Dus na de var promise regels een return promise
+*/
+
+
+///Trying to use node-geocoder
+var NodeGeocoder = require('node-geocoder');
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: 'YOUR API KEY ENABLED FOR SERVER USE',
+  formatter: null
+};
+var geocoder = NodeGeocoder(options);
+// geocoding using node-geocoder
+router.route('/stores/geopromise').get((request, response) => {
+  var promise = geocoder.geocode('29 champs elysée paris')
+  return promise
+  /*
+  .then(res => {
+      console.log('Geocoding successful:' + res[0].streetName);
+    },reason => {
+      console.log('rejected',reason)
+    })
+  .catch(err => {
+    console.log('Geocoding failed\n' + err);
+  });
+  response.json(promise)
+  */
 });
 
 
@@ -46,14 +82,26 @@ router.route('/stores/:id').get((req, res) => {
 
 // Adds a document.
 router.route('/stores/add').post((req, res) => {
+  console.log('/stores/add')
   let store = new Store(req.body);
   store.save()
     .then(store => {
-      res.status(200).json({'store': 'Added Successfully'});
+      res.status(200).json('Document Added Successfully');
     })
     .catch(err => {
       res.status(400).send('Failed to create new record\n' + res.json(err));
     });
+});
+
+// Deletes a single document by _id.
+router.route('/stores/delete/:id').get((req, res) => {
+  console.log('/stores/delete/',req.params.id)
+  Store.findByIdAndRemove({_id: req.params.id }, (err, store) => {
+    if (err)
+      res.json(err);
+    else
+      res.json('Removed Successfully');
+   });
 });
 
 // Updates an existing document.
@@ -78,16 +126,6 @@ router.route('/stores/update/:id').post((req, res) => {
       });
     }
   });
-});
-
-// Deletes a single document by _id.
-router.route('/stores/delete/:id').get((req, res) => {
-  Store.findByIdAndRemove({_id: req.params.id }, (err, store) => {
-    if (err)
-      res.json(err);
-    else
-      res.json('Removed Successfully');
-   });
 });
 
 // Finds distinct values in field

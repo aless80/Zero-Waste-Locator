@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '../models/store.model';
+import { map } from 'rxjs/operators';
+import { callbackify } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -16,30 +18,35 @@ export class StoreService {
 
   constructor(private http: HttpClient) { }
 
-
-   // Fetches all documents.
-  geocodeCallback() {
-    var url = `${this.uri}/${this.collection}/geocallback`
-    console.log('service geocodeCallback: ',url)
-    var out = this.http.get(url);
-    return out
-  }
-
+  
+  // Call node-geocoder
   geocodePromise() {
     var url = `${this.uri}/${this.collection}/geopromise`
     console.log('service geocodePromise: ',url)
-    var out = this.http.get(url);
-    console.log('service out: ',out) //promise
+    var out = this.http.get(url)
+      //.pipe(map(res => res[0])) //res.json() not working
+      //.subscribe(response => console.log('service geocodePromise subscribe: ',response))
+      console.log('service out: ',out) //promise
     return out
   }
-  
+  //Try to subscribe here in service
+  test: any;
+  geocodePromise2(callback: (receiver) => void) {
+    var url = `${this.uri}/${this.collection}/geopromise`
+    console.log('service geocodePromise2: ',url)
+    return this.http.get(url)
+      .subscribe(test => {
+        this.test = test;
+        callback(this.test)
+        console.log(this.test);
+      });
+  }
   
 
 
   // Fetches all documents.
   getStores() {
-    var stores = this.http.get(`${this.uri}/${this.collection}`);
-    return stores
+    return this.http.get(`${this.uri}/${this.collection}`);
   }
 
   // Fetches a single document by _id.
@@ -49,10 +56,9 @@ export class StoreService {
 
   // Creates a new document.
   addStore(store) {
-    const newstore = {
-      lat: store.lat,
-      lng: store.lng,
-      location: store.location,  // [Long; Lat]
+    /*const newstore = {
+      coords: [store.lat, store.lng],
+      location: store.location,
       address: store.address,
       street_num: store.street_num,
       zip: store.zip,
@@ -61,7 +67,10 @@ export class StoreService {
       type: store.type,
       username: store.username
     };
-    return this.http.post(`${this.uri}/${this.collection}/add`, newstore);
+    console.log('store.service addStore:',`${this.uri}/${this.collection}/add`)
+    console.log('store.service addStore',store)
+    */
+    return this.http.post(`${this.uri}/${this.collection}/add`, store);
   }
 
   // Updates an existing document.
