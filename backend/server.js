@@ -41,8 +41,10 @@ var options = {
 var geocoder = NodeGeocoder(options);
 // geocoding using node-geocoder
 router.route('/stores/geopromise').get((request, response) => {
-  var promise = geocoder.geocode('29 champs elysée paris')
-  return promise
+  geocoder.geocode('29 champs elysée paris').then(data => {
+    console.log({ data });
+    response.json(data);
+  });
   /*
   .then(res => {
       console.log('Geocoding successful:' + res[0].streetName);

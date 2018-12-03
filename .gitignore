@@ -3,7 +3,6 @@
 /src/index.html
 /backend/data
 /backend/node_modules
-/db
 
 # compiled output
 /dist
