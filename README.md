@@ -19,7 +19,8 @@ NB: This app does not use agm-core for Google Maps as described in many tutorial
 
 Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. Install the node and Angular dependencies with:
 
-```npm install
+```
+npm install
 ng build
 ```
 
