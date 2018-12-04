@@ -1,16 +1,7 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="text-center">
-        <h3>
-          <div #gmap style="width:100%;height:400px"></div>
-        </h3>
-      </div>
-    </div>
-  </div>
+  <div #gmap class="map-container" style="width:1000px;height:500px"></div>
   <br>
-  <alert></alert>
-
+  
   <div class="row">
     <div class="col-md-6">
       <form class="form-horizontal" novalidate="">
@@ -22,7 +13,8 @@
               Please enter the address.
             </div>
             <div class="input-group-append">
-              <button type="submit" class="btn btn-primary" (click)="findLocation()">Search</button>
+              <button type="submit" class="btn btn-primary" (click)="run_geocoding()" [disabled]="search_string === ''">Search</button>
+              <button type="submit" class="btn btn-primary" (click)="geocode()" hidden>Search node-geocoder</button>
             </div>
           </div>
         </div>
@@ -32,16 +24,11 @@
 
   <!-- I am considering to move the search to its own component, as a sibling component of the map one. Now it is a child of the maps component. This works
   <br>
-  <app-save (search)="findLocation($event)"></app-save>
+  <app-save (search)="run_geocoding($event)"></app-save>
   -->
-
-  <!-- I am trying to use node-geocoder. I cannot get the testgeocode variable yet-->
-  <button type="submit" class="btn btn-primary" (click)="geocode()">call node-geocoder</button>
   <br>
-  <button type="submit" class="btn btn-primary" (click)="geocode2()">call node-geocoder 2</button>
-  testgeocode:{{testgeocode}}
+  <alert></alert>
 
-</div>
 <hr class="mb-4">
 <app-form [formResult]="formResult"></app-form>
-
+</div>

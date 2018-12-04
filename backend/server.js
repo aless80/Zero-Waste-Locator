@@ -20,17 +20,7 @@ connection.once('open', () => {
 });
 
 
-
-
-
-/*
-Ja probleem is dat de code al klaar is voordat de promise resolved
-Probeer eens de promise te returnen in de get functie
-Dus na de var promise regels een return promise
-*/
-
-
-///Trying to use node-geocoder
+// Settings for node-geocoder
 var NodeGeocoder = require('node-geocoder');
 var options = {
   provider: 'google',
@@ -39,23 +29,18 @@ var options = {
   formatter: null
 };
 var geocoder = NodeGeocoder(options);
-// geocoding using node-geocoder
-router.route('/stores/geopromise').get((request, response) => {
-  geocoder.geocode('29 champs elysée paris').then(data => {
-    console.log({ data });
-    response.json(data);
-  });
-  /*
-  .then(res => {
-      console.log('Geocoding successful:' + res[0].streetName);
-    },reason => {
-      console.log('rejected',reason)
-    })
+
+// Geocoding using node-geocoder
+router.route('/stores/geopromise/:address').get((req, res) => {
+  geocoder.geocode(req.params.address)
+  .then(data => {
+    res.json(data);
+  },reason => {
+    console.log('Geocoding rejected\n',reason)
+  })
   .catch(err => {
     console.log('Geocoding failed\n' + err);
   });
-  response.json(promise)
-  */
 });
 
 

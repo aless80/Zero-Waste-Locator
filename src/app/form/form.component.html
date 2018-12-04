@@ -1,4 +1,4 @@
-<div class="container" *ngIf="formResult !== undefined">
+<div class="container" *ngIf="formResult !== undefined666">
   <div class="row">
     <div class="col-md-6 order-md-1">
       <h4 class="mb-3">Store information</h4>
@@ -23,15 +23,6 @@
             <label for="locality">Town</label>
             <input class="form-control" id="locality" [(ngModel)]="formResult.locality" name="locality" placeholder="" required="" type="text">
           </div>
-          <!--<div class="col-md-3 mb-3" *ngIf="formResult.locality || !formResult.adm_area_level_1">
-            <label for="locality">Town</label>
-            <input class="form-control" id="locality" [(ngModel)]="formResult.locality" name="locality" placeholder="" required="" type="text">
-          </div>
-          <div class="col-md-3 mb-3" *ngIf="!formResult.locality && formResult.adm_area_level_1">
-            <label for="adm_area_level_1">Town</label>
-            <input class="form-control" id="adm_area_level_1" [(ngModel)]="formResult.adm_area_level_1" name="adm_area_level_1" placeholder="" required="" type="text">
-          </div>-->
-
           <div class="col-md-3 mb-3">
             <label for="country">Country</label>
             <select class="custom-select d-block w-100" id="country" required="">
@@ -41,20 +32,29 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="googlemaps">Link to Google Maps <span class="text-muted">(Optional)</span></label>
-          <div class="input-group">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary" (click)="goToGoogleMaps()">Go to Google Maps</button>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="googlemaps">Link to Google Maps <span class="text-muted">(Optional)</span></label>
+            <div class="input-group">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary" (click)="goToGoogleMaps($event)">Go to Google Maps</button>
+              </div>
+              <!--<input class="form-control" [(ngModel)]="formResult.url" name="url" placeholder="Url to Google Maps" type="text">
+                -->
             </div>
-            <!--<input class="form-control" [(ngModel)]="formResult.url" name="url" placeholder="Url to Google Maps" type="text">
-              -->
           </div>
         </div>
-        <div class="row">
+        
+        <div class="row">        
           <div class="col-md-6 mb-3">
             <label for="coordinates">Latitude and logitude</label>
             <input class="form-control" [(ngModel)]="formResult.coords[0] + ', ' + formResult.coords[1]" id="coordinates" name="coordinates" placeholder="Marker's coordinates" required="" type="text">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="username">Added by:</label>
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="formResult.username" name="username" placeholder="Username" required="" type="text">
+            </div>
           </div>
         </div>
         <!--<div class="row">
@@ -75,52 +75,39 @@
             </select>
           </div>
         </div>-->
-        <div class="row">
-          <div class="col-md-3 mb-3">
-            <label for="username">Store added by:</label>
-            <div class="input-group">
-              <input class="form-control" [(ngModel)]="formResult.username" name="username" placeholder="Username" required="" type="text">
-            </div>
-          </div>
-        </div>
-
-
-
-
         
         <hr class="mb-4">
         <h4 class="mb-3">Store type</h4>
 
-        <div class="d-block my-3">
-          <div class="custom-control custom-radio" *ngFor="let type of storetypes">
-            <input id="{{type}}" name="storetype" class="custom-control-input" checked="" required="" type="radio">
-            <label class="custom-control-label" for="{{type}}">{{type}}</label>
+        <form>
+          <div class="checkbox" *ngFor="let type of storetypes">
+            <label>
+              <input type="checkbox" value="">{{type}}
+            </label>
           </div>
-
-          <!--<div class="custom-control custom-radio">
-            <input id="storetypeother" name="storetypeother" class="custom-control-input" checked="" required="" type="radio">          
-            <label class="custom-control-label" for="storetypeother">Other</label>
-            <input class="form-control" name="other" placeholder="Url to Google Maps" type="text">            
-          </div>-->
-
-
-          <div class="input-group">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary" (click)="goToGoogleMaps()">Go to Google Maps</button>
-            </div>
-            <input class="form-control" name="other" placeholder="Url to Google Maps" type="text">            
+          <div class="checkbox">
+            <label class="custom">
+              <input type="checkbox" value="" (click)="newStoreType($event)">New type
+            </label>            
           </div>
-
+        </form>
+        <div class="input-group" *ngIf="show_newtype">
+          <div class="col-md-6 mb-3">
+          <input class="form-control" name="other" placeholder="New store type" type="text" #box (keyup.enter)="update(box.value, $event)" (blur)="update(box.value, $event)">
+            <button type="submit" class="btn btn-secondary">Add</button>
+          </div>
         </div>
+
         <!--<div class="custom-control custom-checkbox">
           <input class="custom-control-input" id="same-address" type="checkbox">
           <label class="custom-control-label" for="same-address">Checkbox</label>
         </div>
         -->
         <hr class="mb-4">
-        <button type="submit" class="btn btn-primary btn-lg btn-block" (click)="save()">Save</button>
+        <button id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="save()">Save</button>
       </form>
     </div>
+
 
 
     <!--
@@ -218,4 +205,37 @@
 </script>
 
 
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+
+
+<!--<script>
+    //$(document).ready(function () {
+        var editCameraLabel = function (label) {
+            console.log('editCameraLabel')
+            label.hide();
+            var labelText = label.text();
+
+            label.after("<input type='text' value='" + labelText + "' /><input type='button' value='Save' />");
+
+            var input = label.next();
+            input.focus();
+
+            var saveButton = input.next();
+
+            saveButton.click(function () {
+                labelText = input.val();
+                label.text(labelText);
+                input.remove();
+                $(this).remove();
+                label.show();
+            });
+        };
+
+        //$('label').click(function () {
+        //    editCameraLabel($(this));
+        //});
+    //});//end of document ready
+</script>-->

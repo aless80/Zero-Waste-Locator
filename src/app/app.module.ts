@@ -8,7 +8,6 @@ import { StoreService } from './services/store.service';
 import { SaveComponent } from './save/save.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MessageComponent } from './message/message.component';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './services/alert.service';
 @NgModule({
@@ -18,7 +17,6 @@ import { AlertService } from './services/alert.service';
     FormComponent,
     SaveComponent,
     NavbarComponent,
-    MessageComponent,
     AlertComponent
   ],
   imports: [
