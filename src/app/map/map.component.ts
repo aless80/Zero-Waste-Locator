@@ -56,7 +56,7 @@ export class MapComponent implements OnInit {
       locality: "Oslo",
       zip: "0174",
       country: "Norway",
-      descr: "descr",
+      descr: "some descr",
       type: "some type",
       username: "aless80"
     };
@@ -168,7 +168,7 @@ export class MapComponent implements OnInit {
         componentRestrictions: { country: this.componentRestrictions } //country restriction to Norway
       },
       (results, status) => {
-        console.log("findLocation status:", status, " results[0]:", results[0]);
+        console.log("run_geocoding status:", status, " results[0]:", results[0]);
         if (status == google.maps.GeocoderStatus.OK) {
           this.process_results(results);
         }
@@ -210,7 +210,7 @@ export class MapComponent implements OnInit {
     var h2 = document.createElement("h2");
     h2.textContent = marker.getTitle();
     var div = document.createElement("div");
-    var input1 = document.createElement("input");
+    /*var input1 = document.createElement("input");
     input1.id = "input1";
     input1.type = "text";
     input1.value = "some type";
@@ -218,18 +218,19 @@ export class MapComponent implements OnInit {
     var input2 = document.createElement("input");
     input2.id = "input2";
     input2.type = "submit";
+    */
     var anchor = document.createElement("a");
     anchor.href = "#"; //this.removeMarker(store_obj._id)
     anchor.text = "Remove";
     this.selectedMarkerIndex = this.markers.length;
     //Click listeners in elements of marker's InfoWindow
-    input2.addEventListener("click", () =>
+    /*input2.addEventListener("click", () =>
       this.submitForm(this.selectedMarkerIndex)
-    );
+    );*/
     anchor.addEventListener("click", () => this.removeMarker(store_obj._id)); //this.selectedMarkerIndex
     //Build everything together in iwdiv element
-    div.appendChild(input1);
-    div.appendChild(input2);
+    //div.appendChild(input1);
+    //div.appendChild(input2);
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
