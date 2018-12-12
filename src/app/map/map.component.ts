@@ -51,13 +51,13 @@ export class MapComponent implements OnInit {
   ngOnInit() {
     this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
-      address: "Bjerregaards gate",
+      address: "Slottsplassen",
       street_num: "1",
       locality: "Oslo",
-      zip: "0174",
+      zip: "0010",
       country: "Norway",
-      descr: "some descr",
-      type: "some type",
+      descr: "This is just an example to populate the form component",
+      type: "Royal palace",
       username: "aless80"
     };
 
