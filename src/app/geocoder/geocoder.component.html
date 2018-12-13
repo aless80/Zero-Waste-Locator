@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-10">
+    <form class="form-horizontal" novalidate="">
+      <div class="col-md-9 mb-3">
+        <label for="address">Full address</label>
+        <div class="input-group">
+          <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text">
+          <div class="invalid-feedback">
+            Please enter the address.
+          </div>
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary" (click)="run_geocoding()" [disabled]="search_string === ''">Search</button>
+            <button type="submit" class="btn btn-primary" (click)="geocode()" hidden>Search node-geocoder</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>  
+</div>

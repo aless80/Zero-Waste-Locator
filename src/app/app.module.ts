@@ -10,6 +10,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './services/alert.service';
+import { GeocoderComponent } from './geocoder/geocoder.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,7 +18,8 @@ import { AlertService } from './services/alert.service';
     FormComponent,
     SaveComponent,
     NavbarComponent,
-    AlertComponent
+    AlertComponent,
+    GeocoderComponent
   ],
   imports: [
     BrowserModule,

@@ -72,7 +72,7 @@ export class FormComponent implements OnInit, OnChanges {
   save() {
     var out = this.storeService
       .addStore(this.formResult)
-      .subscribe(res => console.log);
+      .subscribe(res => console.log(res));
   }
 
   countries = [

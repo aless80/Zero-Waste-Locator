@@ -25,7 +25,7 @@ export class MapComponent implements OnInit {
   //Default settings for map and search. They can be removed
   default_latitude: number = 49.935;
   default_longitude: number = 10.79;
-  search_string: string;
+  //search_string: string;
   componentRestrictions: string = "NO"; //restrict search to Norway
 
   //Location tracker
@@ -49,7 +49,7 @@ export class MapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.formResult = {
+    /*this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
       street_num: "1",
@@ -59,7 +59,7 @@ export class MapComponent implements OnInit {
       descr: "This is just an example to populate the form component",
       type: "Royal palace",
       username: "aless80"
-    };
+    };*/
 
     //Load stores
     this.getStores();
@@ -80,7 +80,7 @@ export class MapComponent implements OnInit {
     //Find current location
     this.findMe();
     //Default location for search
-    this.search_string = "Bjerregaards gate 60C, 0174 Oslo";
+    //this.search_string = "Bjerregaards gate 60C, 0174 Oslo";
   }
 
   ngOnDestroy() {
@@ -135,6 +135,7 @@ export class MapComponent implements OnInit {
     }
   }
 
+  /*Moved to geocoder component
   //Geocoding using in node-geocoder in backend
   geocode() {
     console.log("map geocode clicked");
@@ -168,7 +169,7 @@ export class MapComponent implements OnInit {
         componentRestrictions: { country: this.componentRestrictions } //country restriction to Norway
       },
       (results, status) => {
-        console.log("run_geocoding status:", status, " results[0]:", results[0]);
+        console.log("run_geocoding status:", status, " results:", results);
         if (status == google.maps.GeocoderStatus.OK) {
           this.process_results(results);
         }
@@ -176,7 +177,10 @@ export class MapComponent implements OnInit {
     );
   }
   process_results(results) {
-    //TODO:review when more than one search result
+    //Clear any other previous searches
+    this.removeMarkers();
+    //TODO:review when more than one search result. Use Place API:
+    //https://developers.google.com/maps/documentation/geocoding/best-practices
     //Move map to searched location
     this.map.panTo(results[0].geometry.location);
     //this.setTempMarker(results[0], undefined, 'Search result');
@@ -184,6 +188,7 @@ export class MapComponent implements OnInit {
     this.formResult = this.storeService.result2Store(results[0]);
     this.setTempMarker(this.formResult, undefined, "Search result");
   }
+  */
 
   setTempMarker(store_obj, icon?: string, title?: string) {
     //TODO: check if point already exists!
@@ -247,21 +252,9 @@ export class MapComponent implements OnInit {
     this.markers.push(marker);
     //Close InfoWindow
     this.hideInfoWindow();
-    //TODO: probably I want one single temp marker
   }
   hideInfoWindow() {
-    //useful?
     this.infowindow.close();
-  }
-  submitForm(markerind) {
-    //TODO Problem: edited string stays even when I do not submit
-    console.log("submitForm: ", markerind);
-    console.log("this: ", this);
-    console.log("this.markers: ", this.markers);
-    console.log(
-      "this.markers[markerind].content: ",
-      this.markers[markerind].content
-    );
   }
   removeMarker(_id) {
     var markerind = this.selectedMarkerIndex;
@@ -270,13 +263,22 @@ export class MapComponent implements OnInit {
       .subscribe(res => console.log, err => console.error(err));
     this.markers[markerind].setMap(null);
   }
-  editMarkerInfo(markerind) {
-    console.log("editMarkerInfo: ", markerind);
-  }
   deleteMarker(markerind) {
     console.log("deleteMarker before: ", this.markers);
     this.markers.splice(markerind, 1);
     console.log("deleteMarker after: ", this.markers);
+  }
+  removeMarkers() {
+    if (this.markers.length) {
+      for (var i = 0; i < this.markers.length; i++) {
+        if (this.markers[i].title == 'Search result')
+          this.markers[i].setMap(null);        
+      }
+      //Clear markers array
+      this.markers = [];
+    } else {
+      console.log('No markers to remove')
+    }
   }
 
   ///API calls through service
@@ -317,7 +319,7 @@ export class MapComponent implements OnInit {
     });
   }
 
-  //Messages
+  ///Messages
   showAlert(text: string): void {
     if (this.msgText != "") return;
     this.msgText = text;
@@ -360,18 +362,9 @@ export class MapComponent implements OnInit {
     // Shows any markers currently in the array
     this.setMapOnAll(this.map);
   }
-  removeMarkers() {
-    if (this.markers.length) {
-      for (var i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(null);
-      }
-      //Clear markers array
-      this.markers = [];
-    } else {
-      console.log('No markers to remove')
-    }
   }*/
 
+  ///This is for periodic tracking. Useful for mobiles
   /*trackMe() {
     if (navigator.geolocation) {
       this.isTracking = true;
