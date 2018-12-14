@@ -173,28 +173,16 @@ export class MapComponent implements OnInit {
     iwdiv.id = "node";
     var h2 = document.createElement("h2");
     h2.textContent = marker.getTitle();
-    /*var input1 = document.createElement("input");
-    input1.id = "input1";
-    input1.type = "text";
-    input1.value = "some type";
-    input1.style.width = "200px";
-    var input2 = document.createElement("input");
-    input2.id = "input2";
-    input2.type = "submit";
-    */
     var anchor = document.createElement("a");
     anchor.href = "#"; //this.removeMarker(store_obj._id)
     anchor.text = "Remove";
     this.selectedMarkerIndex = this.markers.length;
-    //Click listeners in elements of marker's InfoWindow
-    /*input2.addEventListener("click", () =>
-      this.submitForm(this.selectedMarkerIndex)
-    );*/
-    anchor.addEventListener("click", () => this.removeMarker(store_obj._id)); 
-    var div = document.createElement("div");
+    //Click listener in "Remove" link of marker's InfoWindow
+    anchor.addEventListener("click", () => {
+      this.removeMarker(store_obj._id)      
+    }); 
     //Build everything together in iwdiv element. Add text
-    //div.appendChild(input1);
-    //div.appendChild(input2);
+    var div = document.createElement("div");
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
@@ -220,13 +208,17 @@ export class MapComponent implements OnInit {
   hideInfoWindow() {
     this.infowindow.close();
   }
+
   removeMarker(_id) {
-    var markerind = this.selectedMarkerIndex; 
+    if (this.markers[this.selectedMarkerIndex].title == 'Search result') {
+      this.removeSearchMarkers();
+      return
+    }      
     this.storeService
       .deleteStore(_id)
       .subscribe(res => console.log, err => console.error(err));
-    this.markers[markerind].setMap(null);
-    this.deleteMarker(markerind);
+    this.markers[this.selectedMarkerIndex].setMap(null);
+    this.deleteMarker(this.selectedMarkerIndex);
   }
   removeSearchMarkers() {
     if (this.markers.length) {
@@ -236,8 +228,6 @@ export class MapComponent implements OnInit {
           this.deleteMarker(i);
         }
       }
-      //Clear markers array  WHY?
-      //this.markers = [];
     } else {
       console.log('No markers to remove')
     }
