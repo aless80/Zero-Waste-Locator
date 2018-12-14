@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from "@angular/core";
 import { EventEmitter, Output } from "@angular/core";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 import { Store } from "../models/store.model";
-import { StoreService } from "../services/store.service";
 
 @Component({
   selector: "app-form",
@@ -12,7 +11,8 @@ import { StoreService } from "../services/store.service";
 export class FormComponent implements OnInit, OnChanges {
   @Input("formResult") formResult: Store;
   @Output() submit = new EventEmitter<boolean>();
-  storetypes: Store[];
+  @Input() storetypes: Store[];
+  //storetypes: Store[];
 
   //Variables to handle the new store type (selecting it, editing it..)
   public static readonly NEWTYPE_PLACEHOLDER = "New store type";
@@ -21,21 +21,13 @@ export class FormComponent implements OnInit, OnChanges {
   show_newtype_editor: boolean = false;
   hide_edit: boolean = true;    
 
-  constructor(private storeService: StoreService) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.storeService.getDistinctTypes().subscribe(
-      (data: Store[]) => {
-        this.storetypes = data;
-      },
-      err => {
-        console.error(err);
-      }
-    );
-  }
+  ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log("form - ngOnChanges", changes);
+    console.log(this.storetypes)
   }
 
   
@@ -128,9 +120,6 @@ export class FormComponent implements OnInit, OnChanges {
       );
     var win = window.open(url, "_blank");
     win.focus();
-  }
-  getDistinctTypes() {
-    return this.storeService.getDistinctTypes();
   }
   //Use clicks Save to save the store in database
   saveForm() {

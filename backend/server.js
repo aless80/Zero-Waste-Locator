@@ -117,29 +117,13 @@ router.route('/stores/update/:id').post((req, res) => {
 
 // Finds distinct values in field
 router.route('/storestypes').get((req, res) => {
-  Store
-    /*.find(
-      null,//{types: "Charity shop"},
-      "types"
-    )*/
-    /*.find( 
-    )*/
-    //.select('types')
-    /*
-    .aggregate(
-      [
-          { "$unwind": "$types" }
-      ],
-    )*/
-    .distinct("types")
-    .exec(
-      (err, stores) => {
-          if (err)
-            res.status(400).send('Failed to fetch stores\n' + res.json(err));
-          else
-            res.json(stores);
-        }
-    )
+  Store.distinct("types")
+    .exec((err, stores) => {
+        if (err)
+          res.status(400).send('Failed to fetch stores\n' + res.json(err));
+        else
+          res.json(stores);
+    })
   });
 
 router.route('/storesdistinct/:field').get((req, res) => {

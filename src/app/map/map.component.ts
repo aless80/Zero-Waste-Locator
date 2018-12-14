@@ -25,7 +25,6 @@ export class MapComponent implements OnInit {
   //Default settings for map and search. They can be removed
   default_latitude: number = 49.935;
   default_longitude: number = 10.79;
-  //search_string: string;
   componentRestrictions: string = "NO"; //restrict search to Norway
 
   //Location tracker
@@ -39,6 +38,8 @@ export class MapComponent implements OnInit {
 
   //data passed between map and form
   formResult: Store;
+  storetypes: Store[];
+  
 
   //message component
   msgText: string = "";
@@ -48,21 +49,12 @@ export class MapComponent implements OnInit {
     private alertService: AlertService
   ) {}
 
-  //Get emitter to save form
-  getEmitter(event:KeyboardEvent){
-    if (event == undefined) return
-    console.log('getEmitter',event.type,event)
-    var out = this.storeService
-      .addStore(this.formResult)
-      .subscribe(res => console.log(res));
-  }
-
   ngOnInit() {
     //Some addresses that work
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
     //Fretex: Ullevålsveien 12, 0171 Oslo
     //
-    /*this.formResult = {
+    this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
       street_num: "1",
@@ -73,9 +65,19 @@ export class MapComponent implements OnInit {
       types: ["Charity shop"],
       username: "aless80"
     };
-    */
     //Load stores
     this.getStores();
+    //Get all the distinct store types present in DB. Pass to Form component
+    this.storeService.getDistinctTypes()
+      .subscribe(
+        (data: Store[]) => {
+          this.storetypes = data;
+          console.log('Map this.storetypes=',this.storetypes)
+        },
+        err => {
+          console.error(err);
+        }
+      );
     //Create the map
     var mapProp = {
       center: new google.maps.LatLng(
@@ -102,6 +104,7 @@ export class MapComponent implements OnInit {
     this.storeListSub.unsubscribe();
   }
 
+  ///Get position of client
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
   findMe() {
     if (navigator.geolocation) {
@@ -149,6 +152,7 @@ export class MapComponent implements OnInit {
   }
 
 
+  ///Handle markers for geocoding search
   //Create marker with InfoWindow. Push marker to this.markers
   setTempMarker(store_obj, icon?: string, title?: string) {
     //TODO: check if point already exists!
@@ -199,7 +203,7 @@ export class MapComponent implements OnInit {
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
-    iwdiv.appendChild(document.createTextNode('Adress: '+store_obj.address+', '+' '+store_obj.zip+', '+store_obj.locality));
+    iwdiv.appendChild(document.createTextNode('Adress: '+store_obj.address+', '+store_obj.street_num+' '+store_obj.zip+', '+store_obj.locality));
     iwdiv.appendChild(document.createElement("br"));
     iwdiv.appendChild(document.createTextNode('Store type: '+store_obj.types.join(', ')));
     iwdiv.appendChild(document.createElement("br"));
@@ -246,6 +250,24 @@ export class MapComponent implements OnInit {
   }
 
   ///API calls through service
+  //Get emitter to save form
+  getEmitter(event:KeyboardEvent){
+    if (event == undefined) return
+    console.log('getEmitter',event.type,event)
+    var out = this.storeService
+      .addStore(this.formResult)
+      .subscribe(res => {
+        console.log(res);
+        this.afterSaving()
+      });
+  }
+  afterSaving(){
+    //Reload stores from DB
+    this.getStores();
+    //Close search marker
+
+    //open newly created marker
+  }
   // Fetches all documents.
   getStoresV1() {
     this.storeService.getStores().subscribe(
