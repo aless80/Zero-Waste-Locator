@@ -70,13 +70,8 @@ export class MapComponent implements OnInit {
     //Get all the distinct store types present in DB. Pass to Form component
     this.storeService.getDistinctTypes()
       .subscribe(
-        (data: Store[]) => {
-          this.storetypes = data;
-          console.log('Map this.storetypes=',this.storetypes)
-        },
-        err => {
-          console.error(err);
-        }
+        (data: Store[]) => this.storetypes = data,
+        err => console.error(err)
       );
     //Create the map
     var mapProp = {
@@ -195,7 +190,7 @@ export class MapComponent implements OnInit {
     /*input2.addEventListener("click", () =>
       this.submitForm(this.selectedMarkerIndex)
     );*/
-    anchor.addEventListener("click", () => this.removeMarker(store_obj._id)); //this.selectedMarkerIndex
+    anchor.addEventListener("click", () => this.removeMarker(store_obj._id)); 
     var div = document.createElement("div");
     //Build everything together in iwdiv element. Add text
     //div.appendChild(input1);
@@ -225,30 +220,32 @@ export class MapComponent implements OnInit {
     this.infowindow.close();
   }
   removeMarker(_id) {
-    var markerind = this.selectedMarkerIndex;
+    var markerind = this.selectedMarkerIndex; 
     this.storeService
       .deleteStore(_id)
       .subscribe(res => console.log, err => console.error(err));
     this.markers[markerind].setMap(null);
+    this.deleteMarker(markerind);
+  }
+  removeSearchMarkers() {
+    if (this.markers.length) {
+      for (var i = 0; i < this.markers.length; i++) {
+        if (this.markers[i].title == 'Search result') {
+          this.markers[i].setMap(null);
+          this.deleteMarker(i);
+        }
+      }
+      //Clear markers array  WHY?
+      //this.markers = [];
+    } else {
+      console.log('No markers to remove')
+    }
   }
   deleteMarker(markerind) {
     console.log("deleteMarker before: ", this.markers);
     this.markers.splice(markerind, 1);
     console.log("deleteMarker after: ", this.markers);
   }
-  removeSearchMarkers() {
-    if (this.markers.length) {
-      for (var i = 0; i < this.markers.length; i++) {
-        if (this.markers[i].title == 'Search result')
-          this.markers[i].setMap(null);        
-      }
-      //Clear markers array
-      this.markers = [];
-    } else {
-      console.log('No markers to remove')
-    }
-  }
-
   ///API calls through service
   //Get emitter to save form
   getEmitter(event:KeyboardEvent){
@@ -256,36 +253,39 @@ export class MapComponent implements OnInit {
     console.log('getEmitter',event.type,event)
     var out = this.storeService
       .addStore(this.formResult)
-      .subscribe(res => {
-        console.log(res);
-        this.afterSaving()
-      });
+      .subscribe(
+          res => this.afterSaving(),
+          err => this.error(err, 2500)
+      );
   }
-  afterSaving(){
-    //Reload stores from DB
-    this.getStores();
-    //Close search marker
 
-    //open newly created marker
+  afterSaving(){
+    //Close search marker
+    this.removeSearchMarkers();
+    //Pass to getStores callback 
+    var callback = () => {
+      //After stores have been loaded, open the store saved last
+      google.maps.event.trigger(this.markers[this.markers.length-1], 'click')
+      //Show message
+      this.success("Store saved in database",2500)
+    }
+    //Reload stores from DB
+    this.getStores(callback);    
   }
+  
   // Fetches all documents.
-  getStoresV1() {
-    this.storeService.getStores().subscribe(
-      (data: Store[]) => {
-        this.stores = data;
-        this.updateMap();
-      },
-      err => console.error(err)
-    );
-  }
-  getStores() {
-    this.storeListSub = this.storeService.getStores().subscribe(
-      (data: Store[]) => {
-        this.stores = data;
-        console.log("data", data);
-        this.updateMap();
-      },
-      err => console.error(err)
+  getStores(callback?) {
+    //First delete all markers
+    this.deleteAllMarkers()
+    //Query DB, plot all stores
+    this.storeListSub = this.storeService.getStores()
+      .subscribe(
+        (data: Store[]) => {
+          this.stores = data;
+          this.updateMap();
+          if (callback!= undefined) callback()
+        },
+        err => console.error(err)
     );
   }
   updateMap() {
@@ -338,18 +338,15 @@ export class MapComponent implements OnInit {
   }
 
   /// Maybe useful later
-  /*setMapOnAll(map) {
+  deleteAllMarkers() {
     // Sets the map on all markers in the array
     for (var i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(this.map);
     }
+    this.markers = [];
   }
-  showMarkers() {
-    // Shows any markers currently in the array
-    this.setMapOnAll(this.map);
-  }
-  }*/
-
+  
+  
   ///This is for periodic tracking. Useful for mobiles
   /*trackMe() {
     if (navigator.geolocation) {

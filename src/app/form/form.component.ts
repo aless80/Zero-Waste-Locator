@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { EventEmitter, Output } from "@angular/core";
-import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 import { Store } from "../models/store.model";
 
 @Component({
@@ -8,7 +7,7 @@ import { Store } from "../models/store.model";
   templateUrl: "./form.component.html",
   styleUrls: ["./form.component.css"]
 })
-export class FormComponent implements OnInit, OnChanges {
+export class FormComponent {
   @Input("formResult") formResult: Store;
   @Output() submit = new EventEmitter<boolean>();
   @Input() storetypes: Store[];
@@ -22,15 +21,13 @@ export class FormComponent implements OnInit, OnChanges {
   hide_edit: boolean = true;    
 
   constructor() {}
-
-  ngOnInit() { }
-
+  
+  /*
+  import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
   ngOnChanges(changes: SimpleChanges) {
     console.log("form - ngOnChanges", changes);
-    console.log(this.storetypes)
-  }
+  }*/
 
-  
   ///Handling the store types checkboxes
   //Check if store is of a certain store type
   hasType(type){
@@ -89,7 +86,8 @@ export class FormComponent implements OnInit, OnChanges {
       this.checked_newType = true; //Sometimes needed (when checkbox off while editing)
       //Good stuff I was playing with:
       //(<HTMLInputElement>event.target)   this is the <input> element
-      //event.stopPropagation();
+      //event.preventDefault()
+      //event.stopPropagation();      
     } else {  
       //Reset to default placeholder
       this.show_newtype_editor = false;
