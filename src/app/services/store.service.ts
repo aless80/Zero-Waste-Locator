@@ -49,7 +49,7 @@ export class StoreService {
       zip: store.zip,
       country: store.country,
       descr: store.descr,
-      type: store.type,
+      types: store.types,
       username: store.username
     };
     return this.http.post(
@@ -63,12 +63,18 @@ export class StoreService {
     return this.http.get(`${this.uri}/${this.collection}/delete/${id}`);
   }
 
-  // Get the distinct values of a field
+  // Get the distinct values of the types field
+  getDistinctTypes() {
+    return this.http.get(`${this.uri}/${this.collection}types`);
+  }
+
+  // Get the distinct values of a field (Not yet used)
   getDistinctValues(field) {
+    return this.http.get(`${this.uri}/${this.collection}types`);
     return this.http.get(`${this.uri}/${this.collection}distinct/${field}`);
   }
 
-  //Utility method to convert result to store type
+  //Utility method to convert result to store types
   result2Store(result) {
     const store: Store = {
       coords: [
@@ -81,7 +87,7 @@ export class StoreService {
       zip: "",
       country: "",
       descr: "",
-      type: "",
+      types: [],
       username: ""
     };
     for (var i = 0; i < result.address_components.length; i++) {
@@ -108,7 +114,7 @@ export class StoreService {
     return store;
   }
 
-  //Utility method to convert result to store type
+  //Utility method to convert result to store types
   result2Store_backend(result) {
     const store: Store = {
       coords: [Number(result.latitude), Number(result.longitude)],
@@ -118,7 +124,7 @@ export class StoreService {
       zip: result.zipcode,
       country: result.country,
       descr: "",
-      type: "",
+      types: [],
       username: "aless80" //TODO when authentication is implemented
     };
     return store;

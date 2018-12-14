@@ -34,7 +34,6 @@ export class GeocoderComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    //this.search_string = this._parent.search_string;
     this.search_string = "Bjerregaards gate 60C, 0174 Oslo";
   }
 
@@ -80,7 +79,7 @@ export class GeocoderComponent implements OnInit {
   }
   process_results(results) {
     //Clear any other previous searches
-    this._parent.removeMarkers();
+    this._parent.removeSearchMarkers();
     //TODO:review when more than one search result. Use Place API:
     //https://developers.google.com/maps/documentation/geocoding/best-practices
     //Move map to searched location

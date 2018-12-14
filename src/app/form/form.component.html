@@ -59,7 +59,9 @@
             <input class="form-control" [(ngModel)]="formResult.coords[0] + ', ' + formResult.coords[1]" id="coordinates" name="coordinates" placeholder="Marker's coordinates" required="" type="text">
           </div>
         </div>
-        <!--<div class="row">
+        <!--Meh, leave this out
+          
+          <div class="row">
           <div class="col-md-3 mb-3">
             <label for="opentime">Opening time</label>
             <select class="custom-select d-block w-100" id="opentime" required="">
@@ -76,42 +78,48 @@
               <option>8.30</option>
             </select>
           </div>
-        </div>-->
-        
+        </div>
         <hr class="mb-4">
-        <h4 class="mb-3">Store type</h4>
+        -->
 
+
+        <h4 class="mb-3">Store type</h4>
         <form>
           <div class="checkbox" *ngFor="let type of storetypes">
             <label>
-              <input type="checkbox" value="">{{type}}
+              <input type="checkbox" [checked]="hasType(type)" (click)="toggleType($event)" name="{{type}}">{{type}}
             </label>
           </div>
           <div class="checkbox">
-            <label class="custom">
-              <input type="checkbox" value="" (click)="newStoreType($event)">New type
-            </label>            
+            <label class="custom" (click)="clickNewtypeText($event)">
+              <input type="checkbox" [(checked)]="checked_newType" value="" (click)="clickNewtypeText($event)">{{newType}}
+            </label>
+            <span style="cursor:pointer;color:blue;" [hidden]="hide_edit"
+              (click)="editNewStoreTypeInput($event)">&nbsp;Edit
+            </span>
+          </div>
+          <div class="input-group" *ngIf="show_newtype_editor">
+            <div class="col-md-6 mb-3">    
+              <input #box (keyup.enter)="confirmNewType(box.value, $event)" (blur)="confirmNewType(box.value, $event); box.value=''" value="{{newType}}">
+              <button type="submit" class="btn btn-secondary" (click)="confirmNewType(formResult.type, $event)">Add</button>
+            </div>
           </div>
         </form>
-        <div class="input-group" *ngIf="show_newtype">
-          <div class="col-md-6 mb-3">
-          <input class="form-control" name="other" placeholder="New store type" type="text" #box (keyup.enter)="update(box.value, $event)" (blur)="update(box.value, $event)">
-            <button type="submit" class="btn btn-secondary">Add</button>
+
+
+        
+
+        <h4 class="mb-3">Description</h4>
+        <textarea class="col-md-9 mb-3" rows="4" [(ngModel)]="formResult.descr" name="description" placeholder="Optional description" required=""></textarea>
+        
+        <div class="row">
+          <div class="col-md-4">        
+            <div class="input-group-append">
+              <button id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="saveForm()">Save</button>
+            </div>
           </div>
         </div>
 
-        <!--<div class="custom-control custom-checkbox">
-          <input class="custom-control-input" id="same-address" type="checkbox">
-          <label class="custom-control-label" for="same-address">Checkbox</label>
-        </div>
-        -->
-        <hr class="mb-4">
-        <h4 class="mb-3">Description</h4>
-        <textarea class="col-md-9 mb-3" rows="4" [(ngModel)]="formResult.descr" name="description" placeholder="Optional description" required=""></textarea>
-
-
-        <hr class="mb-4">
-        <button id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="save()">Save</button>
       </form>
     </div>
 

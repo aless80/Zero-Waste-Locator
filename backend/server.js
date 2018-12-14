@@ -104,7 +104,7 @@ router.route('/stores/update/:id').post((req, res) => {
       store.zip = req.body.zip;
       store.country = req.body.country;
       store.descr = req.body.descr;
-      store.type = req.body.type;
+      store.types = req.body.types;
       store.username = req.body.username;
       store.save().then(store => {
         res.json('Update Complete');
@@ -116,8 +116,34 @@ router.route('/stores/update/:id').post((req, res) => {
 });
 
 // Finds distinct values in field
-router.route('/storesdistinct/:field').get((req, res) => { ///:field
-  Store.distinct(req.params.field, (err, result) => { //req.params.field
+router.route('/storestypes').get((req, res) => {
+  Store
+    /*.find(
+      null,//{types: "Charity shop"},
+      "types"
+    )*/
+    /*.find( 
+    )*/
+    //.select('types')
+    /*
+    .aggregate(
+      [
+          { "$unwind": "$types" }
+      ],
+    )*/
+    .distinct("types")
+    .exec(
+      (err, stores) => {
+          if (err)
+            res.status(400).send('Failed to fetch stores\n' + res.json(err));
+          else
+            res.json(stores);
+        }
+    )
+  });
+
+router.route('/storesdistinct/:field').get((req, res) => {
+  Store.distinct(req.params.field, (err, result) => {
     if (err)
       res.json([]);
       //res.status(400).send('Failed to fetch distinct values from stores\n' + res.json(err));

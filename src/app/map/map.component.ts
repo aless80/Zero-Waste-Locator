@@ -48,7 +48,20 @@ export class MapComponent implements OnInit {
     private alertService: AlertService
   ) {}
 
+  //Get emitter to save form
+  getEmitter(event:KeyboardEvent){
+    if (event == undefined) return
+    console.log('getEmitter',event.type,event)
+    var out = this.storeService
+      .addStore(this.formResult)
+      .subscribe(res => console.log(res));
+  }
+
   ngOnInit() {
+    //Some addresses that work
+    //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
+    //Fretex: Ullevålsveien 12, 0171 Oslo
+    //
     /*this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
@@ -57,10 +70,10 @@ export class MapComponent implements OnInit {
       zip: "0010",
       country: "Norway",
       descr: "This is just an example to populate the form component",
-      type: "Royal palace",
+      types: ["Charity shop"],
       username: "aless80"
-    };*/
-
+    };
+    */
     //Load stores
     this.getStores();
     //Create the map
@@ -135,61 +148,8 @@ export class MapComponent implements OnInit {
     }
   }
 
-  /*Moved to geocoder component
-  //Geocoding using in node-geocoder in backend
-  geocode() {
-    console.log("map geocode clicked");
-    var out = this.storeService.geocode(this.search_string).subscribe(
-      res => {
-        console.log("map geocode.subscribe res:", res);
-        this.process_results_backend(res);
-        this.success("Geocoding successful", 2500);
-      },
-      err => console.error("Geocoding err:", err),
-      () => console.log("Completed")
-    );
-  }
-  process_results_backend(results) {
-    //TODO:review when more than one search result
-    //Move map to searched location
-    this.map.panTo(
-      new google.maps.LatLng(results[0].latitude, results[0].longitude)
-    );
-    //Pass data to form component and set marker
-    this.formResult = this.storeService.result2Store_backend(results[0]);
-    this.setTempMarker(this.formResult, undefined, "Search result");
-  }
 
-  run_geocoding() {
-    if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
-    this.geocoder.geocode(
-      {
-        address: this.search_string,
-        region: "no", //region bias to Norway
-        componentRestrictions: { country: this.componentRestrictions } //country restriction to Norway
-      },
-      (results, status) => {
-        console.log("run_geocoding status:", status, " results:", results);
-        if (status == google.maps.GeocoderStatus.OK) {
-          this.process_results(results);
-        }
-      }
-    );
-  }
-  process_results(results) {
-    //Clear any other previous searches
-    this.removeMarkers();
-    //TODO:review when more than one search result. Use Place API:
-    //https://developers.google.com/maps/documentation/geocoding/best-practices
-    //Move map to searched location
-    this.map.panTo(results[0].geometry.location);
-    //this.setTempMarker(results[0], undefined, 'Search result');
-    //Pass data to form component and set marker
-    this.formResult = this.storeService.result2Store(results[0]);
-    this.setTempMarker(this.formResult, undefined, "Search result");
-  }
-  */
-
+  //Create marker with InfoWindow. Push marker to this.markers
   setTempMarker(store_obj, icon?: string, title?: string) {
     //TODO: check if point already exists!
     var marker = new google.maps.Marker({
@@ -214,7 +174,6 @@ export class MapComponent implements OnInit {
     iwdiv.id = "node";
     var h2 = document.createElement("h2");
     h2.textContent = marker.getTitle();
-    var div = document.createElement("div");
     /*var input1 = document.createElement("input");
     input1.id = "input1";
     input1.type = "text";
@@ -233,13 +192,18 @@ export class MapComponent implements OnInit {
       this.submitForm(this.selectedMarkerIndex)
     );*/
     anchor.addEventListener("click", () => this.removeMarker(store_obj._id)); //this.selectedMarkerIndex
-    //Build everything together in iwdiv element
+    var div = document.createElement("div");
+    //Build everything together in iwdiv element. Add text
     //div.appendChild(input1);
     //div.appendChild(input2);
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
-    iwdiv.appendChild(document.createTextNode(store_obj.descr));
+    iwdiv.appendChild(document.createTextNode('Adress: '+store_obj.address+', '+' '+store_obj.zip+', '+store_obj.locality));
+    iwdiv.appendChild(document.createElement("br"));
+    iwdiv.appendChild(document.createTextNode('Store type: '+store_obj.types.join(', ')));
+    iwdiv.appendChild(document.createElement("br"));
+    iwdiv.appendChild(document.createTextNode('Description: '+store_obj.descr));
     iwdiv.appendChild(document.createElement("br"));
     iwdiv.appendChild(div);
     //Click listener to marker to set and open InfoWindow
@@ -268,7 +232,7 @@ export class MapComponent implements OnInit {
     this.markers.splice(markerind, 1);
     console.log("deleteMarker after: ", this.markers);
   }
-  removeMarkers() {
+  removeSearchMarkers() {
     if (this.markers.length) {
       for (var i = 0; i < this.markers.length; i++) {
         if (this.markers[i].title == 'Search result')
@@ -394,4 +358,59 @@ export class MapComponent implements OnInit {
       this.marker.setPosition(location);
     }
   }*/
+
+    /*Moved to geocoder component
+  //Geocoding using in node-geocoder in backend
+  geocode() {
+    console.log("map geocode clicked");
+    var out = this.storeService.geocode(this.search_string).subscribe(
+      res => {
+        console.log("map geocode.subscribe res:", res);
+        this.process_results_backend(res);
+        this.success("Geocoding successful", 2500);
+      },
+      err => console.error("Geocoding err:", err),
+      () => console.log("Completed")
+    );
+  }
+  process_results_backend(results) {
+    //TODO:review when more than one search result
+    //Move map to searched location
+    this.map.panTo(
+      new google.maps.LatLng(results[0].latitude, results[0].longitude)
+    );
+    //Pass data to form component and set marker
+    this.formResult = this.storeService.result2Store_backend(results[0]);
+    this.setTempMarker(this.formResult, undefined, "Search result");
+  }
+
+  run_geocoding() {
+    if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
+    this.geocoder.geocode(
+      {
+        address: this.search_string,
+        region: "no", //region bias to Norway
+        componentRestrictions: { country: this.componentRestrictions } //country restriction to Norway
+      },
+      (results, status) => {
+        console.log("run_geocoding status:", status, " results:", results);
+        if (status == google.maps.GeocoderStatus.OK) {
+          this.process_results(results);
+        }
+      }
+    );
+  }
+  process_results(results) {
+    //Clear any other previous searches
+    this.removeSearchMarkers();
+    //TODO:review when more than one search result. Use Place API:
+    //https://developers.google.com/maps/documentation/geocoding/best-practices
+    //Move map to searched location
+    this.map.panTo(results[0].geometry.location);
+    //this.setTempMarker(results[0], undefined, 'Search result');
+    //Pass data to form component and set marker
+    this.formResult = this.storeService.result2Store(results[0]);
+    this.setTempMarker(this.formResult, undefined, "Search result");
+  }
+  */
 }

@@ -10,7 +10,7 @@ let Store = new Schema({
     zip: {type: String, required: true},
     country: {type: String, required: true, default: 'Norway'},
     descr: {type: String, default: ''},
-    type: {type: String, default: ''},
+    types: {type: [String], default: ''},
     created_at: {type: Date, default: Date.now},
     modified_at: {type: Date, default: Date.now},
     username: {type: String, default: 'admin'},

@@ -9,6 +9,6 @@ export interface Store {
   locality: string;
   country: string;
   descr: string;
-  type: string;
+  types: string[];
   username: string;
 }
