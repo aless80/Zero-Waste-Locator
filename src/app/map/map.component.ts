@@ -54,7 +54,7 @@ export class MapComponent implements OnInit {
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
     //Fretex: Ullevålsveien 12, 0171 Oslo
     //
-    this.formResult = {
+    /*this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
       street_num: "1",
@@ -64,7 +64,7 @@ export class MapComponent implements OnInit {
       descr: "This is just an example to populate the form component",
       types: ["Charity shop"],
       username: "aless80"
-    };
+    };*/
     //Load stores
     this.getStores();
     //Get all the distinct store types present in DB. Pass to Form component
@@ -210,6 +210,7 @@ export class MapComponent implements OnInit {
     marker.addListener("click", () => {
       this.infowindow.setContent(iwdiv);
       this.infowindow.open(this.map, marker);
+      this.formResult = store_obj;
     });
     //Push marker to markers
     this.markers.push(marker);

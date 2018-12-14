@@ -1,13 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { EventEmitter, Output } from "@angular/core";
 import { Store } from "../models/store.model";
-
+import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 @Component({
   selector: "app-form",
   templateUrl: "./form.component.html",
   styleUrls: ["./form.component.css"]
 })
-export class FormComponent {
+export class FormComponent implements OnChanges {
   @Input("formResult") formResult: Store;
   @Output() submit = new EventEmitter<boolean>();
   @Input() storetypes: Store[];
@@ -22,21 +22,17 @@ export class FormComponent {
 
   constructor() {}
   
-  /*
-  import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
   ngOnChanges(changes: SimpleChanges) {
     console.log("form - ngOnChanges", changes);
-  }*/
+  }
 
   ///Handling the store types checkboxes
   //Check if store is of a certain store type
   hasType(type){
-    //console.log('checked:',type)
     return this.formResult.types.includes(type)
   } 
   //Check/uncheck new type
   toggleType(event){
-    //console.log('addToTypeArray', this.formResult.types, event.target.name, event.target.checked)
     if (event.target.checked)
       this.formResult.types.push(event.target.name)
     else {
