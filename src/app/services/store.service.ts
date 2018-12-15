@@ -65,8 +65,7 @@ export class StoreService {
 
   // Get the distinct values of a field (Not yet used)
   getDistinctValues(field) {
-    return this.http.get(`${this.uri}/${this.collection}/types`);
-    //return this.http.get(`${this.uri}/${this.collection}/distinct/${field}`);
+    return this.http.get(`${this.uri}/${this.collection}/distinct/${field}`);
   }
 
   // Check if exists in DB

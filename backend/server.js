@@ -44,9 +44,6 @@ router.route('/stores/geopromise/:address').get((req, res) => {
 });
 
 
-
-
-
 // Fetches all documents.
 router.route('/stores').get((req, res) => {
   Store.find((err, stores) => {
@@ -59,6 +56,7 @@ router.route('/stores').get((req, res) => {
 
 // Fetches a single document by _id.
 router.route('/stores/:id').get((req, res) => {
+  console.log('/stores/'+req.params.id)
   Store.findById(req.params.id, (err, store) => {
     if (err)
       res.status(400).send('Failed to fetch store\n' + res.json(err));
@@ -117,6 +115,7 @@ router.route('/stores/update/:id').post((req, res) => {
 
 // Finds distinct values in field. It also works with "types" files, which is an array
 router.route('/stores/distinct/:field').get((req, res) => {
+  console.log('/stores/distinct/'+req.params.field)
   Store.distinct(req.params.field)
     .exec((err, results) => {
         if (err)
@@ -126,9 +125,11 @@ router.route('/stores/distinct/:field').get((req, res) => {
     })
 });
 
+
+
 // Check if document exists
 router.route('/stores/exists').post((req, res) => {
-  console.log('/stores/exists',req.body.address)
+  console.log('/stores/exists ',req.body.address)
   Store.find(
       {address: req.body.address, 
         //street_num: req.body.street_num
@@ -143,12 +144,13 @@ router.route('/stores/exists').post((req, res) => {
 
 // Get 5 documents in order of nearest to farthest
 router.route('/stores/near').post((req, res) => {
+  console.log('/stores/near ',req.body.coords)
   Store.aggregate([{
     $geoNear: {
        near: { type: "Point", coordinates: req.body.coords }, //not sure what is "Point"
        spherical: true,
        maxDistance: 200,
-       query: {address : "some address" },
+       //query: {address : "some address" },
        distanceField: "dist.calculated", //output field with distance
        includeLocs: "dist.location", //output field with the location used for the distance
        num: 5       
