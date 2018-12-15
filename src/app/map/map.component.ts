@@ -31,8 +31,7 @@ export class MapComponent implements OnInit {
   formResult: Store;
   storetypes: Store[];
   
-
-  //message component
+  //Message component
   msgText: string = "";
 
   constructor(
@@ -44,7 +43,7 @@ export class MapComponent implements OnInit {
     //Some addresses that work
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
     //Fretex: Ullevålsveien 12, 0171 Oslo
-    //
+    //Uncomment to populate form at startup
     /*this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
@@ -59,7 +58,7 @@ export class MapComponent implements OnInit {
     //Load stores
     this.getStores();
     //Get all the distinct store types present in DB. Pass to Form component
-    this.storeService.getDistinctTypes()
+    this.storeService.getDistinctValues('types')
       .subscribe(
         (data: Store[]) => this.storetypes = data,
         err => console.error(err)

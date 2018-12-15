@@ -2,7 +2,7 @@
   <div #gmap class="map-container" style="width:1000px;height:500px"></div>
   <br>
   
-  <app-geocoder></app-geocoder>
+  <app-geocoder id="app-geocoder"></app-geocoder>
   <!-- I am considering to move the search to a sibling component of the Map component. Now the search is in Geocoder component, which is child of Maps. The following uses an emitter and works when you restore the callbacks in Maps
   <app-save (search)="run_geocoding($event)"></app-save>
   -->
@@ -13,5 +13,5 @@
   <alert></alert>
  
   <hr class="mb-4">
-  <app-form [formResult]="formResult" [storetypes]="storetypes" (submit)="getEmitter($event)"></app-form>
+  <app-form id="app-form" [formResult]="formResult" [storetypes]="storetypes" (submit)="getEmitter($event)"></app-form>
 </div>

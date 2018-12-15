@@ -63,16 +63,20 @@ export class StoreService {
     return this.http.get(`${this.uri}/${this.collection}/delete/${id}`);
   }
 
-  // Get the distinct values of the types field
-  getDistinctTypes() {
-    return this.http.get(`${this.uri}/${this.collection}types`);
-  }
-
   // Get the distinct values of a field (Not yet used)
   getDistinctValues(field) {
-    return this.http.get(`${this.uri}/${this.collection}types`);
-    return this.http.get(`${this.uri}/${this.collection}distinct/${field}`);
+    return this.http.get(`${this.uri}/${this.collection}/types`);
+    //return this.http.get(`${this.uri}/${this.collection}/distinct/${field}`);
   }
+
+  // Check if exists in DB
+  exists(obj) {
+    console.log('service:',`${this.uri}/${this.collection}/exists`)
+    return this.http.post(
+      `${this.uri}/${this.collection}/exists`,
+      obj
+    );
+  }  
 
   //Utility method to convert result to store types
   result2Store(result) {

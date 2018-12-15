@@ -115,28 +115,54 @@ router.route('/stores/update/:id').post((req, res) => {
   });
 });
 
-// Finds distinct values in field
-router.route('/storestypes').get((req, res) => {
-  Store.distinct("types")
-    .exec((err, stores) => {
+// Finds distinct values in field. It also works with "types" files, which is an array
+router.route('/stores/distinct/:field').get((req, res) => {
+  Store.distinct(req.params.field)
+    .exec((err, results) => {
         if (err)
-          res.status(400).send('Failed to fetch stores\n' + res.json(err));
+          res.status(400).send('Failed to fetch distinct fields\n' + res.json(err));
         else
-          res.json(stores);
+          res.json(results);
+    })
+});
+
+// Check if document exists
+router.route('/stores/exists').post((req, res) => {
+  console.log('/stores/exists',req.body.address)
+  Store.find(
+      {address: req.body.address, 
+        //street_num: req.body.street_num
+      })
+    .exec((err, stores) => {
+      if (err)
+        res.status(400).send('Failed to verify the stores\n' + res.json(err));
+      else
+        res.json(stores);
     })
   });
 
-router.route('/storesdistinct/:field').get((req, res) => {
-  Store.distinct(req.params.field, (err, result) => {
-    if (err)
-      res.json([]);
-      //res.status(400).send('Failed to fetch distinct values from stores\n' + res.json(err));
-    else
-      res.json(result)
+// Get 5 documents in order of nearest to farthest
+router.route('/stores/near').post((req, res) => {
+  Store.aggregate([{
+    $geoNear: {
+       near: { type: "Point", coordinates: req.body.coords }, //not sure what is "Point"
+       spherical: true,
+       maxDistance: 200,
+       query: {address : "some address" },
+       distanceField: "dist.calculated", //output field with distance
+       includeLocs: "dist.location", //output field with the location used for the distance
+       num: 5       
+    }
+  }])
+    .exec((err, stores) => {
+      if (err)
+        res.status(400).send('Failed to verify the stores\n' + res.json(err));
+      else
+        res.json(stores);
+    })
   });
-});
+
 
 app.use('/', router);
-
 // Establishes which port the backend runs on.
 app.listen(4000, () => console.log('Express server running on port 4000'));

@@ -26,6 +26,7 @@ export class SaveComponent implements OnInit {
   styleUrls: ['./geocoder.component.css']
 })
 export class GeocoderComponent implements OnInit {
+  public static readonly DEFAULT_SEARCH = "Bjerregaards gate 60C, 0174 Oslo";
   search_string: string;
   geocoder: any;
 
@@ -35,31 +36,18 @@ export class GeocoderComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.search_string = "Bjerregaards gate 60C, 0174 Oslo";
+    this.search_string = GeocoderComponent.DEFAULT_SEARCH;
   }
 
-  //Geocoding using in node-geocoder in backend
-  geocode() {
-    console.log("map geocode clicked");
-    var out = this.storeService.geocode(this.search_string).subscribe(
-      res => {
-        console.log("map geocode.subscribe res:", res);
-        this.process_results_backend(res);
-        this._parent.success("Geocoding successful", 2500);
-      },
-      err => console.error("Geocoding err:", err),
-      () => console.log("Completed")
-    );
-  }
-  process_results_backend(results) {
-    //TODO:review when more than one search result
-    //Move map to searched location
-    this._parent.map.panTo(
-      new google.maps.LatLng(results[0].latitude, results[0].longitude)
-    );
-    //Pass data to form component and set marker
-    this._parent.formResult = this.storeService.result2Store_backend(results[0]);
-    this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
+  exists(){
+    console.log(this.search_string)
+    
+    var str = this.search_string.trim()
+    var arr=str.split(/(\d+)/g) //[ "Bjerregaards gate ", "60", "C ", "0174", " Oslo" ]
+    let obj = {address: arr[0]}
+
+    console.log(obj)
+    this.storeService.exists(obj)
   }
 
   run_geocoding() {
@@ -88,6 +76,30 @@ export class GeocoderComponent implements OnInit {
     //this.setTempMarker(results[0], undefined, 'Search result');
     //Pass data to form component and set marker
     this._parent.formResult = this.storeService.result2Store(results[0]);
+    this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
+  }
+
+  //Geocoding using in node-geocoder in backend
+  geocode() {
+    console.log("map geocode clicked");
+    var out = this.storeService.geocode(this.search_string).subscribe(
+      res => {
+        console.log("map geocode.subscribe res:", res);
+        this.process_results_backend(res);
+        this._parent.success("Geocoding successful", 2500);
+      },
+      err => console.error("Geocoding err:", err),
+      () => console.log("Completed")
+    );
+  }
+  process_results_backend(results) {
+    //TODO:review when more than one search result
+    //Move map to searched location
+    this._parent.map.panTo(
+      new google.maps.LatLng(results[0].latitude, results[0].longitude)
+    );
+    //Pass data to form component and set marker
+    this._parent.formResult = this.storeService.result2Store_backend(results[0]);
     this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
   }
 }
