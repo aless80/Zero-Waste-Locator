@@ -30,7 +30,7 @@ export class StoreService {
 
   // Fetches a single document by _id.
   getStoreById(id) {
-    return this.http.get(`${this.uri}/${this.collection}/${id}`);
+    return this.http.get(`${this.uri}/${this.collection}/get/${id}`);
   }
 
   // Creates a new document.
@@ -68,14 +68,12 @@ export class StoreService {
     return this.http.get(`${this.uri}/${this.collection}/distinct/${field}`);
   }
 
-  // Check if exists in DB
-  exists(obj) {
-    console.log('service:',`${this.uri}/${this.collection}/exists`)
-    return this.http.post(
-      `${this.uri}/${this.collection}/exists`,
-      obj
-    );
-  }  
+  // Check if address exists in DB
+  exists(address) {
+    var url = `${this.uri}/${this.collection}/exists/` + encodeURI(address);
+    console.log('service url:', url)
+    return this.http.get(url);
+  }
 
   //Utility method to convert result to store types
   result2Store(result) {

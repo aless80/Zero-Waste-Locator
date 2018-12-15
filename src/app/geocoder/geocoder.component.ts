@@ -40,17 +40,23 @@ export class GeocoderComponent implements OnInit {
   }
 
   exists(){
-    console.log(this.search_string)
-    
-    var str = this.search_string.trim()
-    var arr=str.split(/(\d+)/g) //[ "Bjerregaards gate ", "60", "C ", "0174", " Oslo" ]
-    let obj = {address: arr[0]}
-
-    console.log(obj)
-    this.storeService.exists(obj)
+    //Clean the address to be searched (remove punctuation and junk characters)
+    var full_address = this.search_string.match(/\d\w*|\w+( +[a-z]\w*)*/gi).join(' ')
+    console.log('Geocoder address: -'+full_address+'-')
+    //Verify if cleaned searched string is in DB
+    var res = this.storeService.exists(full_address)
+      .subscribe(
+        (res: []) => {
+        console.log("Geocoder exists - matches: ",res.length, " res:", res);
+      },
+      err => console.error("Geocoding err:", err),
+      () => console.log("Completed")
+    );
   }
 
   run_geocoding() {
+    this.exists()
+
     if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
     this.geocoder.geocode(
       {
@@ -81,10 +87,9 @@ export class GeocoderComponent implements OnInit {
 
   //Geocoding using in node-geocoder in backend
   geocode() {
-    console.log("map geocode clicked");
     var out = this.storeService.geocode(this.search_string).subscribe(
       res => {
-        console.log("map geocode.subscribe res:", res);
+        console.log("Geocoder geocode.subscribe res:", res);
         this.process_results_backend(res);
         this._parent.success("Geocoding successful", 2500);
       },

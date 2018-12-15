@@ -46,6 +46,7 @@ router.route('/stores/geopromise/:address').get((req, res) => {
 
 // Fetches all documents.
 router.route('/stores').get((req, res) => {
+  console.log('/stores')
   Store.find((err, stores) => {
     if (err)
       res.status(400).send('Failed to fetch stores\n' + res.json(err));
@@ -55,7 +56,7 @@ router.route('/stores').get((req, res) => {
 });
 
 // Fetches a single document by _id.
-router.route('/stores/:id').get((req, res) => {
+router.route('/stores/get/:id').get((req, res) => {
   console.log('/stores/'+req.params.id)
   Store.findById(req.params.id, (err, store) => {
     if (err)
@@ -91,6 +92,7 @@ router.route('/stores/delete/:id').get((req, res) => {
 
 // Updates an existing document.
 router.route('/stores/update/:id').post((req, res) => {
+  console.log('/stores/update/'+req.params.id)
   Store.findById(req.params.id, (err, store) => {
     if (!store)
       return next(new Error('Could not load document'));
@@ -125,22 +127,49 @@ router.route('/stores/distinct/:field').get((req, res) => {
     })
 });
 
-
-
 // Check if document exists
-router.route('/stores/exists').post((req, res) => {
-  console.log('/stores/exists ',req.body.address)
-  Store.find(
-      {address: req.body.address, 
-        //street_num: req.body.street_num
-      })
+router.route('/stores/exists/:address').get((req, res) => {
+  console.log('/stores/exists ',req.params.address)
+  //.find({},{"address":1,"street_num":1})
+  
+  Store.aggregate([ 
+    { 
+      $project: {
+        "doc":"$$ROOT", 
+        full_address: { 
+          $concat: [ "$address"," ","$street_num"," ","$zip"," ","$locality"," ","$country"]
+        }
+      }
+    }, 
+    { 
+      $match: {
+        full_address: {
+          '$regex': req.params.address, //eg: "rregaards gate 60C 0174 oslo no", 
+          '$options': 'i'
+        }
+      }
+    },
+    { 
+      $replaceRoot: {
+        newRoot: "$doc"
+      }
+    } 
+  ])
+  
+  
+  //.find({address: {'$regex': "bjerregaards", '$options': 'i'}})  
+  //Store.find({address: {'$regex': req.params.address, '$options': 'i'}})  
     .exec((err, stores) => {
       if (err)
         res.status(400).send('Failed to verify the stores\n' + res.json(err));
-      else
+      else {
+        console.log('                matches: '+stores.length);
         res.json(stores);
+      }
     })
   });
+
+
 
 // Get 5 documents in order of nearest to farthest
 router.route('/stores/near').post((req, res) => {
