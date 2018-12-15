@@ -27,6 +27,7 @@ export class SaveComponent implements OnInit {
 })
 export class GeocoderComponent implements OnInit {
   search_string: string;
+  geocoder: any;
 
   constructor(
     private storeService: StoreService,
@@ -62,12 +63,12 @@ export class GeocoderComponent implements OnInit {
   }
 
   run_geocoding() {
-    if (!this._parent.geocoder) this._parent.geocoder = new google.maps.Geocoder();
-    this._parent.geocoder.geocode(
+    if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
+    this.geocoder.geocode(
       {
         address: this.search_string,
         region: "no", //region bias to Norway
-        componentRestrictions: { country: this._parent.componentRestrictions } //country restriction to Norway
+        componentRestrictions: { country: this._parent .componentRestrictions } //country restriction to Norway
       },
       (results, status) => {
         console.log("run_geocoding status:", status, " results:", results);

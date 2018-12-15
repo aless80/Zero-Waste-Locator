@@ -16,27 +16,18 @@ import { AlertService } from "../services/alert.service";
 export class MapComponent implements OnInit {
   @ViewChild("gmap") gmapElement: any;
   map: google.maps.Map;
-  geocoder: any;
+  infowindow: google.maps.InfoWindow = new google.maps.InfoWindow();
   curr_marker: google.maps.Marker;
   markers: any[] = [];
-  selectedMarkerIndex: number;
-  infowindow: google.maps.InfoWindow = new google.maps.InfoWindow();
-
-  //Default settings for map and search. They can be removed
-  default_latitude: number = 49.935;
-  default_longitude: number = 10.79;
-  componentRestrictions: string = "NO"; //restrict search to Norway
-
-  //Location tracker
-  currentLat: any;
-  currentLong: any;
-  //isTracking: true;
-
-  //marker_types: string[];
-  stores: Store[];
+  selectedMarkerIndex: number;  
   storeListSub: Subscription; //to unsubscribe
 
-  //data passed between map and form
+  //Default settings for map and search. They can be removed
+  public static readonly DEFAULT_LAT = 49.935;
+  public static readonly DEFAULT_LNG = 10.79;
+  componentRestrictions: string = "NO"; //restrict search to Norway. Used in Geocoder
+
+  //Communication between Map and Form
   formResult: Store;
   storetypes: Store[];
   
@@ -76,8 +67,8 @@ export class MapComponent implements OnInit {
     //Create the map
     var mapProp = {
       center: new google.maps.LatLng(
-        this.default_latitude,
-        this.default_longitude
+        MapComponent.DEFAULT_LAT,
+        MapComponent.DEFAULT_LNG
       ),
       zoom: 10,
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -120,8 +111,8 @@ export class MapComponent implements OnInit {
         "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png";
     if (title == undefined) title = "No title";
 
-    this.currentLat = position.coords.latitude;
-    this.currentLong = position.coords.longitude;
+    //this.currentLat = position.coords.latitude;
+    //this.currentLong = position.coords.longitude;
 
     let location = new google.maps.LatLng(
       position.coords.latitude,
@@ -272,15 +263,14 @@ export class MapComponent implements OnInit {
     this.storeListSub = this.storeService.getStores()
       .subscribe(
         (data: Store[]) => {
-          this.stores = data;
-          this.updateMap();
+          this.updateMap(data);
           if (callback!= undefined) callback()
         },
         err => console.error(err)
     );
   }
-  updateMap() {
-    this.stores.forEach(element => {
+  updateMap(data:Store[]) {
+    data.forEach(element => {
       this.setTempMarker(
         element,
         "http://maps.gstatic.com/mapfiles/markers2/icon_green.png",
