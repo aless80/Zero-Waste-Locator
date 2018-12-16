@@ -177,7 +177,6 @@ export class MapComponent implements OnInit {
     var anchor = document.createElement("a");
     anchor.href = "#"; //this.removeMarker(store_obj._id)
     anchor.text = "Remove";
-    this.selectedMarkerIndex = this.markers.length;
     //Click listener in "Remove" link of marker's InfoWindow
     anchor.addEventListener("click", () => {
       this.removeMarker(store_obj._id)      
@@ -199,10 +198,12 @@ export class MapComponent implements OnInit {
     marker.addListener("click", () => {
       this.infowindow.setContent(iwdiv);
       this.infowindow.open(this.map, marker);
+      this.selectedMarkerIndex = this.markers.indexOf(marker);
       this.formResult = store_obj;
     });
     //Push marker to markers
     this.markers.push(marker);
+    this.selectedMarkerIndex = this.markers.length;
     //Close InfoWindow
     this.hideInfoWindow();
   }
