@@ -51,6 +51,7 @@ export class FormComponent implements OnChanges {
   ///Handling the new store type checkbox
   //User clicks on text of new type
   clickNewtypeText(event: any){
+    console.log('clickNewtypeText',event)
     //If the user clicks on the default placeholder for the new type, edit it
     if (this.newType==FormComponent.NEWTYPE_PLACEHOLDER)
       this.editNewStoreTypeInput(event);
@@ -58,6 +59,7 @@ export class FormComponent implements OnChanges {
   }
   //Edit the new type
   editNewStoreTypeInput(event: KeyboardEvent) {
+    console.log('editNewStoreTypeInput',event)
     //Show the text input with the previous new type or empty if none
     this.show_newtype_editor = !this.show_newtype_editor;
     this.newType = '';
@@ -68,7 +70,7 @@ export class FormComponent implements OnChanges {
   }
   //User clicks on "Add" or press enter to confirm the new type
   confirmNewType(value: string, event:KeyboardEvent) {
-    //console.log("confirmNewType", event.type,  "value=-", value,'-',  event);
+    console.log("confirmNewType", event.type,  "value=-", value,'-',  event);
     //Behavior depends on whether there is any text in the input box
     if (value) {
       //Hide new type editor

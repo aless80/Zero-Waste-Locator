@@ -101,7 +101,7 @@
           <div class="input-group" *ngIf="show_newtype_editor">
             <div class="col-md-6 mb-3">    
               <input #box (keyup.enter)="confirmNewType(box.value, $event)" (blur)="confirmNewType(box.value, $event); box.value=''" value="{{newType}}">
-              <button type="submit" class="btn btn-secondary" (click)="confirmNewType(formResult.type, $event)">Add</button>
+              <button type="submit" class="btn btn-secondary" (click)="confirmNewType(box.value, $event)">Add</button>
             </div>
           </div>
         </form>
