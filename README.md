@@ -9,10 +9,15 @@ For this reason I am implementing this app where users can search and log stores
 
 ### Progress report
 
-This is a MEAN app () and it is still under development. The frontend using Google Maps API is not complete but it works. When you click on a marker two components appear with information on the store and some dummy products. I am setting up the NodeJS backened, MongoDB database, service layer, so that The idea is to store results searched in the embedded Google Maps to the MongoDB database.  
+This is a MEAN app () and it is still under development. The frontend using Angular and the Google Maps API is fully functional, though I have plans to add more functionality (products, search on store type). 
 
-This project usesthe Google Maps API in Angular CLI 7.0.6, NodeJS 8.10.0, Angular: 7.0.4. I am developing in Linux using MongoDB v3.4.17. 
+Through the frontend users can run Google Maps' geolocation, upon which the results are visualized on markes on the map.  
+I implemented a caching system that checks whether the searched address is already present in the database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
+A form appears when you click on a marker. This form contains user editable information on the store such as the store type, store description, etc. This form allows the user to save or update the store/location to the DB. 
 
+The backend consists in a REST API run by NodeJS on a MongoDB DB. The REST API handles CRUD and query operations on the DB, allowing the storage of results searched or saved from the frontend.  
+
+This project usesthe Google Maps API in Angular CLI 7.0.6, NodeJS 8.10.0, Angular: 7.0.4. I am developing in Linux using MongoDB v3.4.17. Of course, the app also uses RxJS.  
 NB: This app does not use agm-core for Google Maps as described in many tutorials. I initially took that approach but I could not find enough documentation to extend it and implement functionalities such as InfoWindow or callbacks from markers.
 
 ## Installation
@@ -28,7 +33,7 @@ Get a Google Maps API key [here](https://developers.google.com/maps/documentatio
 
 Set up a Google Maps API key for using it on a server. This can be used for geocoding from the server backend through [npm-geocoder](https://www.npmjs.com/package/node-geocoder). See the [backend/server.js](backend/server.js) file. 
 
-I will soon clean up things and give both options to the user. 
+I will soon(-ish) clean up things and give both options to the user. 
 
 <!--
 npm i --save-dev babel-cli babel-preset-env
@@ -56,7 +61,8 @@ Open your browser at http://localhost:4200/
 
 ## Some references
 
-Here are some references I am using to develop MEAN applications: 
+Here are some references I am using to develop MEAN applications:  
+
 [Building a MEAN Application](https://navakos.slab.com/public/building-a-mean-application-c9369d11?utm_source=mybridge&utm_medium=blog&utm_campaign=read_more#step-nine-adding-the-gitignore)
 
 [MEAN App tutorial with Angular 4](https://medium.com/netscape/mean-app-tutorial-with-angular-4-part-1-18691663ea96)
