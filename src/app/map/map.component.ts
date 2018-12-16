@@ -206,48 +206,43 @@ export class MapComponent implements OnInit {
     //Close InfoWindow
     this.hideInfoWindow();
   }
+  //User closes a marker's InfoWindow
   hideInfoWindow() {
     this.infowindow.close();
   }
+  //User clicked on "Remove" in marker's InfoWindow
   removeMarker(_id) {
+    //Close the form
+    this.formResult = undefined;
+    //If search marker, remove it and return
     if (this.markers[this.selectedMarkerIndex].title == 'Search result') {
       this.removeSearchMarkers();
       return
-    }      
-    this.storeService
-      .deleteStore(_id)
+    }
+    //Delete a store from DB
+    this.storeService.deleteStore(_id)
       .subscribe(res => console.log, err => console.error(err));
     this.markers[this.selectedMarkerIndex].setMap(null);
-    this.deleteMarker(this.selectedMarkerIndex);
+    this.markers.splice(this.selectedMarkerIndex, 1);
   }
   removeSearchMarkers() {
     if (this.markers.length) {
       for (var i = 0; i < this.markers.length; i++) {
         if (this.markers[i].title == 'Search result') {
           this.markers[i].setMap(null);
-          this.deleteMarker(i);
+          this.markers.splice(i, 1);
         }
       }
-    } else {
-      console.log('No markers to remove')
-    }
+    } else console.log('No markers to remove')
   }
-  deleteMarker(markerind: number) {
-    console.log("deleteMarker before: ", this.markers);
-    this.markers.splice(markerind, 1);
-    console.log("deleteMarker after: ", this.markers);
-  }
-
+  
   ///API calls through service
   //Get emitter to save form
   getEmitter(event:KeyboardEvent){
     if (event == undefined) return
-    console.log('getEmitter',event.type,event)
+    console.log('getEmitter:',event.type)
     //if (event.type == "submit") 
     //Handle Update and Save
-
-    console.log('getEmitter',this.formResult._id)
-
     if (this.formResult._id != undefined) {
       this.storeService.updateStore(this.formResult)
         .subscribe(
