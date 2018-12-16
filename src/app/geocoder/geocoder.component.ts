@@ -5,7 +5,8 @@ import { Store } from "../models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
 import {Inject, forwardRef} from '@angular/core';
 /*
-Instead of injecting parent Map in child (Geocoder, the other option is to use an emitter in child
+Note for myself
+Instead of injecting parent Map in child (Geocoder), the other option is to use an emitter in child
 import { EventEmitter, Output } from "@angular/core";
 ..
 export class SaveComponent implements OnInit {
@@ -41,21 +42,21 @@ export class GeocoderComponent implements OnInit {
 
   //Check if address to be searched is already in DB
   search(){
-    //Clean the address to be searched (remove punctuation and junk characters)
-    var full_address = this.search_string.match(/\d\w*|\w+( +[a-z]\w*)*/gi).join(' ')
     //Verify if cleaned searched string is in DB
-    var res = this.storeService.exists(full_address)
+    var res = this.storeService.address_exists(this.search_string)
       .subscribe(
-        (store: [Store]) => {
+        (store: [any]) => {
+          //No need for geocoding when address to be searched is stored in DB
           if (!store.length) {
-            this.geocoding()
+            //this._parent.formResult._id = ''; TODO: check
+            this.geocoding();            
           } else {
-            console.log("Search string cached. ",store.length, " match(es)",store);
+            console.log(store.length + " match"+(store.length != 1 ? 'es' : '') + ". Loading address from database", store);
+            //this._parent.formResultID = store[0]._id;
             this._parent.process_results(store[0]);
           }
-      },
-      err => console.error("Search err:", err),
-      () => console.log("Completed")
+        },
+        err => console.error("Search err:", err)
     );
   }
 

@@ -1,8 +1,8 @@
 // store.model.ts
 
 export interface Store {
-  //id: string
-  coords: [number, number]; // [Long; Lat]
+  _id?: string,
+  coords: [number, number]; // [Lng; Lat]
   address: string;
   street_num: string;
   zip: string;

@@ -115,7 +115,13 @@
         <div class="row">
           <div class="col-md-4">        
             <div class="input-group-append">
-              <button id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="saveForm()">Save</button>
+              <div *ngIf="formResult._id; then update else save"></div>
+              <ng-template #update>
+                  <button  id="update" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Update</button>
+              </ng-template>
+              <ng-template #save>
+                  <button  id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Save</button>
+              </ng-template>
             </div>
           </div>
         </div>

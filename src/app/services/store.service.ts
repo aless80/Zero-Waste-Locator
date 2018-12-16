@@ -18,7 +18,7 @@ export class StoreService {
   constructor(private http: HttpClient) {}
 
   // Call node-geocoder
-  geocode(address) {
+  geocode(address: string) {
     var url = `${this.uri}/${this.collection}/geopromise/` + encodeURI(address);
     return this.http.get(url);
   }
@@ -29,23 +29,22 @@ export class StoreService {
   }
 
   // Fetches a single document by _id.
-  getStoreById(id) {
+  getStoreById(id: string) {
     return this.http.get(`${this.uri}/${this.collection}/get/${id}`);
   }
 
   // Creates a new document.
-  addStore(store) {
+  addStore(store: Store) {
     return this.http.post(`${this.uri}/${this.collection}/add`, store);
   }
 
   // Updates an existing document.
-  updateStore(id, store) {
+  updateStore(store: Store) {
     const newstore = {
-      lat: store.lat,
-      lng: store.lng,
-      location: store.location, // [Long; Lat]
+      coords: store.coords,
       address: store.address,
       street_num: store.street_num,
+      locality: store.locality,
       zip: store.zip,
       country: store.country,
       descr: store.descr,
@@ -53,13 +52,13 @@ export class StoreService {
       username: store.username
     };
     return this.http.post(
-      `${this.uri}/${this.collection}/update/${id}`,
+      `${this.uri}/${this.collection}/update/${store._id}`,
       newstore
     );
   }
 
   // Deletes an existing document.
-  deleteStore(id) {
+  deleteStore(id: string) {
     return this.http.get(`${this.uri}/${this.collection}/delete/${id}`);
   }
 
@@ -69,7 +68,7 @@ export class StoreService {
   }
 
   // Check if address exists in DB
-  exists(search_string) {
+  address_exists(search_string) {
     //Clean the address to be searched (remove punctuation and junk characters)
     var address = search_string.match(/\d\w*|\w+( +[a-z]\w*)*/gi).join(' ')
     //Send to REST API

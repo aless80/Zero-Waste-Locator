@@ -30,6 +30,7 @@ export class MapComponent implements OnInit {
   //Communication between Map and Form
   formResult: Store;
   storetypes: Store[];
+  //formResultID: string = '';
   
   //Message component
   msgText: string = "";
@@ -138,7 +139,7 @@ export class MapComponent implements OnInit {
 
 
   ///Handle markers of stores from geocoding search or from DB
-    process_results(store) {
+  process_results(store) {
     //Pass data to form component and set marker
     this.formResult = store;
     //Handle search marker
@@ -208,7 +209,6 @@ export class MapComponent implements OnInit {
   hideInfoWindow() {
     this.infowindow.close();
   }
-
   removeMarker(_id) {
     if (this.markers[this.selectedMarkerIndex].title == 'Search result') {
       this.removeSearchMarkers();
@@ -232,24 +232,41 @@ export class MapComponent implements OnInit {
       console.log('No markers to remove')
     }
   }
-  deleteMarker(markerind) {
+  deleteMarker(markerind: number) {
     console.log("deleteMarker before: ", this.markers);
     this.markers.splice(markerind, 1);
     console.log("deleteMarker after: ", this.markers);
   }
+
   ///API calls through service
   //Get emitter to save form
   getEmitter(event:KeyboardEvent){
     if (event == undefined) return
     console.log('getEmitter',event.type,event)
-    var out = this.storeService
-      .addStore(this.formResult)
-      .subscribe(
-          res => this.afterSaving(),
-          err => this.error(err, 2500)
-      );
-  }
+    //if (event.type == "submit") 
+    //Handle Update and Save
 
+    console.log('getEmitter',this.formResult._id)
+
+    if (this.formResult._id != undefined) {
+      this.storeService.updateStore(this.formResult)
+        .subscribe(
+            res => this.afterUpdating(),
+            err => this.error(err, 2500)
+        );
+    } else {
+      this.storeService.addStore(this.formResult)
+        .subscribe(
+            res => this.afterSaving(),
+            err => this.error(err, 2500)
+        );
+    }
+  }
+  afterUpdating(){
+    //Close search marker
+    this.removeSearchMarkers(); //not sure it is needed 
+    this.success("Store updated in database",2500)
+  }
   afterSaving(){
     //Close search marker
     this.removeSearchMarkers();
@@ -263,8 +280,9 @@ export class MapComponent implements OnInit {
     //Reload stores from DB
     this.getStores(callback);    
   }
+
   
-  // Fetches all documents.
+  // Fetch all documents.
   getStores(callback?) {
     //First delete all markers
     this.deleteAllMarkers()
@@ -294,6 +312,7 @@ export class MapComponent implements OnInit {
       this.success("Store deleted", 2500);
     });
   }
+
 
   ///Messages
   showAlert(text: string): void {

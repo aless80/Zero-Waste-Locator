@@ -9,9 +9,8 @@ import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 })
 export class FormComponent implements OnChanges {
   @Input("formResult") formResult: Store;
-  @Output() submit = new EventEmitter<boolean>();
   @Input() storetypes: Store[];
-  //storetypes: Store[];
+  @Output() submit = new EventEmitter<boolean>();
 
   //Variables to handle the new store type (selecting it, editing it..)
   public static readonly NEWTYPE_PLACEHOLDER = "New store type";
@@ -23,16 +22,18 @@ export class FormComponent implements OnChanges {
   constructor() {}
   
   ngOnChanges(changes: SimpleChanges) {
-    console.log("form - ngOnChanges", changes);
+    console.log("form - ngOnChanges", changes, this.checked_newType);
+    //Uncheck new type cause there is a new form
+    this.checked_newType = false
   }
 
   ///Handling the store types checkboxes
   //Check if store is of a certain store type
-  hasType(type){
+  hasType(type: string){
     return this.formResult.types.includes(type)
   } 
   //Check/uncheck new type
-  toggleType(event){
+  toggleType(event: any){
     if (event.target.checked)
       this.formResult.types.push(event.target.name)
     else {
@@ -40,25 +41,23 @@ export class FormComponent implements OnChanges {
     }
     //Sort types array alphabetically
     this.formResult.types.sort()
-    console.log('addToTypeArray', this.formResult.types)
   }
-  removeFromTypesArray(elem) {
-    let ind = this.formResult.types.indexOf(elem);
+  removeFromTypesArray(type: string) {
+    let ind = this.formResult.types.indexOf(type);
       if (ind>=0)
         this.formResult.types.splice(ind,1);
-      else 
-        console.warn("Could not remove ", elem, " from formResult.types array")
   }
   
   ///Handling the new store type checkbox
   //User clicks on text of new type
-  clickNewtypeText(event){
+  clickNewtypeText(event: any){
     //If the user clicks on the default placeholder for the new type, edit it
     if (this.newType==FormComponent.NEWTYPE_PLACEHOLDER)
       this.editNewStoreTypeInput(event);
+    this.checked_newType = event.target.checked;
   }
   //Edit the new type
-  editNewStoreTypeInput(event:KeyboardEvent) {
+  editNewStoreTypeInput(event: KeyboardEvent) {
     //Show the text input with the previous new type or empty if none
     this.show_newtype_editor = !this.show_newtype_editor;
     this.newType = '';
@@ -79,17 +78,18 @@ export class FormComponent implements OnChanges {
       this.formResult.types.push(this.newType);
       //Show the "Edit" text, checkmark is on
       this.hide_edit = false;
-      this.checked_newType = true; //Sometimes needed (when checkbox off while editing)
+      //Checking the checkbox is prob not necessary, maybe needed when checkbox off while editing
+      this.checked_newType = true;
       //Good stuff I was playing with:
       //(<HTMLInputElement>event.target)   this is the <input> element
       //event.preventDefault()
-      //event.stopPropagation();      
+      //event.stopPropagation();
     } else {  
       //Reset to default placeholder
       this.show_newtype_editor = false;
       this.newType=FormComponent.NEWTYPE_PLACEHOLDER;
       this.hide_edit = true;
-      //Uncheck checkbox. Small bug: not working when editing the default new field
+      //Unchecking the checkbox is prob not necessary but does not hurt
       this.checked_newType = false;
     }
   }
@@ -116,7 +116,9 @@ export class FormComponent implements OnChanges {
     win.focus();
   }
   //Use clicks Save to save the store in database
-  saveForm() {
+  submitForm() {
+    //Uncheck the new type cause it is going to be saved
+    this.checked_newType = false
     //Let Map parent save the form to DB
     this.submit.emit(null)
   }

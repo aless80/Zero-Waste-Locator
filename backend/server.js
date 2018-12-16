@@ -81,7 +81,7 @@ router.route('/stores/add').post((req, res) => {
 
 // Deletes a single document by _id.
 router.route('/stores/delete/:id').get((req, res) => {
-  console.log('/stores/delete/',req.params.id)
+  console.log('/stores/delete/'+req.params.id)
   Store.findByIdAndRemove({_id: req.params.id }, (err, store) => {
     if (err)
       res.json(err);
