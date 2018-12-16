@@ -151,7 +151,6 @@ export class MapComponent implements OnInit {
   }
   //Create marker with InfoWindow. Push marker to this.markers
   setTempMarker(store_obj, icon?: string, title?: string) {
-    //TODO: check if point already exists!
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(
         store_obj.coords[0],
@@ -186,7 +185,7 @@ export class MapComponent implements OnInit {
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
-    iwdiv.appendChild(document.createTextNode('Adress: '+store_obj.address+', '+store_obj.street_num+' '+store_obj.zip+', '+store_obj.locality));
+    iwdiv.appendChild(document.createTextNode('Address: '+store_obj.address+' '+store_obj.street_num+', '+store_obj.zip+', '+store_obj.locality));
     iwdiv.appendChild(document.createElement("br"));
     iwdiv.appendChild(document.createTextNode('Store type: '+store_obj.types.join(', ')));
     iwdiv.appendChild(document.createElement("br"));
@@ -297,7 +296,7 @@ export class MapComponent implements OnInit {
       this.setTempMarker(
         element,
         "http://maps.gstatic.com/mapfiles/markers2/icon_green.png",
-        element.descr
+        element.address+' '+element.street_num+', '+element.locality
       );
     });
   }
