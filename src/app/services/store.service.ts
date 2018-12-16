@@ -69,9 +69,11 @@ export class StoreService {
   }
 
   // Check if address exists in DB
-  exists(address) {
+  exists(search_string) {
+    //Clean the address to be searched (remove punctuation and junk characters)
+    var address = search_string.match(/\d\w*|\w+( +[a-z]\w*)*/gi).join(' ')
+    //Send to REST API
     var url = `${this.uri}/${this.collection}/exists/` + encodeURI(address);
-    console.log('service url:', url)
     return this.http.get(url);
   }
 

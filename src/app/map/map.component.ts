@@ -137,7 +137,17 @@ export class MapComponent implements OnInit {
   }
 
 
-  ///Handle markers for geocoding search
+  ///Handle markers of stores from geocoding search or from DB
+    process_results(store) {
+    //Pass data to form component and set marker
+    this.formResult = store;
+    //Handle search marker
+    this.removeSearchMarkers();
+    this.setTempMarker(store, undefined, "Search result");
+    this.map.panTo(
+      new google.maps.LatLng(store.coords[0], store.coords[1])
+    );
+  }
   //Create marker with InfoWindow. Push marker to this.markers
   setTempMarker(store_obj, icon?: string, title?: string) {
     //TODO: check if point already exists!

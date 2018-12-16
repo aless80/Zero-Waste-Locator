@@ -129,9 +129,8 @@ router.route('/stores/distinct/:field').get((req, res) => {
 
 // Check if document exists
 router.route('/stores/exists/:address').get((req, res) => {
-  console.log('/stores/exists ',req.params.address)
-  //.find({},{"address":1,"street_num":1})
-  
+  //:address can be part of the full address, for example 'hamps elisées 14 1234 Pari'
+  //MongoDB aggregation. 1) put together a full address without commas; 2) match the incoming address parameter as substring; 3) return the whole matching document(s).  
   Store.aggregate([ 
     { 
       $project: {
@@ -155,15 +154,11 @@ router.route('/stores/exists/:address').get((req, res) => {
       }
     } 
   ])
-  
-  
-  //.find({address: {'$regex': "bjerregaards", '$options': 'i'}})  
-  //Store.find({address: {'$regex': req.params.address, '$options': 'i'}})  
-    .exec((err, stores) => {
+  .exec((err, stores) => {
       if (err)
-        res.status(400).send('Failed to verify the stores\n' + res.json(err));
+        res.status(400).send('/stores/exists failed\n' + res.json(err));
       else {
-        console.log('                matches: '+stores.length);
+        console.log('/stores/exists ',stores.length,' match' + (stores.length != 1 ? 'es' : '') + ' on: ', req.params.address)
         res.json(stores);
       }
     })

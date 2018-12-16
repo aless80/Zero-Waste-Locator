@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreService } from "../services/store.service";
 import { MapComponent } from '../map/map.component'
-
+import { Store } from "../models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
 import {Inject, forwardRef} from '@angular/core';
 /*
@@ -39,24 +39,29 @@ export class GeocoderComponent implements OnInit {
     this.search_string = GeocoderComponent.DEFAULT_SEARCH;
   }
 
-  exists(){
+  //Check if address to be searched is already in DB
+  search(){
     //Clean the address to be searched (remove punctuation and junk characters)
     var full_address = this.search_string.match(/\d\w*|\w+( +[a-z]\w*)*/gi).join(' ')
-    console.log('Geocoder address: -'+full_address+'-')
     //Verify if cleaned searched string is in DB
     var res = this.storeService.exists(full_address)
       .subscribe(
-        (res: []) => {
-        console.log("Geocoder exists - matches: ",res.length, " res:", res);
+        (store: [Store]) => {
+          if (!store.length) {
+            this.geocoding()
+          } else {
+            console.log("Search string cached. ",store.length, " match(es)",store);
+            this._parent.process_results(store[0]);
+          }
       },
-      err => console.error("Geocoding err:", err),
+      err => console.error("Search err:", err),
       () => console.log("Completed")
     );
   }
 
-  run_geocoding() {
-    this.exists()
-
+  geocoding() {
+    //TODO: consider to use Place API:
+    //https://developers.google.com/maps/documentation/geocoding/best-practices
     if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
     this.geocoder.geocode(
       {
@@ -65,46 +70,33 @@ export class GeocoderComponent implements OnInit {
         componentRestrictions: { country: this._parent .componentRestrictions } //country restriction to Norway
       },
       (results, status) => {
-        console.log("run_geocoding status:", status, " results:", results);
+        console.log("Geocoding status:", status, " results:", results);
         if (status == google.maps.GeocoderStatus.OK) {
-          this.process_results(results);
+          //Transform google maps result to Store type
+          var store:Store = this.storeService.result2Store(results[0]);
+          //Send to parent Map component
+          this._parent.process_results(store);
         }
       }
     );
   }
-  process_results(results) {
-    //Clear any other previous searches
-    this._parent.removeSearchMarkers();
-    //TODO:review when more than one search result. Use Place API:
-    //https://developers.google.com/maps/documentation/geocoding/best-practices
-    //Move map to searched location
-    this._parent.map.panTo(results[0].geometry.location);
-    //this.setTempMarker(results[0], undefined, 'Search result');
-    //Pass data to form component and set marker
-    this._parent.formResult = this.storeService.result2Store(results[0]);
-    this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
-  }
 
+  //Not used and obsolete but good stuff
   //Geocoding using in node-geocoder in backend
-  geocode() {
+  node_geocode() {
     var out = this.storeService.geocode(this.search_string).subscribe(
       res => {
         console.log("Geocoder geocode.subscribe res:", res);
-        this.process_results_backend(res);
-        this._parent.success("Geocoding successful", 2500);
+        //Move map to searched location
+        this._parent.map.panTo(
+          new google.maps.LatLng(res[0].latitude, res[0].longitude)
+        );
+        //Pass data to form component and set marker
+        this._parent.formResult = this.storeService.result2Store_backend(res[0]);
+        this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
       },
       err => console.error("Geocoding err:", err),
       () => console.log("Completed")
     );
-  }
-  process_results_backend(results) {
-    //TODO:review when more than one search result
-    //Move map to searched location
-    this._parent.map.panTo(
-      new google.maps.LatLng(results[0].latitude, results[0].longitude)
-    );
-    //Pass data to form component and set marker
-    this._parent.formResult = this.storeService.result2Store_backend(results[0]);
-    this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
-  }
+  }  
 }

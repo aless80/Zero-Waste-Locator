@@ -9,9 +9,8 @@
             Please enter the address.
           </div>
           <div class="input-group-append">
-            <button type="submit" class="btn btn-primary" (click)="run_geocoding()" [disabled]="search_string === ''">Search</button>
-            <button type="submit" class="btn btn-primary" (click)="geocode()" hidden>Search node-geocoder</button>
-            <button type="submit" class="btn btn-primary" (click)="exists()" >exists</button>
+            <button type="submit" class="btn btn-primary" (click)="search()" [disabled]="search_string === ''">Search</button>
+            <button type="submit" class="btn btn-primary" (click)="node_geocode()" hidden>Search using node-geocoder</button>
           </div>
         </div>
       </div>
