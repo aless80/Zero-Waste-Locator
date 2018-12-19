@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-rating',
@@ -8,6 +8,14 @@ import { Component } from '@angular/core';
 export class RatingComponent {
 
   constructor() { }
-  currentRate = 3.14;
-  
+  @Input() rating;
+  @Input() user_rating = 0;
+  hovered = 0;
+  readonly = false;
+
+  setRating(user_rating){
+    console.log('setRating',user_rating)
+    this.user_rating = user_rating
+  }
+
 }

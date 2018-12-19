@@ -1,11 +1,34 @@
-<ng-template #t let-fill="fill">
+<!--fill is if one star is full-->
+<ng-template #t let-fill="fill" let-index="index">
+  
   <span class="star" [class.full]="fill === 100">
-    <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+    <span class="half" [class.fullrated]="user_rating" [style.width.%]="fill" (click)="setRating(index+1)">&#9733;</span>
+    &#9733;
   </span>
 </ng-template>
 
-<ngb-rating [(rate)]="currentRate" [starTemplate]="t" [readonly]="true" max="5"></ngb-rating>
-<pre>Rate: <b>{{currentRate}}</b></pre>
+<p>
+  <ngb-rating id="ngb-rating" [starTemplate]="t" 
+  [rate]="rating.total/rating.count" 
+  (hover)="hovered=$event" (leave)="hovered=0" 
+  [readonly]="false" max="5"></ngb-rating>
+  
 
-<!--<button class="btn btn-sm btn-outline-primary mr-2" (click)="currentRate = 1.35">1.35</button>
+  <b *ngIf="rating.count==1; else goTemplate">(1 rating of {{rating.total}})</b>
+  <ng-template #goTemplate>
+    <b>({{rating.count}} ratings with average {{rating.total/rating.count | number : '1.1-1'}})</b>
+  </ng-template>
+</p>
+
+<!--
+<p>rating: <b>{{rating.total/rating.count | number : '1.1-1'}}</b>&nbsp;
+ (rating.total: {{rating.total}} - rating.count: {{rating.count}})</p>
+<p>Hovered: <b>{{hovered}}</b></p>
+<p>User rating: <b>{{user_rating}}</b></p>
+-->
+
+<!--
+<button class="btn btn-sm btn-outline-{{readonly ? 'danger' : 'success'}}" (click)="readonly = !readonly">
+  {{ readonly ? "readonly" : "editable"}}
+</button>
 -->

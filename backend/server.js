@@ -106,6 +106,7 @@ router.route('/stores/update/:id').post((req, res) => {
       store.descr = req.body.descr;
       store.types = req.body.types;
       store.username = req.body.username;
+      store.rating = req.body.rating;
       store.save().then(store => {
         res.json('Update Complete');
       }).catch(err => {

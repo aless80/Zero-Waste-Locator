@@ -11,4 +11,8 @@ export interface Store {
   descr: string;
   types: string[];
   username: string;
+  rating: {
+    total: number,
+    count: number
+  }
 }

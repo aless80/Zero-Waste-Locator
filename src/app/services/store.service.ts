@@ -49,7 +49,11 @@ export class StoreService {
       country: store.country,
       descr: store.descr,
       types: store.types,
-      username: store.username
+      username: store.username,
+      rating: {
+        total: store.rating.total,
+        count: store.rating.count
+      }
     };
     return this.http.post(
       `${this.uri}/${this.collection}/update/${store._id}`,
@@ -97,7 +101,11 @@ export class StoreService {
       country: "",
       descr: "",
       types: [],
-      username: ""
+      username: "",
+      rating: {
+        total: undefined,
+        count: undefined
+      }
     };
     for (var i = 0; i < result.address_components.length; i++) {
       if (result.address_components[i].types.includes("route")) {
@@ -134,7 +142,11 @@ export class StoreService {
       country: result.country,
       descr: "",
       types: [],
-      username: "aless80" //TODO when authentication is implemented
+      username: "aless80", //TODO when authentication is implemented
+      rating: {
+        total: undefined,
+        count: undefined
+      }
     };
     return store;
   }

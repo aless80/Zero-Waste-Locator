@@ -14,6 +14,10 @@ let Store = new Schema({
     created_at: {type: Date, default: Date.now},
     modified_at: {type: Date, default: Date.now},
     username: {type: String, default: 'admin'},
+    rating: {
+        total: {type: Number, default: 0},
+        count: {type: Number, default: 0}
+      }
 });
 
 /*

@@ -61,7 +61,7 @@ export class MapComponent implements OnInit {
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
     //Fretex: Ullevålsveien 12, 0171 Oslo
     //Uncomment to populate form at startup
-    /*this.formResult = {
+    this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
       address: "Slottsplassen",
       street_num: "1",
@@ -70,8 +70,9 @@ export class MapComponent implements OnInit {
       country: "Norway",
       descr: "This is just an example to populate the form component",
       types: ["Charity shop"],
-      username: "aless80"
-    };*/
+      username: "aless80",
+      rating: {total: 10, count: 3}
+    };
     //Load stores
     this.showAllStores();
     //Get all the distinct store types present in DB. Pass to Form component

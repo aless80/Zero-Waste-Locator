@@ -15,7 +15,7 @@ export class FormComponent implements OnChanges {
   @Input("formResult") formResult: Store;
   @Input() storetypes: Store[];
   @Output() submit = new EventEmitter<boolean>();
-
+  @Output() user_rating: number = 0;
   //Variables to handle the new store type (selecting it, editing it..)
   public static readonly NEWTYPE_PLACEHOLDER = "New store type";
   newType: string = FormComponent.NEWTYPE_PLACEHOLDER;
