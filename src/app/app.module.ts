@@ -11,6 +11,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './services/alert.service';
 import { GeocoderComponent } from './geocoder/geocoder.component';
+//import { TabsComponent } from './tabs/tabs.component';
+//import { TabComponent } from './tabs/tab.component';
+import { SearchtypesComponent } from './searchtypes/searchtypes.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RatingComponent } from './rating/rating.component';
+import { TabsetComponent } from './tabset/tabset.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,12 +26,18 @@ import { GeocoderComponent } from './geocoder/geocoder.component';
     SaveComponent,
     NavbarComponent,
     AlertComponent,
-    GeocoderComponent
+    GeocoderComponent,
+    //TabsComponent,
+    //TabComponent,
+    SearchtypesComponent,
+    RatingComponent,
+    TabsetComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [
     StoreService,

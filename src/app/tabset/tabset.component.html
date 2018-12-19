@@ -1,0 +1,21 @@
+<ngb-tabset #t="ngbTabset">
+    <ngb-tab id="tabset1">
+        <ng-template ngbTabTitle><b>Search</b></ng-template>
+        <ng-template ngbTabContent>
+          <br>
+          <app-geocoder id="app-geocoder"></app-geocoder>
+          <app-form id="app-form" [formResult]="formResult" [storetypes]="storetypes"></app-form>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab id="tabset2">
+      <ng-template ngbTabTitle><b>Filter</b></ng-template>
+      <ng-template ngbTabContent>
+        <br>
+        <app-searchtypes id="app-searchtypes" [storetypes]="storetypes" ></app-searchtypes>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+  <!--
+    <button class="btn btn-outline-primary" (click)="t.select('tabset2')">Selected tab with "tabset2" id</button>
+  -->
+  

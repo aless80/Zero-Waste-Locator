@@ -1,4 +1,4 @@
-<div class="container" *ngIf="formResult !== undefined666">
+<div class="container" *ngIf="formResult !== undefined">
   <div class="row">
     <div class="col-md-10 order-md-1">
       <h4 class="mb-3">Store information</h4>
@@ -82,6 +82,7 @@
         <hr class="mb-4">
         -->
 
+        <app-rating id="app-rating"></app-rating>
 
         <h4 class="mb-3">Store type</h4>
         <form>
@@ -105,22 +106,19 @@
             </div>
           </div>
         </form>
-
-
         
 
         <h4 class="mb-3">Description</h4>
         <textarea class="col-md-9 mb-3" rows="4" [(ngModel)]="formResult.descr" name="description" placeholder="Optional description" required=""></textarea>
-        
         <div class="row">
           <div class="col-md-4">        
             <div class="input-group-append">
               <div *ngIf="formResult._id; then update else save"></div>
               <ng-template #update>
-                  <button  id="update" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Update</button>
+                <button  id="update" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Update</button>                
               </ng-template>
               <ng-template #save>
-                  <button  id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Save</button>
+                <button  id="save" type="submit" class="btn btn-primary btn-lg btn-block" (click)="submitForm()">Save</button>
               </ng-template>
             </div>
           </div>

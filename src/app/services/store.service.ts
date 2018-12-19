@@ -24,7 +24,7 @@ export class StoreService {
   }
 
   // Fetches all documents.
-  getStores() {
+  getAllStores() {
     return this.http.get(`${this.uri}/${this.collection}`);
   }
 
@@ -62,6 +62,13 @@ export class StoreService {
     return this.http.get(`${this.uri}/${this.collection}/delete/${id}`);
   }
 
+  // Query documents on a field
+  fetchField(field, array) {
+    console.log(`${this.uri}/${this.collection}/fetch/${field}`)
+    return this.http.post(`${this.uri}/${this.collection}/fetch/${field}`, array);
+  }
+  
+  
   // Get the distinct values of a field (Not yet used)
   getDistinctValues(field) {
     return this.http.get(`${this.uri}/${this.collection}/distinct/${field}`);

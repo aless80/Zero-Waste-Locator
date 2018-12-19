@@ -115,7 +115,23 @@ router.route('/stores/update/:id').post((req, res) => {
   });
 });
 
-// Finds distinct values in field. It also works with "types" files, which is an array
+// Fetch any document by field
+//It also works with "types" files, which is an array
+router.route('/stores/fetch/:field').post((req, res) => {
+  console.log('/stores/fetch/' + req.params.field, req.body)
+  var query = {};
+  query[req.params.field] = { $in: req.body};
+  Store.find(query)
+    .exec((err, results) => {
+        if (err)
+          res.status(400).send('Failed to fetch documents\n' + res.json(err));
+        else
+          res.json(results);
+    })
+});
+
+// Finds distinct values in field
+//It also works with "types" files, which is an array
 router.route('/stores/distinct/:field').get((req, res) => {
   console.log('/stores/distinct/'+req.params.field)
   Store.distinct(req.params.field)
@@ -164,9 +180,7 @@ router.route('/stores/exists/:address').get((req, res) => {
     })
   });
 
-
-
-// Get 5 documents in order of nearest to farthest
+// Not used: Get 5 documents in order of nearest to farthest
 router.route('/stores/near').post((req, res) => {
   console.log('/stores/near ',req.body.coords)
   Store.aggregate([{

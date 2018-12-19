@@ -1,17 +1,27 @@
 <div class="container">
-  <div #gmap class="map-container" style="width:1000px;height:500px"></div>
+  <div #gmap class="map-container" style="width:500px;height:250px"></div>
   <br>
   
-  <app-geocoder id="app-geocoder"></app-geocoder>
-  <!-- I am considering to move the search to a sibling component of the Map component. Now the search is in Geocoder component, which is child of Maps. The following uses an emitter and works when you restore the callbacks in Maps
+  <!--<app-geocoder id="app-geocoder"></app-geocoder>
+   I am considering to move the search to a sibling component of the Map component. Now the search is in Geocoder component, which is child of Maps. The following uses an emitter and works when you restore the callbacks in Maps
   <app-save (search)="run_geocoding($event)"></app-save>
   -->
   <br>
 
-  <!--<button type="submit" class="btn btn-secondary" (click)="test()">test</button>
-  -->
   <alert></alert>
  
   <hr class="mb-4">
-  <app-form id="app-form" [formResult]="formResult" [storetypes]="storetypes" (submit)="getEmitter($event)"></app-form>
+  <app-tabset [storetypes]="storetypes" [formResult]="formResult" 
+  ></app-tabset>
+  
+  <!--OBSOLETE: Other implementation of tabs
+    <app-tabs>
+    <app-tab id='app-searchtypes' tabTitle="Search by type">
+      <app-searchtypes id="app-searchtypes" [storetypes]="storetypes" (typesEmit)="getEventToggleEmitter($event)"></app-searchtypes>
+    </app-tab>
+    <app-tab tabTitle="Edit" *ngIf="formResult !== undefined">
+      <app-form id="app-form" [formResult]="formResult" [storetypes]="storetypes" (submit)="getSaveEmitter($event)"></app-form>
+    </app-tab>
+  </app-tabs>
+  -->
 </div>

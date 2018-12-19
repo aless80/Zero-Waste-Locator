@@ -1,0 +1,5 @@
+<div class="checkbox" *ngFor="let type of storetypes">
+  <label>
+    <input type="checkbox" name="{{type}}" (change)="sendTypeToggle($event)" name="{{type}}">{{type}}
+  </label>
+</div>

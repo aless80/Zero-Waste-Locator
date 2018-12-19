@@ -1,7 +1,11 @@
-import { Component, Input } from "@angular/core";
-import { EventEmitter, Output } from "@angular/core";
+import { Component, Input, Output } from "@angular/core";
+import { EventEmitter } from "@angular/core";
 import { Store } from "../models/store.model";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
+
+import { ToMapService } from '../services/to-map.service'
+import { Subscription }   from 'rxjs';
+
 @Component({
   selector: "app-form",
   templateUrl: "./form.component.html",
@@ -17,9 +21,16 @@ export class FormComponent implements OnChanges {
   newType: string = FormComponent.NEWTYPE_PLACEHOLDER;
   checked_newType: boolean = false;
   show_newtype_editor: boolean = false;
-  hide_edit: boolean = true;    
+  hide_edit: boolean = true;
 
-  constructor() {}
+  subscription: Subscription;
+    
+  constructor(private toMapService: ToMapService) {
+    this.subscription = toMapService.formSubmit$.subscribe(
+      obj => {
+        console.log(obj)
+    });
+  }
   
   ngOnChanges(changes: SimpleChanges) {
     //console.log("form - ngOnChanges", changes);
@@ -118,12 +129,18 @@ export class FormComponent implements OnChanges {
     var win = window.open(url, "_blank");
     win.focus();
   }
-  //Use clicks Save to save the store in database
+  
   submitForm() {
     //Uncheck the new type cause it is going to be saved
     this.checked_newType = false
     //Let Map parent save the form to DB
-    this.submit.emit(null)
+    console.log('submitForm:')
+    this.toMapService.sendFormSubmit(null)
+  }
+
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    this.subscription.unsubscribe();
   }
 
   countries = [

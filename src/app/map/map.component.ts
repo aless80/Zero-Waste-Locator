@@ -7,6 +7,7 @@ import { Subscription } from "rxjs"; //to unsubscribe
 import { AlertService } from "../services/alert.service";
 //TODO: do not run search when empty address
 //TODO: decide many markers or only one. then probably clear form when second search
+import { ToMapService } from '../services/to-map.service'
 
 @Component({
   selector: "app-map",
@@ -30,6 +31,7 @@ export class MapComponent implements OnInit {
   //Communication between Map and Form
   formResult: Store;
   storetypes: Store[];
+  searchtypes: Store[] = [];
   //formResultID: string = '';
   
   //Message component
@@ -37,8 +39,22 @@ export class MapComponent implements OnInit {
 
   constructor(
     private storeService: StoreService,
-    private alertService: AlertService
-  ) {}
+    private alertService: AlertService,
+    private toMapService: ToMapService
+  ) {
+    toMapService.typeToggle$.subscribe(
+      obj => {
+        console.log('toMapService.typeToggle$ ',obj)
+        this.searchType(obj)
+      });
+      
+    toMapService.formSubmit$.subscribe(
+      obj => {
+        console.log('toMapService.FormSubmit$ ',obj)
+        this.save()
+      });
+      
+  }
 
   ngOnInit() {
     //Some addresses that work
@@ -57,7 +73,7 @@ export class MapComponent implements OnInit {
       username: "aless80"
     };*/
     //Load stores
-    this.getStores();
+    this.showAllStores();
     //Get all the distinct store types present in DB. Pass to Form component
     this.storeService.getDistinctValues('types')
       .subscribe(
@@ -210,7 +226,8 @@ export class MapComponent implements OnInit {
   hideInfoWindow() {
     this.infowindow.close();
   }
-  //User clicked on "Remove" in marker's InfoWindow
+  //User clicked on "Remove" in marker's InfoWindow. 
+  //Delete from map and from storage, if applicable
   removeMarker(_id) {
     //Close the form
     this.formResult = undefined;
@@ -220,10 +237,9 @@ export class MapComponent implements OnInit {
       return
     }
     //Delete a store from DB
-    this.storeService.deleteStore(_id)
-      .subscribe(res => console.log, err => console.error(err));
     this.markers[this.selectedMarkerIndex].setMap(null);
     this.markers.splice(this.selectedMarkerIndex, 1);
+    this.deleteStore(_id, () => this.showAllStores()); //TODO: review
   }
   removeSearchMarkers() {
     if (this.markers.length) {
@@ -236,17 +252,21 @@ export class MapComponent implements OnInit {
     } else console.log('No markers to remove')
   }
   
-  ///API calls through service
-  //Get emitter to save form
-  getEmitter(event:KeyboardEvent){
+    
+  ///Process emitters: OBSOLETE
+  /*//Get emitter to save form
+  getSaveEmitter(event:KeyboardEvent){
     if (event == undefined) return
-    console.log('getEmitter:',event.type)
-    //if (event.type == "submit") 
+    console.log('getSaveEmitter:',event.type)
     //Handle Update and Save
     if (this.formResult._id != undefined) {
       this.storeService.updateStore(this.formResult)
         .subscribe(
-            res => this.afterUpdating(),
+            res => {
+              //Close search marker
+              this.removeSearchMarkers(); //not sure it is needed 
+              this.success("Store updated in database",2500)
+            },
             err => this.error(err, 2500)
         );
     } else {
@@ -257,40 +277,117 @@ export class MapComponent implements OnInit {
         );
     }
   }
-  afterUpdating(){
-    //Close search marker
-    this.removeSearchMarkers(); //not sure it is needed 
-    this.success("Store updated in database",2500)
+  //OBSOLETE Get emitter to search on types
+  getEventToggleEmitter(event:any){
+    if (event == undefined) return
+    //console.log('getEventToggleEmitter:',event)
+    if (event.checked) {
+      this.searchtypes.push(event.name);
+    } else if (!event.checked) {
+      this.searchtypes.splice(this.searchtypes.indexOf(event.name), 1);
+    }    
+    //Query DB, plot all stores
+    this.fetchField((data: Store[]) => {
+      //Delete all markers
+      this.deleteAllMarkers()
+      console.log(data)
+      this.updateMap(data);
+    })
+  }*/
+
+  ///Communication from family components via service
+  //User clicked on save or update button in the form
+  save(){
+    //Handle Update and Save
+    if (this.formResult._id != undefined) {
+      this.storeService.updateStore(this.formResult)
+        .subscribe(
+            res => {
+              //Close search marker
+              this.removeSearchMarkers(); //not sure it is needed 
+              this.success("Store updated in database", 2500)
+            },
+            err => this.error(err, 2500)
+        );
+    } else {
+      this.storeService.addStore(this.formResult)
+        .subscribe(
+            res => this.afterSaving(),
+            err => this.error(err, 2500)
+        );
+    }
   }
   afterSaving(){
     //Close search marker
     this.removeSearchMarkers();
-    //Pass to getStores callback 
+    //Pass to showAllStores callback 
     var callback = () => {
       //After stores have been loaded, open the store saved last
       google.maps.event.trigger(this.markers[this.markers.length-1], 'click')
       //Show message
-      this.success("Store saved in database",2500)
+      this.success("Store saved in database", 2500)
     }
     //Reload stores from DB
-    this.getStores(callback);    
+    this.showAllStores(callback);    
   }
 
-  
-  // Fetch all documents.
-  getStores(callback?) {
-    //First delete all markers
-    this.deleteAllMarkers()
+  //Get emitter to search on types
+  searchType(event:any){
+    if (event == undefined) return
+    console.log('searchType:',event)
+    if (event.checked) {
+      this.searchtypes.push(event.name);
+    } else if (!event.checked) {
+      this.searchtypes.splice(this.searchtypes.indexOf(event.name), 1);
+    }    
     //Query DB, plot all stores
-    this.storeListSub = this.storeService.getStores()
+    this.fetchField((data: Store[]) => {
+      //Delete all markers
+      this.deleteAllMarkers()
+      console.log(data)
+      this.updateMap(data);
+    })
+  }
+  
+  ///Methods using API calls through service
+  // Fetch all documents.
+  showAllStores(callback?) {
+    //Delete all markers
+    //Query DB, plot all stores
+    this.storeListSub = this.storeService.getAllStores()
       .subscribe(
         (data: Store[]) => {
+          this.deleteAllMarkers();
           this.updateMap(data);
           if (callback!= undefined) callback()
         },
         err => console.error(err)
     );
   }
+
+  // Fetch documents of certain types
+  fetchField(callback?) {
+    this.storeListSub = this.storeService.fetchField('types', this.searchtypes)
+      .subscribe(
+        (data: Store[]) => {
+          if (callback!= undefined) callback(data)
+        },
+        err => console.error(err)
+    );
+    
+  }
+
+  // Delete the selected document from storage
+  deleteStore(id:string, callback?) {
+    this.storeService.deleteStore(id)
+      .subscribe(() => {
+      if (callback!= undefined) callback()
+      this.success("Store deleted", 2500);
+    });
+  }
+
+
+  //Plot the given Store data
   updateMap(data:Store[]) {
     data.forEach(element => {
       this.setTempMarker(
@@ -300,14 +397,6 @@ export class MapComponent implements OnInit {
       );
     });
   }
-  // Deletes the selected document and refreshes the document view.
-  deleteStore(id) {
-    this.storeService.deleteStore(id).subscribe(() => {
-      this.getStores();
-      this.success("Store deleted", 2500);
-    });
-  }
-
 
   ///Messages
   showAlert(text: string): void {
@@ -341,11 +430,11 @@ export class MapComponent implements OnInit {
     this.alertService.clear();
   }
 
-  /// Maybe useful later
+  //
   deleteAllMarkers() {
     // Sets the map on all markers in the array
     for (var i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(this.map);
+      this.markers[i].setMap(null);
     }
     this.markers = [];
   }
