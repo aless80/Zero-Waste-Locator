@@ -1,5 +1,15 @@
-<div class="checkbox" *ngFor="let type of storetypes">
+<div class="checkbox">
   <label>
-    <input type="checkbox" name="{{type}}" (change)="sendTypeToggle($event)" name="{{type}}">{{type}}
+    <a name="selectall" href="#" (click)="sendAllToggle(true);"><b>Select all</b></a>
+  </label>
+  &nbsp;
+  <label>
+      <a name="deselectall" href="#" (click)="sendAllToggle(false);"><b>Deselect all</b></a>
+  </label>
+  
+</div>
+<div class="checkbox" *ngFor="let type of storetypes; index as i">
+  <label>
+    <input type="checkbox" name="{{type}}" (change)="sendTypeToggle($event, i)" name="{{type}}" [checked]="type == checked[i]">&nbsp;{{type}}
   </label>
 </div>

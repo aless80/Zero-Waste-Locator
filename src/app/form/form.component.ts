@@ -37,7 +37,6 @@ export class FormComponent implements OnChanges {
     //console.log("form - ngOnChanges", changes);
     //Uncheck new type cause there is a new form
     this.checked_newType = false
-    console.log(this.storetypes)
   }
 
   ///Handling the store types checkboxes
@@ -112,10 +111,8 @@ export class FormComponent implements OnChanges {
 
 
   goToGoogleMaps(event: KeyboardEvent) {
-    console.log('goToGoogleMaps', event.type, event);
+    //console.log('goToGoogleMaps', event.type, event);
     if (event.type != "click") return;
-    console.log("goToGoogleMaps");
-    console.log(event);
     var url =
       "https://www.google.com/maps/search/?api=1&query=" +
       encodeURI(this.formResult.address) +

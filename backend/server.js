@@ -121,7 +121,11 @@ router.route('/stores/update/:id').post((req, res) => {
 router.route('/stores/fetch/:field').post((req, res) => {
   console.log('/stores/fetch/' + req.params.field, req.body)
   var query = {};
-  query[req.params.field] = { $in: req.body};
+  if (req.body == '*') {
+    query[req.params.field] = {$exists: true}
+  } else {
+    query[req.params.field] = { $in: req.body};
+  }
   Store.find(query)
     .exec((err, results) => {
         if (err)

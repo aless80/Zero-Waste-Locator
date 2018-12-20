@@ -17,8 +17,8 @@ export class ToMapService {
   formSubmit$ = this.formSubmitSource.asObservable();
 
   // Service message commands
-  sendTypeToggle(obj: any) {
-    this.typeToggleSource.next(obj);
+  sendTypeToggle(checked: string[]) {
+    this.typeToggleSource.next(checked);
   }
   sendFormSubmit(input: boolean) {
     this.formSubmitSource.next(input);

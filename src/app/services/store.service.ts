@@ -68,7 +68,6 @@ export class StoreService {
 
   // Query documents on a field
   fetchField(field, array) {
-    console.log(`${this.uri}/${this.collection}/fetch/${field}`)
     return this.http.post(`${this.uri}/${this.collection}/fetch/${field}`, array);
   }
   

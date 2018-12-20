@@ -28,7 +28,7 @@ export class MapComponent implements OnInit {
   //Communication between Map and Form
   formResult: Store;
   storetypes: string[];
-  searchtypes: Store[] = [];
+  searchtypes: string[] = [];
   
   //Message component
   msgText: string = "";
@@ -318,21 +318,40 @@ export class MapComponent implements OnInit {
     //Reload stores from DB
     this.showAllStores(callback);    
   }
-
+  
   //Get emitter to search on types
-  searchType(event:any){
-    if (event == undefined) return
-    console.log('searchType:',event)
-    if (event.checked) {
-      this.searchtypes.push(event.name);
-    } else if (!event.checked) {
-      this.searchtypes.splice(this.searchtypes.indexOf(event.name), 1);
-    }    
+  searchType(array: string[]){
+    console.log('map searchType:',array)
     //Query DB, plot all stores
-    this.fetchField((data: Store[]) => {
+    this.fetchField('types', array, (data: Store[]) => {
       //Delete all markers
       this.deleteAllMarkers()
-      console.log(data)
+      console.log('map searchType data:',data)
+      this.updateMap(data);
+    })
+  }
+  
+  searchType2(obj: any){
+    if (obj == undefined) return
+    console.log('map searchType obj:',obj)
+    if (obj.name == "*") {
+      if (obj.checked) {
+        this.searchtypes = ["*"];
+      } else {
+        this.searchtypes = obj.name;
+      }
+    } else {
+      if (obj.checked) {
+        this.searchtypes.push(obj.name);
+      } else if (!obj.checked) {
+        this.searchtypes.splice(this.searchtypes.indexOf(obj.name), 1);
+      }
+    }    
+    //Query DB, plot all stores
+    this.fetchField('types', this.searchtypes, (data: Store[]) => {
+      //Delete all markers
+      this.deleteAllMarkers()
+      console.log('map searchType data:',data)
       this.updateMap(data);
     })
   }
@@ -361,8 +380,8 @@ export class MapComponent implements OnInit {
       );
   }
   // Fetch documents of certain types
-  fetchField(callback?) {
-    this.storeListSub = this.storeService.fetchField('types', this.searchtypes)
+  fetchField(field: string, array: any[], callback?) {
+    this.storeListSub = this.storeService.fetchField(field, array)
       .subscribe(
         (data: Store[]) => {
           if (callback!= undefined) callback(data)
