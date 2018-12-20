@@ -27,7 +27,7 @@ export class MapComponent implements OnInit {
 
   //Communication between Map and Form
   formResult: Store;
-  storetypes: Store[];
+  storetypes: string[];
   searchtypes: Store[] = [];
   
   //Message component
@@ -39,17 +39,11 @@ export class MapComponent implements OnInit {
     private toMapService: ToMapService
   ) {
     toMapService.typeToggle$.subscribe(
-      obj => {
-        console.log('toMapService.typeToggle$ ',obj)
-        this.searchType(obj)
-      });
-      
+      obj => this.searchType(obj)        
+    );
     toMapService.formSubmit$.subscribe(
-      obj => {
-        console.log('toMapService.FormSubmit$ ',obj)
-        this.save()
-      });
-      
+      obj => this.save()
+    );      
   }
 
   ngOnInit() {
@@ -72,11 +66,7 @@ export class MapComponent implements OnInit {
     //Load stores
     this.showAllStores();
     //Get all the distinct store types present in DB. Pass to Form component
-    this.storeService.getDistinctValues('types')
-      .subscribe(
-        (data: Store[]) => this.storetypes = data,
-        err => console.error(err)
-      );
+    this.loadDistinctTypes();
     //Create the map
     var mapProp = {
       center: new google.maps.LatLng(
@@ -102,7 +92,6 @@ export class MapComponent implements OnInit {
     console.log("ngOnDestroy");
     this.storeListSub.unsubscribe();
   }
-
   ///Get position of client
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
   findMe() {
@@ -302,6 +291,8 @@ export class MapComponent implements OnInit {
             res => {
               //Close search marker
               this.removeSearchMarkers(); //not sure it is needed 
+              //Refresh distinct types
+              this.loadDistinctTypes()
               this.success("Store updated in database", 2500)
             },
             err => this.error(err, 2500)
@@ -361,7 +352,14 @@ export class MapComponent implements OnInit {
         err => console.error(err)
     );
   }
-
+  // Get all store types present in all documents in DB
+  loadDistinctTypes() {
+    this.storeService.getDistinctValues('types')
+      .subscribe(
+        (data: string[]) => this.storetypes = data,
+        err => console.error(err)
+      );
+  }
   // Fetch documents of certain types
   fetchField(callback?) {
     this.storeListSub = this.storeService.fetchField('types', this.searchtypes)

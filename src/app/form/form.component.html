@@ -28,7 +28,7 @@
           </div>
           <div class="col-md-4 mb-3">
             <label for="country">Country</label>
-            <select class="custom-select d-block w-100" id="country" required="">
+            <select class="custom-select d-block w-100" id="country" name="country" [(ngModel)]="formResult.country" required="">
               <option value="">{{formResult.country}}</option>
               <option [value]="country" *ngFor="let country of countries">             {{country}}</option>
             </select>
@@ -66,7 +66,7 @@
         <form>
           <div class="checkbox" *ngFor="let type of storetypes">
             <label>
-              <input type="checkbox" [checked]="hasType(type)" (click)="toggleType($event)" name="{{type}}">{{type}}
+              <input type="checkbox" [checked]="hasType(type)" (click)="toggleType($event)" name="{{type}}">&nbsp;{{type}}
             </label>
           </div>
           <div class="checkbox">

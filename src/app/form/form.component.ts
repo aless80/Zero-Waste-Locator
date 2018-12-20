@@ -13,7 +13,7 @@ import { Subscription }   from 'rxjs';
 })
 export class FormComponent implements OnChanges {
   @Input() formResult: Store;
-  @Input() storetypes: Store[];
+  @Input() storetypes: string[];
   @Output() submit = new EventEmitter<boolean>();
   user_rating: number;
   
@@ -37,6 +37,7 @@ export class FormComponent implements OnChanges {
     //console.log("form - ngOnChanges", changes);
     //Uncheck new type cause there is a new form
     this.checked_newType = false
+    console.log(this.storetypes)
   }
 
   ///Handling the store types checkboxes
