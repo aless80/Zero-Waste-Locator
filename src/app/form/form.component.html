@@ -59,30 +59,8 @@
             <input class="form-control" [(ngModel)]="formResult.coords[0] + ', ' + formResult.coords[1]" id="coordinates" name="coordinates" placeholder="Marker's coordinates" required="" type="text">
           </div>
         </div>
-        <!--Meh, leave this out
-          
-          <div class="row">
-          <div class="col-md-3 mb-3">
-            <label for="opentime">Opening time</label>
-            <select class="custom-select d-block w-100" id="opentime" required="">
-              <option value="">Choose...</option>
-              <option>8.00</option>
-              <option>8.30</option>
-            </select>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="closetime">Closing time</label>
-            <select class="custom-select d-block w-100" id="closetime" required="">
-              <option value="">Choose...</option>
-              <option>8.00</option>
-              <option>8.30</option>
-            </select>
-          </div>
-        </div>
-        <hr class="mb-4">
-        -->
 
-        <app-rating id="app-rating" [user_rating]="user_rating" [(rating)]="formResult.rating"></app-rating>
+        <app-rating id="app-rating" [(user_rating)]="user_rating" [(rating)]="formResult.rating" name="rating"></app-rating>
 
         <h4 class="mb-3">Store type</h4>
         <form>

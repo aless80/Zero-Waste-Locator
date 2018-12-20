@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-
+import { Component, Input, Output } from '@angular/core';
+import { EventEmitter } from "@angular/core";
 @Component({
   selector: 'app-rating',
   templateUrl: './rating.component.html',
@@ -9,13 +9,14 @@ export class RatingComponent {
 
   constructor() { }
   @Input() rating;
-  @Input() user_rating = 0;
+  @Input() user_rating: number;
+  @Output() user_ratingChange = new EventEmitter<string>();
+  
   hovered = 0;
   readonly = false;
 
-  setRating(user_rating){
-    console.log('setRating',user_rating)
-    this.user_rating = user_rating
+  setRating(value) {
+    this.user_rating = value;
+    this.user_ratingChange.emit(value);
   }
-
 }

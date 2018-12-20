@@ -12,10 +12,11 @@ import { Subscription }   from 'rxjs';
   styleUrls: ["./form.component.css"]
 })
 export class FormComponent implements OnChanges {
-  @Input("formResult") formResult: Store;
+  @Input() formResult: Store;
   @Input() storetypes: Store[];
   @Output() submit = new EventEmitter<boolean>();
-  @Output() user_rating: number = 0;
+  user_rating: number;
+  
   //Variables to handle the new store type (selecting it, editing it..)
   public static readonly NEWTYPE_PLACEHOLDER = "New store type";
   newType: string = FormComponent.NEWTYPE_PLACEHOLDER;
@@ -133,8 +134,12 @@ export class FormComponent implements OnChanges {
   submitForm() {
     //Uncheck the new type cause it is going to be saved
     this.checked_newType = false
+    //Update formResult.rating with user_rating
+    if (this.user_rating !== undefined) {
+      this.formResult.rating.total += this.user_rating;
+      this.formResult.rating.count += 1
+    }    
     //Let Map parent save the form to DB
-    console.log('submitForm:')
     this.toMapService.sendFormSubmit(null)
   }
 
