@@ -1,5 +1,4 @@
 import { Component, Input, Output, OnDestroy, OnInit } from '@angular/core';
-import { Store } from "../models/store.model";
 import { EventEmitter } from "@angular/core";
 import { ToMapService } from '../services/to-map.service';
 import { Subscription }   from 'rxjs';
@@ -13,7 +12,6 @@ export class SearchtypesComponent implements OnInit, OnDestroy {
   @Input() storetypes: string[];
   @Output() typesEmit = new EventEmitter();
   subscription: Subscription;
-  //all_checked: boolean = false;
   checked: string[]
 
   ngOnInit() {
@@ -21,11 +19,10 @@ export class SearchtypesComponent implements OnInit, OnDestroy {
   }
   constructor(private toMapService: ToMapService) {
     this.subscription = toMapService.typeToggle$.subscribe();
-      //obj => console.log(obj));
    }
 
   sendAllToggle(selection: boolean) {
-    console.log('sendAllToggle this.checked=',this.checked, ' storetypes=',this.storetypes)
+    //console.log('sendAllToggle this.checked=',this.checked, ' storetypes=',this.storetypes)
     if (selection) 
       this.checked = this.storetypes.slice(0); //shallow copy
     else 
@@ -44,7 +41,7 @@ export class SearchtypesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // prevent memory leak when component destroyed
+    // Prevent memory leak when component destroyed
     this.subscription.unsubscribe();
   }
 

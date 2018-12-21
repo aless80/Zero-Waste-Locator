@@ -1,5 +1,5 @@
 <div class="container">
-  <div #gmap class="map-container" style="width:500px;height:250px"></div>
+  <div #gmap class="map-container" style="width:1000px;height:500px"></div>
   <br>
   
   <!--<app-geocoder id="app-geocoder"></app-geocoder>
@@ -7,12 +7,14 @@
   <app-save (search)="run_geocoding($event)"></app-save>
   -->
   <br>
-
+  
+  <!--<button type="submit" (click)="test()">test</button>
+  <p *ngIf="searchResult !== undefined">searchResult {{searchResult.address}}</p>
+  <p *ngIf="formResult !== undefined">formResult {{formResult.address}}</p>
+  -->
   <alert></alert>
- 
-  <hr class="mb-4">
-  <app-tabset [storetypes]="storetypes" [formResult]="formResult" 
-  ></app-tabset>
+  
+  <app-tabset id="app-tabset" [storetypes]="storetypes" [formResult]="formResult" ></app-tabset>
   
   <!--OBSOLETE: Other implementation of tabs
     <app-tabs>

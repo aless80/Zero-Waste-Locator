@@ -11,10 +11,12 @@ export class ToMapService {
   // Observable string sources
   private typeToggleSource = new Subject<any>();
   private formSubmitSource = new Subject<boolean>();
+  private searchTabSource = new Subject<string>();
 
   // Observable string streams
   typeToggle$ = this.typeToggleSource.asObservable();
   formSubmit$ = this.formSubmitSource.asObservable();
+  searchTab$ = this.searchTabSource.asObservable();
 
   // Service message commands
   sendTypeToggle(checked: string[]) {
@@ -22,5 +24,8 @@ export class ToMapService {
   }
   sendFormSubmit(input: boolean) {
     this.formSubmitSource.next(input);
+  }
+  sendSearchTab(input: string) {
+    this.searchTabSource.next(input);
   }
 }

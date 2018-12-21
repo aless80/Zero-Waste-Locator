@@ -23,12 +23,13 @@ export class MapComponent implements OnInit {
   //Default settings for map and search. They can be removed
   public static readonly DEFAULT_LAT = 49.935;
   public static readonly DEFAULT_LNG = 10.79;
-  componentRestrictions: string = "NO"; //restrict search to Norway. Used in Geocoder
+  componentRestrictions: string = "NO"; //Restrict search to Norway. Used in Geocoder
+  regionBias: string = "no"; //region bias to Norway
 
   //Communication between Map and Form
-  formResult: Store;
-  storetypes: string[];
-  searchtypes: string[] = [];
+  formResult: Store;    //Location of the searched location or clicked marker
+  searchResult: Store;  //The searched location
+  storetypes: string[]; //All types of store present in DB
   
   //Message component
   msgText: string = "";
@@ -43,13 +44,32 @@ export class MapComponent implements OnInit {
     );
     toMapService.formSubmit$.subscribe(
       obj => this.save()
+    );
+    toMapService.searchTab$.subscribe(
+      tab => {
+        //User changed tabs
+        if (tab == 'search') {
+          //If search was used, show it
+          var callback;
+          if (this.searchResult) {
+            callback = () => {
+              this.process_results(this.searchResult)
+              //Open marker's InfoWindow not working
+              this.openInfoWindow(this.markers.length-1)
+            }
+          }
+          this.showAllStores(callback);          
+        } else if (tab == 'filter') {
+          this.removeSearchMarkers();
+        }
+      }
     );      
   }
-
   ngOnInit() {
     //Some addresses that work
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
     //Fretex: Ullevålsveien 12, 0171 Oslo
+    //Default location for search string: see geolocation.component.ts
     //Uncomment to populate form at startup
     /*this.formResult = {
       coords: [Number(59.9267819), Number(10.748087599999963)],
@@ -80,11 +100,10 @@ export class MapComponent implements OnInit {
     //Listener to InfoWindow
     google.maps.event.addListener(this.infowindow, "closeclick", () => {
       this.formResult = undefined;
+      this.searchResult = undefined;
     });
     //Find current location
     this.findMe();
-    //Default location for search
-    //this.search_string = "Bjerregaards gate 60C, 0174 Oslo";
   }
 
   ngOnDestroy() {
@@ -109,13 +128,8 @@ export class MapComponent implements OnInit {
   }
   showCurrentPosition(position, icon?: string, title?: string) {
     if (icon == undefined)
-      icon =
-        "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png";
+      icon = "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png";
     if (title == undefined) title = "No title";
-
-    //this.currentLat = position.coords.latitude;
-    //this.currentLong = position.coords.longitude;
-
     let location = new google.maps.LatLng(
       position.coords.latitude,
       position.coords.longitude
@@ -139,24 +153,23 @@ export class MapComponent implements OnInit {
     }
   }
 
-
   ///Handle markers of stores from geocoding search or from DB
   process_results(store) {
     //Pass data to form component and set marker
     this.formResult = store;
     //Handle search marker
     this.removeSearchMarkers();
-    this.setTempMarker(store, undefined, "Search result");
+    this.setMarker(store, undefined, "Search result");
     this.map.panTo(
       new google.maps.LatLng(store.coords[0], store.coords[1])
     );
   }
   //Create marker with InfoWindow. Push marker to this.markers
-  setTempMarker(store_obj, icon?: string, title?: string) {
+  setMarker(store, icon?: string, title?: string) {
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(
-        store_obj.coords[0],
-        store_obj.coords[1]
+        store.coords[0],
+        store.coords[1]
       ),
       map: this.map,
       title: title,
@@ -164,7 +177,6 @@ export class MapComponent implements OnInit {
     });
     //Create markerinfo object
     /*var markerinfo = {
-      //'markerind': this.markers.length,
       'markertype': 'some type',
       'formatted_address': result.formatted_address
     }*/
@@ -176,22 +188,22 @@ export class MapComponent implements OnInit {
     var h2 = document.createElement("h2");
     h2.textContent = marker.getTitle();
     var anchor = document.createElement("a");
-    anchor.href = "#"; //this.removeMarker(store_obj._id)
+    anchor.href = "#"; //this.removeMarker(store._id)
     anchor.text = "Remove";
     //Click listener in "Remove" link of marker's InfoWindow
     anchor.addEventListener("click", () => {
-      this.removeMarker(store_obj._id)      
+      this.removeMarker(store._id)      
     }); 
     //Build everything together in iwdiv element. Add text
     var div = document.createElement("div");
     div.appendChild(document.createElement("br"));
     div.appendChild(anchor);
     iwdiv.appendChild(h2);
-    iwdiv.appendChild(document.createTextNode('Address: '+store_obj.address+' '+store_obj.street_num+', '+store_obj.zip+', '+store_obj.locality));
+    iwdiv.appendChild(document.createTextNode('Address: '+store.address+' '+store.street_num+', '+store.zip+', '+store.locality));
     iwdiv.appendChild(document.createElement("br"));
-    iwdiv.appendChild(document.createTextNode('Store type: '+store_obj.types.join(', ')));
+    iwdiv.appendChild(document.createTextNode('Store type: '+store.types.join(', ')));
     iwdiv.appendChild(document.createElement("br"));
-    iwdiv.appendChild(document.createTextNode('Description: '+store_obj.descr));
+    iwdiv.appendChild(document.createTextNode('Description: '+store.descr));
     iwdiv.appendChild(document.createElement("br"));
     iwdiv.appendChild(div);
     //Click listener to marker to set and open InfoWindow
@@ -200,7 +212,7 @@ export class MapComponent implements OnInit {
       this.infowindow.setContent(iwdiv);
       this.infowindow.open(this.map, marker);
       this.selectedMarkerIndex = this.markers.indexOf(marker);
-      this.formResult = store_obj;
+      this.formResult = store;
     });
     //Push marker to markers
     this.markers.push(marker);
@@ -212,6 +224,10 @@ export class MapComponent implements OnInit {
   hideInfoWindow() {
     this.infowindow.close();
   }
+  //Opens a marker's InfoWindow
+  openInfoWindow(marker_ind: number){
+    google.maps.event.trigger(this.markers[marker_ind], 'click');
+  }
   //User clicked on "Remove" in marker's InfoWindow. 
   //Delete from map and from storage, if applicable
   removeMarker(_id) {
@@ -220,6 +236,8 @@ export class MapComponent implements OnInit {
     //If search marker, remove it and return
     if (this.markers[this.selectedMarkerIndex].title == 'Search result') {
       this.removeSearchMarkers();
+      //Remove the searched location searchResult
+      this.searchResult = undefined;
       return
     }
     //Delete a store from DB
@@ -291,6 +309,8 @@ export class MapComponent implements OnInit {
             res => {
               //Close search marker
               this.removeSearchMarkers(); //not sure it is needed 
+              //Remove the searched location searchResult
+              this.searchResult = undefined;
               //Refresh distinct types
               this.loadDistinctTypes()
               this.success("Store updated in database", 2500)
@@ -305,13 +325,16 @@ export class MapComponent implements OnInit {
         );
     }
   }
+
   afterSaving(){
     //Close search marker
     this.removeSearchMarkers();
+    //Remove the searched location searchResult
+    this.searchResult = undefined;
     //Pass to showAllStores callback 
     var callback = () => {
       //After stores have been loaded, open the store saved last
-      google.maps.event.trigger(this.markers[this.markers.length-1], 'click')
+      this.openInfoWindow(this.markers.length-1)
       //Show message
       this.success("Store saved in database", 2500)
     }
@@ -321,17 +344,18 @@ export class MapComponent implements OnInit {
   
   //Get emitter to search on types
   searchType(array: string[]){
-    console.log('map searchType:',array)
+    //console.log('map searchType:',array)
     //Query DB, plot all stores
     this.fetchField('types', array, (data: Store[]) => {
       //Delete all markers
       this.deleteAllMarkers()
-      console.log('map searchType data:',data)
+      //console.log('map searchType data:',data)
       this.updateMap(data);
     })
   }
   
-  searchType2(obj: any){
+  /*Other implementation of tabs
+  searchType(obj: any){
     if (obj == undefined) return
     console.log('map searchType obj:',obj)
     if (obj.name == "*") {
@@ -355,6 +379,7 @@ export class MapComponent implements OnInit {
       this.updateMap(data);
     })
   }
+  */
   
   ///Methods using API calls through service
   // Fetch all documents.
@@ -404,7 +429,7 @@ export class MapComponent implements OnInit {
   //Plot the given Store data
   updateMap(data:Store[]) {
     data.forEach(element => {
-      this.setTempMarker(
+      this.setMarker(
         element,
         "http://maps.gstatic.com/mapfiles/markers2/icon_green.png",
         element.address+' '+element.street_num+', '+element.locality
@@ -507,7 +532,7 @@ export class MapComponent implements OnInit {
     );
     //Pass data to form component and set marker
     this.formResult = this.storeService.result2Store_backend(results[0]);
-    this.setTempMarker(this.formResult, undefined, "Search result");
+    this.setMarker(this.formResult, undefined, "Search result");
   }
 
   run_geocoding() {
@@ -533,10 +558,10 @@ export class MapComponent implements OnInit {
     //https://developers.google.com/maps/documentation/geocoding/best-practices
     //Move map to searched location
     this.map.panTo(results[0].geometry.location);
-    //this.setTempMarker(results[0], undefined, 'Search result');
+    //this.setMarker(results[0], undefined, 'Search result');
     //Pass data to form component and set marker
     this.formResult = this.storeService.result2Store(results[0]);
-    this.setTempMarker(this.formResult, undefined, "Search result");
+    this.setMarker(this.formResult, undefined, "Search result");
   }
   */
 }

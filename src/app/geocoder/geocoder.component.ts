@@ -33,8 +33,9 @@ export class GeocoderComponent implements OnInit {
 
   constructor(
     private storeService: StoreService,
-    @Inject(forwardRef(() => MapComponent)) private _parent:MapComponent
-    ) { }
+    @Inject(forwardRef(
+      () => MapComponent)) private _parent:MapComponent
+      ) { }
 
   ngOnInit() {
     this.search_string = GeocoderComponent.DEFAULT_SEARCH;
@@ -42,17 +43,16 @@ export class GeocoderComponent implements OnInit {
 
   //Check if address to be searched is already in DB
   search(){
-    //Verify if cleaned searched string is in DB
-    var res = this.storeService.address_exists(this.search_string)
+    //Verify whether cleaned searched string is in DB
+    this.storeService.address_exists(this.search_string)
       .subscribe(
         (store: [any]) => {
           //No need for geocoding when address to be searched is stored in DB
           if (!store.length) {
-            //this._parent.formResult._id = ''; TODO: check
             this.geocoding();            
           } else {
             console.log(store.length + " match"+(store.length != 1 ? 'es' : '') + ". Loading address from database", store);
-            //this._parent.formResultID = store[0]._id;
+            this._parent.searchResult = store[0];
             this._parent.process_results(store[0]);
           }
         },
@@ -67,8 +67,8 @@ export class GeocoderComponent implements OnInit {
     this.geocoder.geocode(
       {
         address: this.search_string,
-        region: "no", //region bias to Norway
-        componentRestrictions: { country: this._parent .componentRestrictions } //country restriction to Norway
+        region: this._parent.regionBias,
+        componentRestrictions: { country: this._parent .componentRestrictions } 
       },
       (results, status) => {
         console.log("Geocoding status:", status, " results:", results);
@@ -76,6 +76,7 @@ export class GeocoderComponent implements OnInit {
           //Transform google maps result to Store type
           var store:Store = this.storeService.result2Store(results[0]);
           //Send to parent Map component
+          this._parent.searchResult = store;
           this._parent.process_results(store);
         }
       }
@@ -94,7 +95,7 @@ export class GeocoderComponent implements OnInit {
         );
         //Pass data to form component and set marker
         this._parent.formResult = this.storeService.result2Store_backend(res[0]);
-        this._parent.setTempMarker(this._parent.formResult, undefined, "Search result");
+        this._parent.setMarker(this._parent.formResult, undefined, "Search result");
       },
       err => console.error("Geocoding err:", err),
       () => console.log("Completed")
