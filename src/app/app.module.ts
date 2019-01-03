@@ -18,6 +18,28 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RatingComponent } from './rating/rating.component';
 import { TabsetComponent } from './tabset/tabset.component';
 
+
+import { HttpModule } from '@angular/http'; //this is old but whatever..
+import { RouterModule, Routes } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+
+//import { AuthGuard } from './guards/auth.guard';
+
+const appRoutes: Routes = [
+  {path: '', component: MapComponent},
+  //{path: 'register', component: RegisterComponent},
+  //{path: 'login', component: LoginComponent},
+  //{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
+  //{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]}
+]
+
+// id_token is from storeUserData(token, user) in auth.service.ts
+export function tokenGetter() {
+  return localStorage.getItem('id_token');
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,13 +53,25 @@ import { TabsetComponent } from './tabset/tabset.component';
     //TabComponent,
     SearchtypesComponent,
     RatingComponent,
-    TabsetComponent
+    TabsetComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+
+    RouterModule.forRoot(appRoutes),
+    HttpModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    })
+
   ],
   providers: [
     StoreService,

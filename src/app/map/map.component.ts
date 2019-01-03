@@ -5,6 +5,8 @@ import { Store } from "../models/store.model";
 import { Subscription } from "rxjs"; //to unsubscribe
 import { AlertService } from "../services/alert.service";
 import { ToMapService } from '../services/to-map.service'
+import { ValidateService } from '../services/validate.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: "app-map",
@@ -37,7 +39,9 @@ export class MapComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private alertService: AlertService,
-    private toMapService: ToMapService
+    private toMapService: ToMapService,
+    private validateService: ValidateService,
+    private authService: AuthService
   ) {
     toMapService.typeToggle$.subscribe(
       obj => this.searchType(obj)        

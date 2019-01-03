@@ -1,16 +1,32 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 import mongoose from 'mongoose';
 import Store from './models/store';
 
+// Initialize the application
 const app = express();
 const router = express.Router();
 
-app.use(cors());
-app.use(bodyParser.json());
+// Load routes
+const users = require('./routes/users');
 
-// Connects to the MongoDB database collection.
+// Passport Config
+require('./config/passport')(passport);
+
+// Connects to the MongoDB database collections
+/*if(process.env.NODE_ENV === 'production'){
+  module.exports = {mongoURI: 'mongodb://abcdefg:abcdefg@ds215961.mlab.com:15961/meanauth-dev',
+                    secret: 'yoursecret'}
+} else {
+  module.exports = {mongoURI: 'mongodb://localhost:27017/meanauth',
+                    secret: 'yoursecret'}
+}*/
+
+// Get rid of warning
+mongoose.set('useCreateIndex', true)
 mongoose.connect('mongodb://localhost:27017/stores', { useNewUrlParser: true });
 
 const connection = mongoose.connection;
@@ -19,6 +35,24 @@ connection.once('open', () => {
     console.log('MongoDB database connection established successfully!');
 });
 
+// CORS Middleware
+app.use(cors());
+
+// Body-Parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Passport Middleware 
+//   *MUST* be after Express Session Middleware
+//   if express-session is being used
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Static Folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Use routes
+app.use('/users', users);
 
 // Settings for node-geocoder
 var NodeGeocoder = require('node-geocoder');
@@ -42,7 +76,6 @@ router.route('/stores/geopromise/:address').get((req, res) => {
     console.log('Geocoding failed\n' + err);
   });
 });
-
 
 // Fetches all documents.
 router.route('/stores').get((req, res) => {
@@ -207,7 +240,8 @@ router.route('/stores/near').post((req, res) => {
     })
   });
 
+const port = process.env.PORT || 4000;
 
 app.use('/', router);
 // Establishes which port the backend runs on.
-app.listen(4000, () => console.log('Express server running on port 4000'));
+app.listen(port, () => console.log(`Express server running on port ${port}`));
