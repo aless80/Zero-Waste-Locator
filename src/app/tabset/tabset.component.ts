@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Store } from "../models/store.model";
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 import { ToMapService } from '../services/to-map.service';
-import { Subscription }   from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tabset',
@@ -22,6 +22,7 @@ export class TabsetComponent implements OnDestroy {
   }
   ngOnDestroy() {
     // Prevent memory leak when component destroyed
-    this.subscription.unsubscribe();
+    if (this.subscription)
+      this.subscription.unsubscribe();
   }
 }

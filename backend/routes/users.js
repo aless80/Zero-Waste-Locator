@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 // Register - /users/register
 router.post('/register', (req, res, next) => {
+  console.log('/register')
   // res.send('REGISTER');
   let newUser = new User({
     name: req.body.name,
@@ -59,7 +60,7 @@ router.post('/register', (req, res, next) => {
 
 // Authenticate - /users/authenticate
 router.post('/authenticate', (req, res, next) => {
-  // res.send('AUTHENTICATE');
+  console.log('/authenticate')  
   const username = req.body.username;
   const password = req.body.password;
 
@@ -100,7 +101,7 @@ router.post('/authenticate', (req, res, next) => {
 // Profile - /users/profile
 // NB: to test this use token gotten from /authenticate, and put it in headers
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-  // res.send('PROFILE');
+  console.log('/profile')
   res.json({user: req.user});
 });
 

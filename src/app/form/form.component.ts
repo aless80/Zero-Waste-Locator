@@ -4,7 +4,7 @@ import { Store } from "../models/store.model";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 
 import { ToMapService } from '../services/to-map.service'
-import { Subscription }   from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-form",
@@ -28,9 +28,8 @@ export class FormComponent implements OnChanges {
     
   constructor(private toMapService: ToMapService) {
     this.subscription = toMapService.formSubmit$.subscribe(
-      obj => {
-        console.log(obj)
-    });
+      obj => console.log(obj)
+    );
   }
   
   ngOnChanges(changes: SimpleChanges) {

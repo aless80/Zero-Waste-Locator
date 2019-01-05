@@ -9,13 +9,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   // Backend Server URI
   // Set in /backend/server.js
-  uri:string = "http://localhost:3000";
+  uri:string = "http://localhost:4000";
 
   // The name of your MongoDB database collection.
   collection:string = "users";
-  
-  //constructor(private http: HttpClient) {}
-  
+    
   authToken: any;
   user: any;
 

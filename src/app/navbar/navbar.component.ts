@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
 
     //this.flashMessages.show('You are now logged out')
 
-    this.router.navigate(['/login']);
+    //this.router.navigate(['/login']);
     return false;
   }
 }

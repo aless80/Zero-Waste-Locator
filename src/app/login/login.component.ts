@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit(){
-    // console.log(this.username);
+    console.log("onLoginSubmit:",this.username, this.password);
     const user = {
       username: this.username,
       password: this.password
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       if(data.success){
         this.authService.storeUserData(data.token, data.user);
         //this.flashMessages.show('You are now logged in');
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
       } else {
         //this.flashMessages.show(data.msg);
         this.router.navigate(['/login']);

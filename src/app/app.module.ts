@@ -24,15 +24,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-
-//import { AuthGuard } from './guards/auth.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},
-  //{path: 'register', component: RegisterComponent},
-  //{path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'login', component: LoginComponent},
   //{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
-  //{path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]}
+  {path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]}
 ]
 
 // id_token is from storeUserData(token, user) in auth.service.ts
@@ -55,7 +55,8 @@ export function tokenGetter() {
     RatingComponent,
     TabsetComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
