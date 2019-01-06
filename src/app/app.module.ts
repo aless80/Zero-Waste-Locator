@@ -1,37 +1,35 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
 import { AppComponent } from './app.component';
+import { AboutComponent } from './about/about.component';
+import { FormsModule }   from '@angular/forms';
 import { MapComponent } from './map/map.component';
 import { FormComponent } from './form/form.component';
 import { StoreService } from './services/store.service';
-import { SaveComponent } from './save/save.component';
+//import { SaveComponent } from './save/save.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { HttpClientModule } from '@angular/common/http';
 import { AlertComponent } from './alert/alert.component';
 import { AlertService } from './services/alert.service';
-import { GeocoderComponent } from './geocoder/geocoder.component';
-//import { TabsComponent } from './tabs/tabs.component';
-//import { TabComponent } from './tabs/tab.component';
-import { SearchtypesComponent } from './searchtypes/searchtypes.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RatingComponent } from './rating/rating.component';
 import { TabsetComponent } from './tabset/tabset.component';
-
-
-import { HttpModule } from '@angular/http'; //this is old but whatever..
-import { RouterModule, Routes } from '@angular/router';
-import { JwtModule } from '@auth0/angular-jwt';
+import { GeocoderComponent } from './geocoder/geocoder.component';
+import { RatingComponent } from './rating/rating.component';
+import { SearchtypesComponent } from './searchtypes/searchtypes.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './auth/auth.guard';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpModule } from '@angular/http'; //this is old but whatever..
+import { RouterModule, Routes } from '@angular/router';
+import { JwtModule } from '@auth0/angular-jwt';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},
+  {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
-  //{path: 'dashboard', component: DashboardComponent, canActivate:[AuthGuard]},
+  //{path: 'map', component: MapComponent, canActivate:[AuthGuard]},
   {path: 'profile', component: ProfileComponent, canActivate:[AuthGuard]}
 ]
 
@@ -45,18 +43,17 @@ export function tokenGetter() {
     AppComponent,
     MapComponent,
     FormComponent,
-    SaveComponent,
+    //SaveComponent,
     NavbarComponent,
     AlertComponent,
     GeocoderComponent,
-    //TabsComponent,
-    //TabComponent,
     SearchtypesComponent,
     RatingComponent,
     TabsetComponent,
     LoginComponent,
     RegisterComponent,
-    ProfileComponent
+    ProfileComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

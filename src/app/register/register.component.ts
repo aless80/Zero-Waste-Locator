@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidateService} from '../services/validate.service';
 import { AuthService} from '../services/auth.service';
-//import { FlashMessagesService } from 'angular2-flash-messages';
+import { AlertService } from "../services/alert.service";
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,9 +17,9 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private validateService:ValidateService, 
-    //private flashMessages:FlashMessagesService,
     private authService:AuthService,
-    private router:Router
+    private router:Router,
+    private alertService: AlertService
   ) { }
 
   ngOnInit() {

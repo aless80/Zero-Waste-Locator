@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { AlertService } from "../services/alert.service";
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService:AuthService,
     private router:Router,
-    //private flashMessages:FlashMessagesService
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
   }
 
   onLoginSubmit(){
-    console.log("onLoginSubmit:",this.username, this.password);
     const user = {
       username: this.username,
       password: this.password

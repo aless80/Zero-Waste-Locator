@@ -1,0 +1,153 @@
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light">
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <div class="text-center">
+      <h1 class="display-4 font-weight-normal">Zero Waste Locator</h1>
+    </div>
+    <div class="text-left">
+      <p class="lead font-weight-normal">
+        Welcome to Zero Waste Locator, a site to find shops selling Zero Waste products.
+      </p>
+      <p class="lead font-weight-normal">You can use the filter tab to look up Zero Waste stores present in the database. 
+        Because using the Google Maps API costs me some money, I kindly ask to register. 
+        If you do, you will be able to use the search functionality on the Google Map displayed <a href="/map">here</a></p>
+      <a class="btn btn-primary mr-1" [routerLink]="['/register']">Register</a>
+      <a class="btn btn-success" [routerLink]="['/login']">Login</a>
+    </div>
+  </div>
+  <div class="product-device box-shadow d-none d-md-block"></div>
+  <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Aim of this app</h2>
+      <p>The aim of this app is to let users search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up.</p>
+      <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2>Technical details</h2>
+      <p>This is a MEAN (MongoDB, Express, Angular CLI 7.0.6, Node) app using the Google Maps API to show store locations on a google map. 
+      On the back-end a server is based on Node.js/Express server. Mongoose ODM is used to connect to the MongoDB database organize models and query the database. The front-end was built using Angular-CLI 7, in addition to Bootstrap.
+      Full features authentication using JSON web tokens.  Login and store user data.</p>
+      <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+    </div>
+    <div class="col-md-4">
+      <h2>Zero Waste</h2>
+      <p>Zero Waste is a lifestyle philosophy that encourages the redesign of resource life cycles so that all products are reused. The goal is for no trash to be sent to landfills, incinerators, or the ocean. Zero Waste is for me about reducing consumption, in particular of plastic products.</p>
+      <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+    </div>
+  </div>
+
+  <hr>
+
+
+
+
+
+
+
+
+
+  <!--Accordion wrapper-->
+  <div class="accordion md-accordion accordion-1" id="accordion" role="tablist">
+    <div class="card">
+      <div class="card-header blue lighten-3 z-depth-1" role="tab" id="heading1">
+        <h5 class="text-uppercase mb-0 py-1">
+          <!--<a class="collapsed white-text font-weight-bold" data-toggle="collapse" href="#aim_div" aria-expanded="false"
+            aria-controls="aim_div">First accordion</a>-->
+          <a class="white-text font-weight-bold" (click)="active1 = !active1" [attr.aria-expanded]="active1" aria-controls="aim_div" href="#" onClick="return false;">Aim of this app »</a>
+          <i class="fas fa-angle-down rotate-icon fa-2x"></i>
+        </h5>
+      </div>
+      <div id="aim_div" class="collapse" role="tabpanel" aria-labelledby="heading1" data-parent="#accordion"  [ngbCollapse]="!active1">
+        <div class="card-body">
+          <div class="row my-4">
+            <div class="col-md-8">
+              <h2 class="font-weight-bold mb-3 black-text">Aim of this app</h2>
+              <p class="">The aim of this app is to let users search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up.</p>
+              <!--<p class="mb-0">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.</p>
+                -->
+            </div>
+            <div class="col-md-4 mt-3 pt-2">
+              <div class="view z-depth-1">
+                <img src="https://mdbootstrap.com/img/Photos/Others/nature.jpeg" alt="" class="img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header blue lighten-3 z-depth-1" role="tab" id="heading2">
+        <h5 class="text-uppercase mb-0 py-1">
+          <!--<a class="collapsed font-weight-bold white-text" data-toggle="collapse" href="#techdetails_div"
+            aria-expanded="false" aria-controls="techdetails_div">Second accordion</a>-->
+          <a class="white-text font-weight-bold" (click)="active2 = !active2" [attr.aria-expanded]="active2" aria-controls="techdetails_div" href="#" onClick="return false;">Technical details »</a>
+        </h5>
+      </div>
+      <div id="techdetails_div" class="collapse" role="tabpanel" aria-labelledby="heading2" data-parent="#accordion" [ngbCollapse]="!active2">
+        <div class="card-body">
+          <div class="row my-4">
+            <div class="col-md-8">
+              <h2 class="font-weight-bold mb-3 black-text">Technical details</h2>
+              <p class="">
+                This is a MEAN (MongoDB, Express, Angular CLI 7.0.6, Node) app using the Google Maps API to show store locations on a google map. 
+                On the back-end a server is based on Node.js/Express server. Mongoose ODM is used to connect to the MongoDB database organize models and query the database. The front-end was built using Angular-CLI 7, in addition to Bootstrap.
+                Full features authentication using JSON web tokens.  Login and store user data.</p>
+            </div>
+            <div class="col-md-4 mt-3 pt-2">
+              <div class="view z-depth-1">
+                <img src="https://mdbootstrap.com/img/Photos/Others/nature.jpeg" alt="" class="img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header blue lighten-3 z-depth-1" role="tab" id="heading3">
+        <h5 class="text-uppercase mb-0 py-1">
+          <a class="white-text font-weight-bold" (click)="active3 = !active3" [attr.aria-expanded]="active3" aria-controls="techdetails_div" href="#" onClick="return false;">Zero Waste »</a>
+        </h5>
+      </div>
+      <div id="techdetails_div" class="collapse" role="tabpanel" aria-labelledby="heading3" data-parent="#accordion" [ngbCollapse]="!active3">
+        <div class="card-body">
+          <div class="row my-4">
+            <div class="col-md-8">
+              <h2 class="font-weight-bold mb-3 black-text">About Zero Waste</h2>
+              <p class="">
+                Zero Waste is a lifestyle philosophy that encourages the redesign of resource life cycles so that all products are reused. The goal is for no trash to be sent to landfills, incinerators, or the ocean. Zero Waste is for me about reducing consumption, in particular of plastic products</p>
+            </div>
+            <div class="col-md-4 mt-3 pt-2">
+              <div class="view z-depth-1">
+                <img src="https://mdbootstrap.com/img/Photos/Others/nature.jpeg" alt="" class="img-fluid">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--
+  <a class="nav-link" href="https://github.com/aless80/gmaps-ng7" target="_blank">GitHub <span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+        <a
+          class="nav-link"
+          href="https://angular.io/"
+          target="_blank"
+          >angular.io</a
+        >
+      
+        <a
+          class="nav-link"
+          href="https://developers.google.com/maps/documentation/geocoding/start"
+          target="_blank"
+          >Google Maps docs</a
+        >
+      
+-->
+
+</div>

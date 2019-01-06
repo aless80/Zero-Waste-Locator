@@ -1,14 +1,14 @@
 ﻿import { Injectable } from '@angular/core';
-//import { Router, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Alert, AlertType } from '../models/alert';
+//import { Router, NavigationStart } from '@angular/router';
 
 @Injectable()
 export class AlertService {
     private subject = new Subject<Alert>();
-    private keepAfterRouteChange = false;
+    //private keepAfterRouteChange = false;
 
     constructor(){//private router: Router) {
         // clear alert messages on route change unless 'keepAfterRouteChange' flag is true
@@ -49,7 +49,7 @@ export class AlertService {
 
     // main alert method    
     alert(alert: Alert) {
-        this.keepAfterRouteChange = alert.keepAfterRouteChange;
+        //this.keepAfterRouteChange = alert.keepAfterRouteChange;
         this.subject.next(alert);
     }
 
