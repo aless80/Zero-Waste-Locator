@@ -160,7 +160,11 @@ export class MapComponent implements OnInit {
   ///Handle markers of stores from geocoding search or from DB
   process_results(store) {
     //Pass data to form component and set marker
+    console.log('process_results')
+    console.log(localStorage.getItem('user'))
+    store.username = JSON.parse(localStorage.getItem('user')).username
     this.formResult = store;
+
     //Handle search marker
     this.removeSearchMarkers();
     this.setMarker(store, undefined, "Search result");

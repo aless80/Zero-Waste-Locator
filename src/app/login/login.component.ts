@@ -18,10 +18,9 @@ export class LoginComponent implements OnInit {
     private alertService: AlertService,
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  onLoginSubmit(){
+  onLoginSubmit() {
     const user = {
       username: this.username,
       password: this.password
@@ -31,16 +30,12 @@ export class LoginComponent implements OnInit {
       if(data.success){
         this.authService.storeUserData(data.token, data.user);
         this.alertService.success('You are now logged in', 2500);
-        
-        this.router.navigate(['/']);
+        setTimeout(() => this.router.navigate(['/']), 1500);
       } else {
         this.alertService.error(data.msg, 2500);
         this.router.navigate(['/login']);
       }
-
     });
-
   }
-
 }
 
