@@ -6,24 +6,18 @@
    I am considering to move the search to a sibling component of the Map component. Now the search is in Geocoder component, which is child of Maps. The following uses an emitter and works when you restore the callbacks in Maps
   <app-save (search)="run_geocoding($event)"></app-save>
   -->
-  <br>
   
-  <!--<button type="submit" (click)="test()">test</button>
+  <!--
+    <button type="submit" (click)="test()">test</button>
+  -->
+  <!--
   <p *ngIf="searchResult !== undefined">searchResult {{searchResult.address}}</p>
   <p *ngIf="formResult !== undefined">formResult {{formResult.address}}</p>
   -->
-  <alert></alert>
+  <div class="input-group-append">
+    <alert></alert>
+  </div>
   
   <app-tabset id="app-tabset" [storetypes]="storetypes" [formResult]="formResult" ></app-tabset>
   
-  <!--OBSOLETE: Other implementation of tabs
-    <app-tabs>
-    <app-tab id='app-searchtypes' tabTitle="Search by type">
-      <app-searchtypes id="app-searchtypes" [storetypes]="storetypes" (typesEmit)="getEventToggleEmitter($event)"></app-searchtypes>
-    </app-tab>
-    <app-tab tabTitle="Edit" *ngIf="formResult !== undefined">
-      <app-form id="app-form" [formResult]="formResult" [storetypes]="storetypes" (submit)="getSaveEmitter($event)"></app-form>
-    </app-tab>
-  </app-tabs>
-  -->
 </div>

@@ -22,8 +22,7 @@ export class RegisterComponent implements OnInit {
     private alertService: AlertService
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onRegisterSubmit(){
     console.log('onRegisterSubmit');
@@ -36,35 +35,25 @@ export class RegisterComponent implements OnInit {
 
     // Required Fields
     if(!this.validateService.validateRegister(user)){
-      // console.log('Please fill in all fields');
-      //this.flashMessages.show('Please fill in all fields');
+      this.alertService.warn('Please fill in all fields', 2500);
       return false;
     }
 
     // Validate Email
     if(!this.validateService.validateEmail(user.email)){
-      // console.log('Please use a valid email');
-      //this.flashMessages.show('Please use a valid email');
+      this.alertService.warn('Please use a valid email', 2500);
       return false;
     }
 
     // Register User
     this.authService.registerUser(user).subscribe(data => {
-      // console.log(data);
       if(data.success){
-        //this.flashMessages.show('You are now registered and can log in');
-        this.router.navigate(['/login']);
+        this.alertService.success('You are now registered and can log in', 2500);
+        setTimeout(() => this.router.navigate(['/login']), 1500);
       } else {
-
-        //this.flashMessages.show('Something went wrong');
+        this.alertService.error('Something went wrong', 2500);
         this.router.navigate(['/register']);
       }
     });
-
-
-
   }
-
-
-
 }

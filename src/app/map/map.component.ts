@@ -273,7 +273,7 @@ export class MapComponent implements OnInit {
             res => {
               //Close search marker
               this.removeSearchMarkers(); //not sure it is needed 
-              this.success("Store updated in database",2500)
+              this.alertService.success("Store updated in database",2500)
             },
             err => this.error(err, 2500)
         );
@@ -317,15 +317,15 @@ export class MapComponent implements OnInit {
               this.searchResult = undefined;
               //Refresh distinct types
               this.loadDistinctTypes()
-              this.success("Store updated in database", 2500)
+              this.alertService.success("Store updated in database", 2500)
             },
-            err => this.error(err, 2500)
+            err => this.alertService.error(err, 2500)
         );
     } else {
       this.storeService.addStore(this.formResult)
         .subscribe(
             res => this.afterSaving(),
-            err => this.error(err, 2500)
+            err => this.alertService.error(err, 2500)
         );
     }
   }
@@ -340,7 +340,7 @@ export class MapComponent implements OnInit {
       //After stores have been loaded, open the store saved last
       this.openInfoWindow(this.markers.length-1)
       //Show message
-      this.success("Store saved in database", 2500)
+      this.alertService.success("Store saved in database", 2500)
     }
     //Reload stores from DB
     this.showAllStores(callback);    
@@ -425,7 +425,7 @@ export class MapComponent implements OnInit {
     this.storeService.deleteStore(id)
       .subscribe(() => {
       if (callback!= undefined) callback()
-      this.success("Store deleted", 2500);
+      this.alertService.success("Store deleted", 2500);
     });
   }
 
@@ -448,29 +448,6 @@ export class MapComponent implements OnInit {
     setTimeout(() => {
       this.msgText = "";
     }, 2000);
-  }
-  success(message: string, timeout?: number) {
-    this.alertService.success(message);
-    setTimeout(() => this.clear(), timeout);
-  }
-
-  error(message: string, timeout?: number) {
-    this.alertService.error(message);
-    setTimeout(() => this.clear(), timeout);
-  }
-
-  info(message: string, timeout?: number) {
-    this.alertService.info(message);
-    setTimeout(() => this.clear(), timeout);
-  }
-
-  warn(message: string, timeout?: number) {
-    this.alertService.warn(message);
-    setTimeout(() => this.clear(), timeout);
-  }
-
-  clear() {
-    this.alertService.clear();
   }
 
   //
@@ -522,7 +499,7 @@ export class MapComponent implements OnInit {
       res => {
         console.log("map geocode.subscribe res:", res);
         this.process_results_backend(res);
-        this.success("Geocoding successful", 2500);
+        this.alertService.success("Geocoding successful", 2500);
       },
       err => console.error("Geocoding err:", err),
       () => console.log("Completed")

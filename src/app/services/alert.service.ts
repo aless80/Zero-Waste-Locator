@@ -31,20 +31,24 @@ export class AlertService {
     }
 
     // convenience methods
-    success(message: string) {
+    success(message: string, timeout = 1000) {
         this.alert(new Alert({ message, type: AlertType.Success }));
+        setTimeout(() => this.clear(), timeout);
     }
 
-    error(message: string) {
+    error(message: string, timeout = 1000) {
         this.alert(new Alert({ message, type: AlertType.Error }));
+        setTimeout(() => this.clear(), timeout);
     }
 
-    info(message: string) {
+    info(message: string, timeout = 1000) {
         this.alert(new Alert({ message, type: AlertType.Info }));
+        setTimeout(() => this.clear(), timeout);
     }
 
-    warn(message: string) {
+    warn(message: string, timeout = 1000) {
         this.alert(new Alert({ message, type: AlertType.Warning }));
+        setTimeout(() => this.clear(), timeout);
     }
 
     // main alert method    

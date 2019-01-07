@@ -1,6 +1,3 @@
-﻿<div
-  *ngFor="let alert of alerts"
-  class="{{ cssClass(alert) }} alert-dismissable"
->
-  {{ alert.message }} <a class="close" (click)="removeAlert(alert)">&times;</a>
+﻿<div *ngFor="let alert of alerts" class="{{ cssClass(alert) }} alert-dismissable">
+  {{ alert.message }} &nbsp;<a class="close" (click)="removeAlert(alert)">&times;</a>
 </div>

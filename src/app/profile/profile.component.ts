@@ -19,7 +19,6 @@ export class ProfileComponent implements OnInit {
   // Need to load the user when initilize
   ngOnInit() {
     this.authService.getProfile().subscribe(profile => {
-      // console.log(profile.user);
       this.user = profile.user;
     },
     err => {

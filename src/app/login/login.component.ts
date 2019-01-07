@@ -28,13 +28,13 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.authenticateUser(user).subscribe(data => {
-      // console.log(data);
       if(data.success){
         this.authService.storeUserData(data.token, data.user);
-        //this.flashMessages.show('You are now logged in');
+        this.alertService.success('You are now logged in', 2500);
+        
         this.router.navigate(['/']);
       } else {
-        //this.flashMessages.show(data.msg);
+        this.alertService.error(data.msg, 2500);
         this.router.navigate(['/login']);
       }
 
