@@ -15,12 +15,14 @@
   <div class="collapse navbar-collapse" id="navbarsExample02">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a
-          class="nav-link"
-          href="https://github.com/aless80/gmaps-ng7"
-          target="_blank"
-          >GitHub <span class="sr-only">(current)</span></a
-        >
+        <a class="nav-link" href="/">
+          Home
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/about">
+          About
+        </a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -32,18 +34,12 @@
         [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
         <a class="nav-link" [routerLink]="['/register']">Register</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!authService.isTokenExp()" (click)="onLogoutClick()" href="/">Logout</a>
+      </li>
+      <li class="nav-item" *ngIf="!authService.isTokenExp()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a class="nav-link" [routerLink]="['/profile']">Profile</a>
+      </li>
     </ul>
-    <!--
-      <form class="form-inline my-2 my-md-0">
-        <input class="form-control" placeholder="Search" type="text">
-      </form>
-    -->
-    <li class="nav-item">
-      <a class="nav-link" *ngIf="!authService.isTokenExp()" (click)="onLogoutClick()" href="/">Logout</a>
-    </li>
-    <li class="nav-item" *ngIf="!authService.isTokenExp()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-      <a class="nav-link" [routerLink]="['/profile']">Profile</a>
-    </li>
-
   </div>
 </nav>
