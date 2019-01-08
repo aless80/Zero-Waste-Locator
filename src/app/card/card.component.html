@@ -1,0 +1,22 @@
+<div class="card border-0">  
+  <div class="card-header p-3 mb-2 bg-dark" role="tab" (click)="active = !active" id="heading1">
+    <h5 class="text-uppercase mb-0 py-1">
+      <a class="text-white font-weight-bold" [attr.aria-expanded]="active" aria-controls="aim_div" href="#" onClick="return false;">{{label}} <i class="fas fa-angle-down rotate-icon fa-2x"></i>
+      </a>
+    </h5>
+  </div>
+  <div id="aim_div" class="collapse" role="tabpanel" aria-labelledby="heading1" data-parent="#accordion"  [ngbCollapse]="!active">
+    <div class="card-body">
+      <div class="row my-4">
+        <div class="col-md-8">
+          <p innerHTML={{text}}>{{text}}</p>
+        </div>
+        <div class="col-md-4 mt-3 pt-2">
+          <div class="view z-depth-1">
+            <img src={{img}} alt="" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

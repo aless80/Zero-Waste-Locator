@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-about',
@@ -6,15 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
-  public active1 = false;
-  public active2 = false;
-  public active3 = false;
-  public active4 = false;
-  public active5 = false;
+  constructor(private authService: AuthService) { }
 
-  constructor() { }
-
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
 }

@@ -23,6 +23,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http'; //this is old but whatever..
 import { RouterModule, Routes } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
+import { CardComponent } from './card/card.component';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},
@@ -53,14 +54,14 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    AboutComponent
+    AboutComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     NgbModule,
-
     RouterModule.forRoot(appRoutes),
     HttpModule,
     HttpClientModule,
