@@ -2,7 +2,6 @@ import Store from '../models/store';
 
 // Retrieve all stores from the database.
 exports.findAll = (req, res) => {
-    console.log('/stores')
     Store.find((err, stores) => {
       if (err)
         res.status(400).send('Failed to fetch stores\n' + res.json(err));
@@ -13,7 +12,6 @@ exports.findAll = (req, res) => {
 
 // Fetches a single document by _id.
 exports.findOne = (req, res) => {
-    console.log('/stores/'+req.params.id)
     Store.findById(req.params.id, (err, store) => {
       if (err)
         res.status(400).send('Failed to fetch store\n' + res.json(err));
@@ -24,7 +22,6 @@ exports.findOne = (req, res) => {
   
 //Create new store
 exports.create = (req, res) => {
-    console.log('/stores/add')
     let store = new Store(req.body);
     store.save()
       .then(store => {
@@ -37,7 +34,6 @@ exports.create = (req, res) => {
 
 // Delete a store with the specified id in the request
 exports.delete = (req, res) => {
-  console.log('/stores/delete/'+req.params.id)
   Store.findByIdAndRemove({_id: req.params.id }, (err, store) => {
     if (err)
       res.json(err);
@@ -48,7 +44,6 @@ exports.delete = (req, res) => {
 
 // Update a store
 exports.update = (req, res) => {
-  console.log('/stores/update/'+req.params.id)
   Store.findById(req.params.id, (err, store) => {
     if (!store)
       return next(new Error('Could not load document'));
@@ -75,7 +70,6 @@ exports.update = (req, res) => {
 // Fetch any document by field
 //It also works with "types" files, which is an array
 exports.fetchfield = (req, res) => {
-    console.log('/stores/fetch/' + req.params.field, req.body)
     var query = {};
     if (req.body == '*') {
       query[req.params.field] = {$exists: true}
@@ -94,7 +88,6 @@ exports.fetchfield = (req, res) => {
 // Finds distinct values in field
 //It also works with "types" files, which is an array
 exports.distinct = (req, res) => {
-    console.log('/stores/distinct/'+req.params.field)
     Store.distinct(req.params.field)
       .exec((err, results) => {
           if (err)
@@ -143,7 +136,6 @@ exports.exist = (req, res) => {
 
 // Not used: Get 5 documents in order of nearest to farthest
 exports.near = (req, res) => {
-    console.log('/stores/near ',req.body.coords)
     Store.aggregate([{
       $geoNear: {
          near: { type: "Point", coordinates: req.body.coords }, //not sure what is "Point"

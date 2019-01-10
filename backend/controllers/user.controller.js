@@ -88,3 +88,15 @@ exports.authenticate = (req, res, next) => {
 exports.profile = (req, res, next) => {
     res.json({user: req.user});
 }
+
+// Delete a store with the specified id in the request
+// Not used in front end but useful for admins
+exports.delete = (req, res) => {
+    User.findByIdAndRemove({_id: req.params.id }, (err, store) => {
+      if (err)
+        res.json(err);
+      else
+        res.json('Removed Successfully');
+     });
+  }
+  
