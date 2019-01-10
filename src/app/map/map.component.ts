@@ -391,7 +391,7 @@ export class MapComponent implements OnInit {
   
   ///Methods using API calls through service
   // Fetch all documents.
-  showAllStores(callback?) {
+  showAllStores(callback?:Function) {
     //Delete all markers
     //Query DB, plot all stores
     this.storeListSub = this.storeService.getAllStores()
@@ -399,7 +399,7 @@ export class MapComponent implements OnInit {
         (data: Store[]) => {
           this.deleteAllMarkers();
           this.updateMap(data);
-          if (callback!= undefined) callback()
+          if (callback != undefined) callback()
         },
         err => console.error(err)
     );
@@ -413,7 +413,7 @@ export class MapComponent implements OnInit {
       );
   }
   // Fetch documents of certain types
-  fetchField(field: string, array: any[], callback?) {
+  fetchField(field: string, array: any[], callback?:Function) {
     this.storeListSub = this.storeService.fetchField(field, array)
       .subscribe(
         (data: Store[]) => {
@@ -425,7 +425,7 @@ export class MapComponent implements OnInit {
   }
 
   // Delete the selected document from storage
-  deleteStore(id:string, callback?) {
+  deleteStore(id:string, callback?:Function) {
     this.storeService.deleteStore(id)
       .subscribe(() => {
       if (callback!= undefined) callback()

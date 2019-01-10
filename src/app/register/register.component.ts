@@ -10,10 +10,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  name: String;
-  username: String;
-  email: String;
-  password: String;
+  name: string;
+  username: string;
+  email: string;
+  password: string;
 
   constructor(
     private validateService:ValidateService, 
@@ -25,7 +25,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   onRegisterSubmit(){
-    console.log('onRegisterSubmit');
     const user = {
       name: this.name,
       email: this.email,
@@ -33,8 +32,14 @@ export class RegisterComponent implements OnInit {
       password: this.password
     }
 
-    // Required Fields
+    // Required Fields (password checked later)
     if(!this.validateService.validateRegister(user)){
+      this.alertService.warn('Please fill in all fields', 2500);
+      return false;
+    }
+
+    // Required Password
+    if(!this.validateService.validatePassword(user.password)){
       this.alertService.warn('Please fill in all fields', 2500);
       return false;
     }
@@ -46,14 +51,15 @@ export class RegisterComponent implements OnInit {
     }
 
     // Register User
-    this.authService.registerUser(user).subscribe(data => {
-      if(data.success){
-        this.alertService.success('You are now registered and can log in', 2500);
-        setTimeout(() => this.router.navigate(['/login']), 1500);
-      } else {
-        this.alertService.error('Something went wrong', 2500);
-        this.router.navigate(['/register']);
-      }
-    });
+    this.authService.registerUser(user)
+      .subscribe(data => {
+        if(data.success){
+          this.alertService.success('You are now registered and can log in', 2500);
+          setTimeout(() => this.router.navigate(['/login']), 1500);
+        } else {
+          this.alertService.error('Something went wrong', 2500);
+          this.router.navigate(['/register']);
+        }
+      });
   }
 }

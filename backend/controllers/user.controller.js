@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
-const User = require('../models/User');
+const User = require('../models/user');
 
-// Retrieve all products from the database.
+// Retrieve all stores from the database.
 exports.findAll = (req, res) => {
     User.find((err, users) => {
       if (err)
@@ -12,6 +12,9 @@ exports.findAll = (req, res) => {
     })
   }
 
+exports.changePassword = (req, res, next) => {
+}
+
 exports.register = (req, res, next) => {
     let newUser = new User({
         name: req.body.name,
@@ -19,13 +22,19 @@ exports.register = (req, res, next) => {
         username: req.body.username,
         password: req.body.password
     });
-    
     // Check if username already exists
     User.getUserByUsername(newUser.username, (err, user) => {
     if(err) throw err;
-    
     if(user){
-        return res.json({success: false, msg: 'Username already exists'});
+        User.updateUser(user, newUser, (err, user) => {
+            if(err){
+                res.json({success: false, msg: 'Fail to update user'});
+                console.log(err)
+            } else {
+                res.json({success: true, msg: 'User updated'});
+                console.log('success')
+            }
+        });    
     } else {
         User.addUser(newUser, (err, user) => {
             if(err){
@@ -33,18 +42,9 @@ exports.register = (req, res, next) => {
             } else {
                 res.json({success: true, msg: 'User registered'});
             }
-        });    
+        });
       }
     });
-  /*  
-    User.addUser(newUser, (err, user) => {
-      if(err){
-        res.json({success: false, msg: 'Fail to register user'});
-      } else {
-        res.json({success: true, msg: 'User registered'});
-      }
-    });
-  */
 }
 
 exports.authenticate = (req, res, next) => {

@@ -31,6 +31,13 @@ export class AuthService {
       .pipe(map(res => res.json()));
   }
 
+  editUser(user){
+    let headers = new Headers();
+    headers.append('Content-Type','application/json');
+    return this.http.post(`${this.uri}/${this.collection}/register`, user, {headers: headers})
+      .pipe(map(res => res.json()));
+  }
+
   authenticateUser(user){
     let headers = new Headers();
     headers.append('Content-Type','application/json');
@@ -45,7 +52,7 @@ export class AuthService {
     // Use the token here
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type','application/json');
-    return this.http.post(`${this.uri}/${this.collection}/profile`, {headers: headers})
+    return this.http.get(`${this.uri}/${this.collection}/profile`, {headers: headers})
     //return this.http.get('users/profile', {headers: headers})
       .pipe(map(res => res.json()));
   }

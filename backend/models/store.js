@@ -20,19 +20,7 @@ let Store = new Schema({
       }
 });
 
-/*
-//See https://scotch.io/tutorials/making-mean-apps-with-google-maps-part-i
-// Sets the created_at parameter equal to the current time
-Store.pre('save', function(next){
-    now = new Date();
-    this.updated_at = now;
-    if(!this.created_at) {
-        this.created_at = now
-    }
-    next();
-});
-
 // Indexes this schema in 2dsphere format (critical for running proximity searches)
-Store.index({location: '2dsphere'});
-*/
+//Store.index({location: '2dsphere'});
+
 export default mongoose.model('Store', Store);

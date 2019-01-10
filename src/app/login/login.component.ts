@@ -25,17 +25,17 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     }
-
-    this.authService.authenticateUser(user).subscribe(data => {
-      if(data.success){
-        this.authService.storeUserData(data.token, data.user);
-        this.alertService.success('You are now logged in', 2500);
-        setTimeout(() => this.router.navigate(['/']), 1500);
-      } else {
-        this.alertService.error(data.msg, 2500);
-        this.router.navigate(['/login']);
-      }
-    });
+    this.authService.authenticateUser(user)
+      .subscribe(data => {
+        if(data.success){
+          this.authService.storeUserData(data.token, data.user);
+          this.alertService.success('You are now logged in', 2500);
+          setTimeout(() => this.router.navigate(['/']), 1500);
+        } else {
+          this.alertService.error(data.msg, 2500);
+          this.router.navigate(['/login']);
+        }
+      });
   }
 }
 

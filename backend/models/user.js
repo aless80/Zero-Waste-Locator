@@ -49,6 +49,24 @@ module.exports.addUser = function(newUser, callback){
   });
 }
 
+module.exports.updateUser = function(user, newUser, callback){ 
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      // Store hash in the password DB
+      if(err) throw err;
+      //Do not store password is empty. That happens eg when I edit profile. Not super neat but ok
+      if (newUser.password) {
+        console.log('hash',hash)
+        user.password = hash;
+      }      
+      user.name = newUser.name,
+      user.email = newUser.email,
+      user.username = newUser.username
+      user.save(callback);
+    });
+  });
+}
+
 module.exports.comparePassword = function(candidatePassword, hash, callback){
   bcrypt.compare(candidatePassword, hash, (err, isMatch) => {
     if(err) throw err;

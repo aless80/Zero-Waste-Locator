@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { MapComponent } from './map/map.component';
 import { FormComponent } from './form/form.component';
 import { StoreService } from './services/store.service';
@@ -24,6 +24,7 @@ import { HttpModule } from '@angular/http'; //this is old but whatever..
 import { RouterModule, Routes } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { CardComponent } from './card/card.component';
+import { SinglecontrolComponent } from './singlecontrol/singlecontrol.component';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},
@@ -55,11 +56,13 @@ export function tokenGetter() {
     RegisterComponent,
     ProfileComponent,
     AboutComponent,
-    CardComponent
+    CardComponent,
+    SinglecontrolComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    //ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
     RouterModule.forRoot(appRoutes),

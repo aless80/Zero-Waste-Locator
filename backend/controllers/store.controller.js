@@ -1,6 +1,6 @@
 import Store from '../models/store';
 
-// Retrieve all products from the database.
+// Retrieve all stores from the database.
 exports.findAll = (req, res) => {
     console.log('/stores')
     Store.find((err, stores) => {
@@ -35,7 +35,7 @@ exports.create = (req, res) => {
       });
   }
 
-// Delete a note with the specified noteId in the request
+// Delete a store with the specified id in the request
 exports.delete = (req, res) => {
   console.log('/stores/delete/'+req.params.id)
   Store.findByIdAndRemove({_id: req.params.id }, (err, store) => {
@@ -46,7 +46,7 @@ exports.delete = (req, res) => {
    });
 }
 
-// Update a product
+// Update a store
 exports.update = (req, res) => {
   console.log('/stores/update/'+req.params.id)
   Store.findById(req.params.id, (err, store) => {
