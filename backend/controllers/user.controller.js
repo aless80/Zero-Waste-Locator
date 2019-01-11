@@ -84,7 +84,7 @@ exports.authenticate = (req, res, next) => {
                 // Need toJSON() or Error: Expected "payload" to be a plain object
                 // https://github.com/bradtraversy/nodeauthapp/issues/3
                 const token = jwt.sign(user.toJSON(), config.secret, {
-                expiresIn: 604800// 1 week in seconds
+                expiresIn: 3600
                 });
 
                 res.json({
