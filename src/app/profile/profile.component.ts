@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit {
     if (this.newpassword !== this.newpassword2) {
       this.alertService.error('Passwords do not match', 2500);
     } else {
-      //Pass the password
+      //Pass the password 
       this.user.password = this.newpassword;
       var callback = () => {
         this.alertService.success('You have successfully changed your password', 2500);

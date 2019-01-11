@@ -48,21 +48,15 @@ exports.register = (req, res, next) => {
     });
     // Check if username already exists
     User.getUserByUsername(newUser.username, (err, user) => {
-    if(err) throw err;
+    if(err) {
+        throw err
+    }
     if(user){
         return res.json({success: false, msg: 'Username already exists'});
-        /*User.updateUser(user, newUser, (err, user) => {
-            if(err){
-                res.json({success: false, msg: 'Fail to update user'});
-                console.log(err)
-            } else {
-                res.json({success: true, msg: 'User updated'});
-                console.log('success')
-            }
-        });    */
     } else {
         User.addUser(newUser, (err, user) => {
             if(err){
+                console.log('Failed to register user:',err)
                 res.json({success: false, msg: 'Failed to register user'});
             } else {
                 res.json({success: true, msg: 'User registered'});
@@ -118,10 +112,14 @@ exports.profile = (req, res, next) => {
 // Not used in front end but useful for admins
 exports.delete = (req, res) => {
     User.findByIdAndRemove({_id: req.params.id }, (err, store) => {
-      if (err)
+      if (err) {
         res.json(err);
-      else
-        res.json('Removed Successfully');
+      } else {
+        if (store) {
+          res.json('Removed Successfully');
+        } else {
+          res.json('Id not found');}
+        }
      });
   }
   

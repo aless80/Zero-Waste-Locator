@@ -64,7 +64,7 @@ export class RegisterComponent implements OnInit {
           this.alertService.success('You are now registered and can log in', 2500);
           setTimeout(() => this.router.navigate(['/login']), 1500);
         } else {
-          this.alertService.error('Something went wrong', 2500);
+          this.alertService.error(data.msg, 2500);
           this.router.navigate(['/register']);
         }
       });
