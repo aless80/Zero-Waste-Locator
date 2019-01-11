@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
     this.subscription = this.authService.getProfile().subscribe(
       profile => {
         this.user = profile.user;
-        //Remove the password cause i do not need it (and otherwise trouble in server when update profile)
+        //Remove the password cause I do not need it (and otherwise trouble in server when update profile)
         this.user.password = '';
       },
       err => {

@@ -15,7 +15,7 @@ export class ValidateService {
   }
 
   validatePassword(password: string){
-    if(password == undefined)
+    if(password == undefined || password == '')
       return false;
     else 
       return true;

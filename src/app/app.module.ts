@@ -62,7 +62,7 @@ export function tokenGetter() {
   imports: [
     BrowserModule,
     FormsModule,
-    //ReactiveFormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
     RouterModule.forRoot(appRoutes),

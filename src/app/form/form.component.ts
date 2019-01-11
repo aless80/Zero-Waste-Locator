@@ -2,7 +2,6 @@ import { Component, Input, Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
 import { Store } from "../models/store.model";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
-
 import { ToMapService } from '../services/to-map.service'
 import { Subscription } from 'rxjs';
 

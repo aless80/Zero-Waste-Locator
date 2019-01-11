@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from "../services/alert.service";
+import { FormGroup,FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs'; //to unsubscribe
 
 @Component({
   selector: 'app-login',
@@ -9,23 +11,31 @@ import { AlertService } from "../services/alert.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: String;
-  password: String;
+  public form: FormGroup;
+  subscription: Subscription;
 
   constructor(
+    private formBuilder: FormBuilder,
     private authService:AuthService,
     private router:Router,
     private alertService: AlertService,
-  ) { }
+  ) {
+    this.form = formBuilder.group({
+      username: '',
+      password: '',
+    });
+   }
 
+  //Unsubscribe
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+  
   ngOnInit() {}
 
   onLoginSubmit() {
-    const user = {
-      username: this.username,
-      password: this.password
-    }
-    this.authService.authenticateUser(user)
+    const user = Object.assign({}, this.form.value);
+    this.subscription = this.authService.authenticateUser(user)
       .subscribe(data => {
         if(data.success){
           this.authService.storeUserData(data.token, data.user);

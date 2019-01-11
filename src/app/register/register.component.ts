@@ -3,6 +3,8 @@ import { ValidateService} from '../services/validate.service';
 import { AuthService} from '../services/auth.service';
 import { AlertService } from "../services/alert.service";
 import { Router } from '@angular/router';
+import { FormGroup,FormBuilder } from '@angular/forms';
+import { Subscription } from 'rxjs'; //to unsubscribe
 
 @Component({
   selector: 'app-register',
@@ -10,28 +12,33 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
+  public form: FormGroup;
+  subscription: Subscription;
 
   constructor(
+    private formBuilder: FormBuilder,
     private validateService:ValidateService, 
     private authService:AuthService,
     private router:Router,
     private alertService: AlertService
-  ) { }
+  ) {
+    this.form = formBuilder.group({
+      username: 'amarin',
+      name: 'amarin',
+      email: 'defaul@email.co',
+      password: '',
+    });
+  }
 
+  //Unsubscribe
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+  
   ngOnInit() {}
 
   onRegisterSubmit(){
-    const user = {
-      name: this.name,
-      email: this.email,
-      username: this.username,
-      password: this.password
-    }
-
+    const user = Object.assign({}, this.form.value);
     // Required Fields (password checked later)
     if(!this.validateService.validateRegister(user)){
       this.alertService.warn('Please fill in all fields', 2500);
@@ -51,7 +58,7 @@ export class RegisterComponent implements OnInit {
     }
 
     // Register User
-    this.authService.registerUser(user)
+    this.subscription = this.authService.registerUser(user)
       .subscribe(data => {
         if(data.success){
           this.alertService.success('You are now registered and can log in', 2500);

@@ -12,8 +12,7 @@ exports.findAll = (req, res) => {
     })
   }
 
-exports.changePassword = (req, res, next) => {
-}
+//exports.changePassword = (req, res, next) => {}
 
 exports.register = (req, res, next) => {
     let newUser = new User({

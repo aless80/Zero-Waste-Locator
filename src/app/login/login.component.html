@@ -1,31 +1,36 @@
 <div class="container">    
   <div class="row">
     <div class="col-md-10 order-md-1">
-      <h2 class="page-header">Login</h2>
-        <form (ngSubmit)="onLoginSubmit()">
-          <div class="row">
-            <div class="col-md-7 mb-3">
-              <div class="form-group">
-                <label>Username</label>
-                <input type="text" class="form-control" [(ngModel)]="username" name="username">
-              </div>
+      <h2 class="page-header">Login</h2>      
+      <form [formGroup]="form" (ngSubmit)="onLoginSubmit()" novalidate>
+
+        <!--<app-singlecontrol (ngModel)="'username'" [label]="'Username'" [type]="'text'" [name]="'username'" [value]="'amarinz'"></app-singlecontrol>
+        -->
+        <div class="row">
+          <div class="col-md-7 mb-3">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" name="username" class="form-control" formControlName="username" value="amarin">
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-7 mb-3">
-              <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" [(ngModel)]="password" name="password">
-              </div>
+        </div>   
+      
+        <div class="row">
+          <div class="col-md-7 mb-3">
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" name="password" class="form-control" formControlName="password">
             </div>
           </div>
-          <input type="submit" value="Login" class="btn btn-primary">
-        </form>
-        <br>
+        </div>
+
         <div class="input-group-append">
           <alert></alert>
         </div>
-      </div>
+        <br>
+        <input type="submit" value="Login" class="btn btn-dark"  [disabled]="form.pristine">
+      </form>
     </div>
   </div>
+</div>
         
