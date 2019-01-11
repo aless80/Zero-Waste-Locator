@@ -27,14 +27,13 @@ export class AuthService {
     let headers = new Headers();
     headers.append('Content-Type','application/json');
     return this.http.post(`${this.uri}/${this.collection}/register`, user, {headers: headers})
-    //return this.http.post('users/register', user, {headers: headers})
       .pipe(map(res => res.json()));
   }
 
   editUser(user){
     let headers = new Headers();
     headers.append('Content-Type','application/json');
-    return this.http.post(`${this.uri}/${this.collection}/register`, user, {headers: headers})
+    return this.http.post(`${this.uri}/${this.collection}/update`, user, {headers: headers})
       .pipe(map(res => res.json()));
   }
 

@@ -38,6 +38,7 @@ module.exports.getUserByUsername = function(username, callback){
   User.findOne(query, callback);
 }
 
+//Add user with encrypted password
 module.exports.addUser = function(newUser, callback){
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -49,20 +50,14 @@ module.exports.addUser = function(newUser, callback){
   });
 }
 
-module.exports.updateUser = function(user, newUser, callback){ 
+//Update user with encrypted password
+module.exports.updateUser = function(userobj, callback){
   bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      // Store hash in the password DB
+    bcrypt.hash(userobj.password, salt, (err, hash) => {
+      // Store hash as the User's password DB
       if(err) throw err;
-      //Do not store password is empty. That happens eg when I edit profile. Not super neat but ok
-      if (newUser.password) {
-        console.log('hash',hash)
-        user.password = hash;
-      }      
-      user.name = newUser.name,
-      user.email = newUser.email,
-      user.username = newUser.username
-      user.save(callback);
+      userobj.password = hash;
+      User.findByIdAndUpdate(userobj.id, userobj, callback);
     });
   });
 }

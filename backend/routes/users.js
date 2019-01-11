@@ -12,6 +12,9 @@ router.get('/', controller.findAll)
 // Register - /users/register
 router.post('/register', controller.register)
 
+// Update - /users/update
+router.post('/update', controller.update)
+
 // Delete user
 router.get('/delete/:id', controller.delete);
 

@@ -45,9 +45,9 @@ exports.delete = (req, res) => {
 // Update a store
 exports.update = (req, res) => {
   Store.findById(req.params.id, (err, store) => {
-    if (!store)
-      return next(new Error('Could not load document'));
-    else {
+    if (!store) {
+      res.json(err);
+    } else {
       store.coords = req.body.coords;
       store.address = req.body.address;
       store.street_num = req.body.street_num;

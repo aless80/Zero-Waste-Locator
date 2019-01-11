@@ -4,15 +4,40 @@ const User = require('../models/user');
 
 // Retrieve all stores from the database.
 exports.findAll = (req, res) => {
-    User.find((err, users) => {
-      if (err)
-        res.status(400).send('Failed to fetch users\n' + res.json(err));
-      else
-        res.json(users);
-    })
-  }
+  User.find((err, users) => {
+    if (err)
+      res.status(400).send('Failed to fetch users\n' + res.json(err));
+    else
+      res.json(users);
+  })
+}
 
-//exports.changePassword = (req, res, next) => {}
+exports.update = (req, res) => {
+  // Check if username already exists
+  User.getUserByUsername(req.body.username, (err, user) => {
+    if(err) throw err;
+    if(!user){
+      return res.json({success: false, msg: 'Username does not exist'});
+    } else {
+      var userid = user.id;
+      var userobj = {};
+      userobj.id = user.id;
+      userobj.username = req.body.username;
+      userobj.name = req.body.name;
+      userobj.email = req.body.email;
+      if (req.body.password){
+        userobj.password = req.body.password;
+        User.updateUser(userobj, (err, user) => {
+          if(err){
+            res.json({success: false, msg: 'Failed to update user'});
+          } else {
+            res.json({success: true, msg: 'User update'});
+          }
+        });
+      };
+    }
+  });
+}
 
 exports.register = (req, res, next) => {
     let newUser = new User({
@@ -25,7 +50,8 @@ exports.register = (req, res, next) => {
     User.getUserByUsername(newUser.username, (err, user) => {
     if(err) throw err;
     if(user){
-        User.updateUser(user, newUser, (err, user) => {
+        return res.json({success: false, msg: 'Username already exists'});
+        /*User.updateUser(user, newUser, (err, user) => {
             if(err){
                 res.json({success: false, msg: 'Fail to update user'});
                 console.log(err)
@@ -33,11 +59,11 @@ exports.register = (req, res, next) => {
                 res.json({success: true, msg: 'User updated'});
                 console.log('success')
             }
-        });    
+        });    */
     } else {
         User.addUser(newUser, (err, user) => {
             if(err){
-                res.json({success: false, msg: 'Fail to register user'});
+                res.json({success: false, msg: 'Failed to register user'});
             } else {
                 res.json({success: true, msg: 'User registered'});
             }

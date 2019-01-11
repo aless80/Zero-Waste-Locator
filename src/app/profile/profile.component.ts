@@ -105,11 +105,7 @@ export class ProfileComponent implements OnInit {
         this.authService.logout()
         setTimeout(() => this.router.navigate(['/login']), 1500);
       }
-      console.log(callback)
-
       var success = this.onUpdateSubmit(callback);
-      
-        
       }
     } 
 }
