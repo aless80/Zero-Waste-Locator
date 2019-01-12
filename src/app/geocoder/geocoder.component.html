@@ -4,16 +4,22 @@
       <div class="col-md-9 mb-3">
         <label for="address">Full address</label>
         <div class="input-group">
-          <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text">
-          <div class="invalid-feedback">
-            Please enter the address.
-          </div>
+          <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text" disabled="!authService.isTokenExp()">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-primary" (click)="search()" [disabled]="search_string === ''">Search</button>
-            <button type="submit" class="btn btn-primary" (click)="node_geocode()" hidden>Search using node-geocoder</button>
+            <button type="submit" class="btn btn-dark" (click)="search()" disabled="!authService.isTokenExp() || search_string === ''">Search</button>
+            <button type="submit" class="btn btn-dark" (click)="node_geocode()" hidden>Search using node-geocoder</button>
           </div>
         </div>
       </div>
     </form>
+    <div class="row">
+      <div class="col-md-10">
+        <div class="col-md-9 mb-3">
+          <div class="input-group-append" *ngIf="authService.isTokenExp()"><br>
+            <h5>Please register and login to use this functionality</h5>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>  
 </div>

@@ -4,6 +4,7 @@ import { MapComponent } from '../map/map.component'
 import { Store } from "../models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
 import {Inject, forwardRef} from '@angular/core';
+import { AuthService } from '../services/auth.service';
 /*
 Note for myself
 Instead of injecting parent Map in child (Geocoder), the other option is to use an emitter in child
@@ -18,7 +19,7 @@ export class SaveComponent implements OnInit {
 //parent:
 <app-save (search)="run_geocoding($event)"></app-save>
 //child
-<button type="submit" class="btn btn-primary" (click)="findLocationTest()">Search</button>
+<button type="submit" class="btn btn-dark" (click)="findLocationTest()">Search</button>
 */
 
 @Component({
@@ -33,6 +34,7 @@ export class GeocoderComponent implements OnInit {
 
   constructor(
     private storeService: StoreService,
+    private authService: AuthService,
     @Inject(forwardRef(
       () => MapComponent)) private _parent:MapComponent
       ) { }
