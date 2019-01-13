@@ -320,21 +320,25 @@ export class MapComponent implements OnInit {
               //Remove the searched location searchResult
               this.searchResult = undefined;
               //Refresh distinct types
-              this.loadDistinctTypes()
+              this.loadDistinctTypes();
+              //Refresh Filter tab: refresh stores and current types
+              this.searchType(this.storetypes)
               this.alertService.success("Store updated in database", 2500)
             },
             err => this.alertService.error(err, 2500)
         );
+
     } else {
+      //Handle adding a new searched store
       this.storeService.addStore(this.formResult)
         .subscribe(
-            res => this.afterSaving(),
+            res => this.afterSavingNewStore(),
             err => this.alertService.error(err, 2500)
         );
     }
   }
 
-  afterSaving(){
+  afterSavingNewStore(){
     //Close search marker
     this.removeSearchMarkers();
     //Remove the searched location searchResult
@@ -345,6 +349,8 @@ export class MapComponent implements OnInit {
       this.openInfoWindow(this.markers.length-1)
       //Show message
       this.alertService.success("Store saved in database", 2500)
+      //Refresh Filter tab: refresh stores and current types
+      this.searchType(this.storetypes)
     }
     //Reload stores from DB
     this.showAllStores(callback);    

@@ -4,7 +4,7 @@ import Store from '../models/store';
 exports.findAll = (req, res) => {
     Store.find((err, stores) => {
       if (err)
-        res.status(400).send('Failed to fetch stores\n' + res.json(err));
+        res.status(400).send('Failed to fetch stores\n' + err);
       else
         res.json(stores);
     });
@@ -14,7 +14,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     Store.findById(req.params.id, (err, store) => {
       if (err)
-        res.status(400).send('Failed to fetch store\n' + res.json(err));
+        res.status(400).send('Failed to fetch store\n' + err);
       else
         res.json(store);
     });
@@ -28,7 +28,7 @@ exports.create = (req, res) => {
         res.status(200).json('Document Added Successfully');
       })
       .catch(err => {
-        res.status(400).send('Failed to create new record\n' + res.json(err));
+        res.status(400).send('Failed to create new record\n' + err);
       });
   }
 
@@ -61,7 +61,7 @@ exports.update = (req, res) => {
       store.save().then(store => {
         res.json('Update Complete');
       }).catch(err => {
-        res.status(400).send('Update failed\n' + res.json(err));
+        res.status(400).send('Update failed\n' + err);
       });
     }
   });
@@ -70,28 +70,30 @@ exports.update = (req, res) => {
 // Fetch any document by field
 //It also works with "types" files, which is an array
 exports.fetchfield = (req, res) => {
-    var query = {};
-    if (req.body == '*') {
-      query[req.params.field] = {$exists: true}
-    } else {
-      query[req.params.field] = { $in: req.body};
-    }
-    Store.find(query)
-      .exec((err, results) => {
-          if (err)
-            res.status(400).send('Failed to fetch documents\n' + res.json(err));
-          else
-            res.json(results);
-      })
+  //console.log(req.params.field, req.body)
+  var query = {};
+  if (req.body == '*') {
+    query[req.params.field] = {$exists: true}
+  } else {
+    query[req.params.field] = { $in: req.body};
   }
+  Store.find(query)
+    .exec((err, results) => {
+        if (err)
+          res.status(400).send('Failed to fetch documents\n' + err);
+        else
+          res.json(results);
+    })
+}
 
 // Finds distinct values in field
 //It also works with "types" files, which is an array
 exports.distinct = (req, res) => {
+    console.log('exports.distinct')
     Store.distinct(req.params.field)
       .exec((err, results) => {
           if (err)
-            res.status(400).send('Failed to fetch distinct fields\n' + res.json(err));
+            res.status(400).send('Failed to fetch distinct fields\n' + err);
           else
             res.json(results);
       })
@@ -126,7 +128,7 @@ exports.exist = (req, res) => {
     ])
     .exec((err, stores) => {
         if (err)
-          res.status(400).send('/stores/exists failed\n' + res.json(err));
+          res.status(400).send('/stores/exists failed\n' + err);
         else {
           console.log('/stores/exists ',stores.length,' match' + (stores.length != 1 ? 'es' : '') + ' on: ', req.params.address)
           res.json(stores);
@@ -149,7 +151,7 @@ exports.near = (req, res) => {
     }])
       .exec((err, stores) => {
         if (err)
-          res.status(400).send('Failed to verify the stores\n' + res.json(err));
+          res.status(400).send('Failed to verify the stores\n' + err);
         else
           res.json(stores);
       })

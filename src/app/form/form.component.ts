@@ -4,6 +4,7 @@ import { Store } from "../models/store.model";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
 import { ToMapService } from '../services/to-map.service'
 import { Subscription } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: "app-form",
@@ -25,7 +26,9 @@ export class FormComponent implements OnChanges {
 
   subscription: Subscription;
     
-  constructor(private toMapService: ToMapService) {
+  constructor(
+    private toMapService: ToMapService,
+    private authService: AuthService) {
     this.subscription = toMapService.formSubmit$.subscribe(
       obj => console.log(obj)
     );
@@ -63,6 +66,7 @@ export class FormComponent implements OnChanges {
   clickNewtypeText(event: any){
     //console.log('clickNewtypeText',event)
     //If the user clicks on the default placeholder for the new type, edit it
+    if (this.authService.isTokenExp()) return
     if (this.newType==FormComponent.NEWTYPE_PLACEHOLDER)
       this.editNewStoreTypeInput(event);
     if (event.target == 'input')

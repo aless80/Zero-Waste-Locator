@@ -86,16 +86,15 @@ exports.authenticate = (req, res, next) => {
                 const token = jwt.sign(user.toJSON(), config.secret, {
                 expiresIn: 3600
                 });
-
                 res.json({
-                success: true,
-                token: 'JWT ' + token,
-                user: {
-                    id: user._id,
-                    name: user.name,
-                    username: user.username,
-                    email: user.email
-                }
+                    success: true,
+                    token: 'JWT ' + token,
+                    user: {
+                        id: user._id,
+                        name: user.name,
+                        username: user.username,
+                        email: user.email
+                    }
                 })
             } else {
                 return res.json({success: false, msg: 'Wrong password'});

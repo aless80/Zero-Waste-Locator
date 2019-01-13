@@ -48,7 +48,7 @@
             </label>
             <div class="input-group">
               <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary" (click)="goToGoogleMaps($event)">Go to Google Maps</button>
+                <button type="submit" class="btn btn-dark" (click)="goToGoogleMaps($event)">Go to Google Maps</button>
               </div>
               <!--<input class="form-control" [(ngModel)]="formResult.url" name="url" placeholder="Url to Google Maps" type="text">
                 -->
@@ -66,12 +66,12 @@
         <form>
           <div class="checkbox" *ngFor="let type of storetypes">
             <label>
-              <input type="checkbox" [checked]="hasType(type)" (click)="toggleType($event)" name="{{type}}">&nbsp;{{type}}
+              <input [disabled]="authService.isTokenExp()" type="checkbox" [checked]="hasType(type)" (click)="toggleType($event)" name="{{type}}">&nbsp;{{type}}
             </label>
           </div>
           <div class="checkbox">
             <label class="custom" (click)="clickNewtypeText($event)">
-              <input type="checkbox" [(checked)]="checked_newType" value="" (click)="clickNewtypeText($event)">{{newType}}
+              <input [disabled]="authService.isTokenExp()" type="checkbox" [(checked)]="checked_newType" value="" (click)="clickNewtypeText($event)">{{newType}}
             </label>
             <span style="cursor:pointer;color:blue;" [hidden]="hide_edit"
               (click)="editNewStoreTypeInput($event)">&nbsp;Edit
@@ -84,11 +84,10 @@
             </div>
           </div>
         </form>
-        
 
         <h4 class="mb-3">Description</h4>
         <textarea class="col-md-9 mb-3" rows="4" [(ngModel)]="formResult.descr" name="description" placeholder="Optional description" required=""></textarea>
-        <div class="row">
+        <div class="row" *ngIf="!authService.isTokenExp()">
           <div class="col-md-4">        
             <div class="input-group-append">
               <div *ngIf="formResult._id; then update else save"></div>
@@ -104,8 +103,6 @@
 
       </form>
     </div>
-
-
 
     <!--
     <div class="col-md-4 order-md-2 mb-4">
@@ -169,70 +166,3 @@
     </ul>
   </footer>-->
 </div>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="../../assets/js/vendor/popper.min.js"></script>
-<script src="../../dist/js/bootstrap.min.js"></script>
-<script src="../../assets/js/vendor/holder.min.js"></script>
-<script>
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
-  (function() {
-    'use strict';
-
-    window.addEventListener('load', function() {
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.getElementsByClassName('needs-validation');
-
-      // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function(form) {
-        form.addEventListener('submit', function(event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
-  })();
-</script>
-
-
-
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-
-
-
-<!--<script>
-    //$(document).ready(function () {
-        var editCameraLabel = function (label) {
-            console.log('editCameraLabel')
-            label.hide();
-            var labelText = label.text();
-
-            label.after("<input type='text' value='" + labelText + "' /><input type='button' value='Save' />");
-
-            var input = label.next();
-            input.focus();
-
-            var saveButton = input.next();
-
-            saveButton.click(function () {
-                labelText = input.val();
-                label.text(labelText);
-                input.remove();
-                $(this).remove();
-                label.show();
-            });
-        };
-
-        //$('label').click(function () {
-        //    editCameraLabel($(this));
-        //});
-    //});//end of document ready
-</script>-->

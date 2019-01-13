@@ -18,7 +18,8 @@ router.get('/delete/:id', controller.delete);
 router.post('/update/:id', controller.update);
 
 // Retrieve any store by field and value
-router.post('fetch/:field', controller.fetchfield);
+router.post('/fetch/:field', controller.fetchfield);
+//router.post('fetch/:field', controller.fetchfield);
 
 // Retrieve all distinct values in a field
 router.get('/distinct/:field', controller.distinct);

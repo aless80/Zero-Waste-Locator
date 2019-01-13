@@ -4,9 +4,9 @@
       <div class="col-md-9 mb-3">
         <label for="address">Full address</label>
         <div class="input-group">
-          <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text" disabled="!authService.isTokenExp()">
+          <input class="form-control" [(ngModel)]="search_string" id="address_string" name="address_string" placeholder="Address" type="text" [disabled]="authService.isTokenExp()">
           <div class="input-group-append">
-            <button type="submit" class="btn btn-dark" (click)="search()" disabled="!authService.isTokenExp() || search_string === ''">Search</button>
+            <button type="submit" class="btn btn-dark" (click)="search()" [disabled]="authService.isTokenExp() || search_string === ''">Search</button>
             <button type="submit" class="btn btn-dark" (click)="node_geocode()" hidden>Search using node-geocoder</button>
           </div>
         </div>
@@ -16,7 +16,7 @@
       <div class="col-md-10">
         <div class="col-md-9 mb-3">
           <div class="input-group-append" *ngIf="authService.isTokenExp()"><br>
-            <h5>Please register and login to use this functionality</h5>
+            <h5>Please register and login to search on Google Maps geolocation and more</h5>
           </div>
         </div>
       </div>
