@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { AlertService } from "../services/alert.service";
-import { ValidateService} from '../services/validate.service';
+import { AlertService } from "../../shared/services/alert.service";
+import { ValidateService} from '../../shared/services/validate.service';
 import { Subscription } from 'rxjs'; //to unsubscribe
 
 @Component({

@@ -2,7 +2,7 @@
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Alert, AlertType } from '../models/alert';
+import { Alert, AlertType } from '../../shared/models/alert';
 //import { Router, NavigationStart } from '@angular/router';
 
 @Injectable()

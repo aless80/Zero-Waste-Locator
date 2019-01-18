@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { Store } from "../models/store.model";
+import { Store } from "../../models/store.model";
 import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
-import { ToMapService } from '../services/to-map.service';
+import { ToMapService } from '../../services/to-map.service';
 import { Subscription } from 'rxjs';
 
 @Component({

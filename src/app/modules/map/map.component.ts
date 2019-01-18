@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ViewChild } from "@angular/core";
-import { StoreService } from "../services/store.service";
-import { Store } from "../models/store.model";
+import { StoreService } from "../../shared/services/store.service";
+import { Store } from "../../shared/models/store.model";
 import { Subscription } from "rxjs"; //to unsubscribe
-import { AlertService } from "../services/alert.service";
-import { ToMapService } from '../services/to-map.service'
-import { ValidateService } from '../services/validate.service';
-import { AuthService } from '../services/auth.service';
+import { AlertService } from "../../shared/services/alert.service";
+import { ToMapService } from '../../shared/services/to-map.service'
+import { ValidateService } from '../../shared/services/validate.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: "app-map",

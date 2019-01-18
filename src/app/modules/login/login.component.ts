@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Router } from '@angular/router';
-import { AlertService } from "../services/alert.service";
+import { AlertService } from "../../shared/services/alert.service";
 import { FormGroup,FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs'; //to unsubscribe
 

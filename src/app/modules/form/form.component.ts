@@ -1,10 +1,10 @@
 import { Component, Input, Output } from "@angular/core";
 import { EventEmitter } from "@angular/core";
-import { Store } from "../models/store.model";
+import { Store } from "../../shared/models/store.model";
 import { OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
-import { ToMapService } from '../services/to-map.service'
+import { ToMapService } from '../../shared/services/to-map.service'
 import { Subscription } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: "app-form",

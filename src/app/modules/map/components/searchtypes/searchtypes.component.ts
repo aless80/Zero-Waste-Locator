@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnDestroy, OnInit } from '@angular/core';
 import { EventEmitter } from "@angular/core";
-import { ToMapService } from '../services/to-map.service';
+import { ToMapService } from '../../../../shared/services/to-map.service';
 import { Subscription }   from 'rxjs';
 
 @Component({

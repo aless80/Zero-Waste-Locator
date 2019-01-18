@@ -1,30 +1,30 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { AboutComponent } from './about/about.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { MapComponent } from './map/map.component';
-import { FormComponent } from './form/form.component';
-import { StoreService } from './services/store.service';
-//import { SaveComponent } from './save/save.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { AlertComponent } from './alert/alert.component';
-import { AlertService } from './services/alert.service';
-import { TabsetComponent } from './tabset/tabset.component';
-import { GeocoderComponent } from './geocoder/geocoder.component';
-import { RatingComponent } from './rating/rating.component';
-import { SearchtypesComponent } from './searchtypes/searchtypes.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { ProfileComponent } from './profile/profile.component';
-import { AuthGuard } from './auth/auth.guard';
+import { MapComponent } from './modules/map/map.component';
+import { FormComponent } from './modules/form/form.component';
+import { StoreService } from './shared/services/store.service';
+//import { SaveComponent } from './modules/map/components/save/save.component';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { AlertComponent } from './shared/alert/alert.component';
+import { AlertService } from './shared/services/alert.service';
+import { TabsetComponent } from './shared/components/tabset/tabset.component';
+import { GeocoderComponent } from './modules/map/components/geocoder/geocoder.component';
+import { RatingComponent } from './modules/form/components/rating/rating.component';
+import { SearchtypesComponent } from './modules/map/components/searchtypes/searchtypes.component';
+import { LoginComponent } from './modules/login/login.component';
+import { RegisterComponent } from './modules/register/register.component';
+import { ProfileComponent } from './modules/profile/profile.component';
+import { AuthGuard } from './shared/auth/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpModule } from '@angular/http'; //this is old but whatever..
 import { RouterModule, Routes } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
-import { CardComponent } from './card/card.component';
-import { SinglecontrolComponent } from './singlecontrol/singlecontrol.component';
+import { AboutComponent } from './modules/about/pages/about.component';
+import { CardComponent } from './modules/about/components/card/card.component'
+import { SinglecontrolComponent } from './shared/components/singlecontrol/singlecontrol.component';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { StoreService } from "../services/store.service";
-import { MapComponent } from '../map/map.component'
-import { Store } from "../models/store.model";
+import { StoreService } from "../../../../shared/services/store.service";
+import { MapComponent } from '../../map.component'
+import { Store } from "../../../../shared/models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
 import {Inject, forwardRef} from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../../../shared/services/auth.service';
 /*
 Note for myself
 Instead of injecting parent Map in child (Geocoder), the other option is to use an emitter in child
