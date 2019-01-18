@@ -13,10 +13,6 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "include": [
-      "**/*.ts",
-      "src/app/*.ts"
-    ],
     "lib": [
       "es2018",
       "dom"
