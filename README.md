@@ -1,4 +1,4 @@
-# GmapsNg7
+# Zero Waste Locator
 
 ## What this App is about
 
@@ -9,16 +9,18 @@ For this reason I am implementing this app where users can search and log stores
 
 ### Progress report
 
-This is a MEAN app () and it is still under development. The frontend using Angular and the Google Maps API is fully functional, though I have plans to add more functionality (products, search on store type). 
+This is a [MEAN](https://www.mongodb.com/) app (
+[MongoDB]](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/ ), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
 
-Through the frontend users can run Google Maps' geolocation, upon which the results are visualized on markes on the map.  
-I implemented a caching system that checks whether the searched address is already present in the database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
+On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and running CRUD operations. [JSON web tokens](https://jwt.io/) handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). Of course, the app uses RxJS for asynchronous or callback-based code.  
+
+This app is still under development. The frontend using Angular and the Google Maps API is fully functional, though I have a few enhancements planned. 
+
+Through the frontend users can search an address using Google Maps' geolocation. The results are displayed as markers on the Google map.  
+I implemented a caching system that checks whether the searched address is already present in the MongoDB database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
 A form appears when you click on a marker. This form contains user editable information on the store such as the store type, store description, etc. This form allows the user to save or update the store/location to the DB. 
 
-The backend consists in a REST API run by NodeJS on a MongoDB DB. The REST API handles CRUD and query operations on the DB, allowing the storage of results searched or saved from the frontend.  
-
-This project usesthe Google Maps API in Angular CLI 7.0.6, NodeJS 8.10.0, Angular: 7.0.4. I am developing in Linux using MongoDB v3.4.17. Of course, the app also uses RxJS.  
-NB: This app does not use agm-core for Google Maps as described in many tutorials. I initially took that approach but I could not find enough documentation to extend it and implement functionalities such as InfoWindow or callbacks from markers.
+NB: This app does not use agm-core for Google Maps as described in many tutorials. IMO documentation is insufficient to extend the agm-core component and implement functionalities such as InfoWindow or callbacks from markers.
 
 ## Installation
 
@@ -31,9 +33,7 @@ ng build
 
 Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
 
-Set up a Google Maps API key for using it on a server. This can be used for geocoding from the server backend through [npm-geocoder](https://www.npmjs.com/package/node-geocoder). See the [backend/server.js](backend/server.js) file. 
-
-I will soon(-ish) clean up things and give both options to the user. 
+The code still includes my implementation of geocoding from the server backend. This implementation uses [npm-geocoder](https://www.npmjs.com/package/node-geocoder) but I commented it out in the code. To use it set up a Google Maps API key for using it on a server and see the [backend/server.js](backend/server.js) file. 
 
 <!--
 npm i --save-dev babel-cli babel-preset-env
@@ -51,14 +51,28 @@ Launch the MongoDB database:
 
 Launch NodeJS for the backend:
 
-```npm run dev```
+```
+cd backend
+npm start dev
+```
 
 Launch Angular for the frontend:
 
 ```ng serve```
 
-Open your browser at http://localhost:4200/
+Open your browser at [http://localhost:4200/](http://localhost:4200/). The backend API is by default at [http://localhost:4000/](http://localhost:4000/), and you can for instance check the /users or /stores endpoints.
 
+## How it looks like
+
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/gmaps-ng7.gif)
+<!--![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/02 - map search.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/03 - map saved.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/04 - profile.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/05 - form.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/06 - form.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/07 - about.png)
+![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/08 - register.png)
+-->
 ## Some references
 
 Here are some references I am using to develop MEAN applications:  
