@@ -28,7 +28,7 @@ export class SaveComponent implements OnInit {
   styleUrls: ['./geocoder.component.css']
 })
 export class GeocoderComponent implements OnInit {
-  public static readonly DEFAULT_SEARCH = "Bjerregaards gate 60C, 0174 Oslo";
+  public static readonly DEFAULT_SEARCH = "";//Bjerregaards gate 60C, 0174 Oslo";
   search_string: string;
   geocoder: any;
 
