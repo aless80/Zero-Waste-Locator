@@ -32,7 +32,9 @@ export class RegisterComponent implements OnInit {
 
   //Unsubscribe
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (typeof this.subscription !== 'undefined') {
+      this.subscription.unsubscribe();
+    }
   }
   
   ngOnInit() {}

@@ -22,7 +22,8 @@ export class TabsetComponent implements OnDestroy {
   }
   ngOnDestroy() {
     // Prevent memory leak when component destroyed
-    if (this.subscription)
+    if (this.subscription) {
       this.subscription.unsubscribe();
+    }
   }
 }

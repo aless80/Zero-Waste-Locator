@@ -112,8 +112,9 @@ export class MapComponent implements OnInit {
 
   ngOnDestroy() {
     //Unsubscribe from service
-    console.log("ngOnDestroy");
-    this.storeListSub.unsubscribe();
+    if (typeof this.storeListSub !== 'undefined') {
+      this.storeListSub.unsubscribe();
+    }
   }
   ///Get position of client
   //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
