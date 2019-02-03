@@ -25,4 +25,7 @@ router.post('/authenticate', controller.authenticate)
 // NB: to test this use token gotten from /authenticate, and put it in headers
 router.get('/profile', passport.authenticate('jwt', {session: false}), controller.profile)
 
+//Log geolocation search from user
+router.post('/logsearch', controller.logSearch)
+
 module.exports = router;

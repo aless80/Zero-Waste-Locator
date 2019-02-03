@@ -80,11 +80,28 @@ export class GeocoderComponent implements OnInit {
           //Send to parent Map component
           this._parent.searchResult = store;
           this._parent.process_results(store);
+          //Log that the user carried out a search
+          this.logUserSearch();
         }
       }
     );
   }
 
+  //Log in DB that the user carried out a search
+  logUserSearch() {
+    //Get the username from localStorage
+    let userJSON = localStorage.getItem('user')
+    let username = JSON.parse(userJSON)['username']
+    //Call service to interact with the backend
+    this.authService.logUserSearch(username).subscribe(data => {
+      if(data.success){
+        console.log('Successfully pushed date of geolocation search');
+      } else {
+        console.log('Error when pushing date of geolocation search: ', data.msg);
+      }
+    });
+  }
+  
   //Not used and obsolete but good stuff
   //Geocoding using in node-geocoder in backend
   node_geocode() {

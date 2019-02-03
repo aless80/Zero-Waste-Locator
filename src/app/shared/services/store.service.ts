@@ -53,10 +53,7 @@ export class StoreService {
         count: store.rating.count
       }
     };
-    return this.http.post(
-      `${this.uri}/${this.collection}/update/${store._id}`,
-      newstore
-    );
+    return this.http.post(`${this.uri}/${this.collection}/update/${store._id}`, newstore);
   }
 
   // Deletes an existing document.

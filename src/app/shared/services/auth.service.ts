@@ -41,8 +41,15 @@ export class AuthService {
     let headers = new Headers();
     headers.append('Content-Type','application/json');
     return this.http.post(`${this.uri}/${this.collection}/authenticate`, user, {headers: headers})
-    //return this.http.post('users/authenticate', user, {headers: headers})
     .pipe(map(res => res.json()));
+  }
+
+  // Log that the logged-in user did a geolocation search
+  logUserSearch(username:string){
+    let headers = new Headers();
+    headers.append('Content-Type','application/json');
+    return this.http.post(`${this.uri}/${this.collection}/logsearch`, {username: username}, {headers: headers})
+      .pipe(map(res => res.json()));
   }
 
   getProfile(){
@@ -52,7 +59,6 @@ export class AuthService {
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type','application/json');
     return this.http.get(`${this.uri}/${this.collection}/profile`, {headers: headers})
-    //return this.http.get('users/profile', {headers: headers})
       .pipe(map(res => res.json()));
   }
 

@@ -23,7 +23,11 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  searches: {
+    type: [Date], 
+    requires: false,
+    default: []},
 });
 
 // module.exports so that it can be used outside this file
