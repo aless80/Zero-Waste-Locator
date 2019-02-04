@@ -31,6 +31,7 @@ export class GeocoderComponent implements OnInit {
   public static readonly DEFAULT_SEARCH = "";//Bjerregaards gate 60C, 0174 Oslo";
   search_string: string;
   geocoder: any;
+  searchQuota: string = '';
 
   constructor(
     private storeService: StoreService,
@@ -51,7 +52,8 @@ export class GeocoderComponent implements OnInit {
         (store: [any]) => {
           //No need for geocoding when address to be searched is stored in DB
           if (!store.length) {
-            this.geocoding();            
+            //See if the user did not exceed their geocoding quota and is allowed to search
+            this.allowGeocodingSearch(this.geocoding.bind(this)) //need to either bind this
           } else {
             console.log(store.length + " match"+(store.length != 1 ? 'es' : '') + ". Loading address from database", store);
             this._parent.searchResult = store[0];
@@ -87,6 +89,47 @@ export class GeocoderComponent implements OnInit {
     );
   }
 
+  //Return object with how many queries the user run
+  allowGeocodingSearch(callback) {
+    //Get the username from localStorage
+    let userJSON = localStorage.getItem('user')
+    let username = JSON.parse(userJSON)['username']
+    //Call service to interact with the backend
+    this.authService.getSearchFrequency(username).subscribe(res => {
+        if(res.success) {
+          // Check if the user is allowed to run a geolocation search
+          //You get eg res.data: { total: 0, lasthour: 0, today: 0 } or { lasthour: 0, today: 7, total: 7}          
+          if (this.allowGeocodingSearchLogic(res.data)) {
+            callback()
+          } else {
+            console.log(this.searchQuota)
+          }
+        }
+      },
+      err => {
+        //You get: res: Object { success: false, msg: <err> }
+        console.error('Error when retrieving number of geolocation searches:', err);
+      }
+    );
+  }
+
+  allowGeocodingSearchLogic(stats){
+    this.searchQuota = '';
+    if (stats['total'] > 150) {
+      this.searchQuota = 'Sorry, you exceeded your search quota (150 geolocation searches).'
+      return false
+    }
+    if (stats['today'] > 40) {
+      this.searchQuota = 'Sorry, you exceeded your search quota for today (40 geolocation searches).'
+      return false
+    }
+    if (stats['lasthour'] > 6) {
+      this.searchQuota = 'Sorry, you exceeded your search quota for the last hour (6 geolocation searches).'
+      return false
+    }
+    return true
+  }
+  
   //Log in DB that the user carried out a search
   logUserSearch() {
     //Get the username from localStorage

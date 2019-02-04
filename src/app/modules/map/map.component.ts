@@ -34,7 +34,7 @@ export class MapComponent implements OnInit {
   storetypes: string[]; //All types of store present in DB
   
   //Message component
-  msgText: string = "";
+  //msgText: string = "";
 
   constructor(
     private storeService: StoreService,
@@ -452,11 +452,12 @@ export class MapComponent implements OnInit {
 
   ///Messages
   showAlert(text: string): void {
-    if (this.msgText != "") return;
+    /*if (this.msgText != "") return;
     this.msgText = text;
     setTimeout(() => {
       this.msgText = "";
-    }, 2000);
+    }, 2000);*/
+    this.alertService.warn(text)
   }
 
   //

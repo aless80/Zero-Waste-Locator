@@ -15,8 +15,11 @@
     <div class="row">
       <div class="col-md-10">
         <div class="col-md-9 mb-3">
-          <div class="input-group-append" *ngIf="authService.isTokenExp()"><br>
+          <div class="input-group-append alert alert-warning" *ngIf="authService.isTokenExp()"><br>
             <h5>Please register and login to search on Google Maps geolocation and more</h5>
+          </div>
+          <div class="input-group-append alert alert-warning" *ngIf="searchQuota != ''"><br>
+            <h5>{{searchQuota}}</h5>
           </div>
         </div>
       </div>

@@ -52,6 +52,13 @@ export class AuthService {
       .pipe(map(res => res.json()));
   }
 
+  getSearchFrequency(username:string){
+    let headers = new Headers();
+    headers.append('Content-Type','application/json');
+    return this.http.post(`${this.uri}/${this.collection}/searchstats`, {username: username}, {headers: headers})
+      .pipe(map(res => res.json()));
+  }
+
   getProfile(){
     let headers = new Headers();
     this.loadToken();

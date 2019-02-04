@@ -28,4 +28,7 @@ router.get('/profile', passport.authenticate('jwt', {session: false}), controlle
 //Log geolocation search from user
 router.post('/logsearch', controller.logSearch)
 
+//Log geolocation search from user
+router.post('/searchstats', controller.searchstats)
+
 module.exports = router;

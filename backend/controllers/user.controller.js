@@ -1,23 +1,24 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/database');
-const User = require('../models/user');
+const jwt = require("jsonwebtoken");
+const config = require("../config/database");
+const User = require("../models/user");
 
 // Retrieve all stores from the database.
 exports.findAll = (req, res) => {
   User.find((err, users) => {
-      if (err)
-    res.status(400).send('Failed to fetch users\n' + res.json(err));
-      else
-        res.json(users);
-  })
-}
+    if (err) {
+      res.status(400).send("Failed to fetch users\n" + res.json(err));
+    } else {
+      res.json(users);
+    }
+  });
+};
 
 exports.update = (req, res) => {
   // Check if username already exists
   User.getUserByUsername(req.body.username, (err, user) => {
-    if(err) throw err;
-    if(!user){
-      return res.json({success: false, msg: 'Username does not exist'});
+    if (err) throw err;
+    if (!user) {
+      return res.json({ success: false, msg: "Username does not exist" });
     } else {
       var userid = user.id;
       var userobj = {};
@@ -25,19 +26,19 @@ exports.update = (req, res) => {
       userobj.username = req.body.username;
       userobj.name = req.body.name;
       userobj.email = req.body.email;
-      if (req.body.password){
+      if (req.body.password) {
         userobj.password = req.body.password;
         User.updateUser(userobj, (err, user) => {
-          if(err){
-            res.json({success: false, msg: 'Failed to update user'});
+          if (err) {
+            res.json({ success: false, msg: "Failed to update user" });
           } else {
-            res.json({success: true, msg: 'User updated'});
+            res.json({ success: true, msg: "User updated" });
           }
         });
-      };
+      }
     }
   });
-}
+};
 
 exports.register = (req, res, next) => {
   let newUser = new User({
@@ -48,35 +49,35 @@ exports.register = (req, res, next) => {
   });
   // Check if username already exists
   User.getUserByUsername(newUser.username, (err, user) => {
-    if(err) {
-      throw err
+    if (err) {
+      throw err;
     }
-    if(user){
-      return res.json({success: false, msg: 'Username already exists'});
+    if (user) {
+      return res.json({ success: false, msg: "Username already exists" });
     } else {
       User.addUser(newUser, (err, user) => {
-        if(err){
-          console.log('Failed to register user:',err)
-          res.json({success: false, msg: 'Failed to register user'});
+        if (err) {
+          console.log("Failed to register user:", err);
+          res.json({ success: false, msg: "Failed to register user" });
         } else {
-          res.json({success: true, msg: 'User registered'});
+          res.json({ success: true, msg: "User registered" });
         }
       });
     }
   });
-}
+};
 
 exports.authenticate = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   User.getUserByUsername(username, (err, user) => {
-    if(err) throw err;
-    if(!user){
-      return res.json({success: false, msg: 'User not found'});
+    if (err) throw err;
+    if (!user) {
+      return res.json({ success: false, msg: "User not found" });
     }
     User.comparePassword(password, user.password, (err, isMatch) => {
-      if(err) throw err;
-      if(isMatch){
+      if (err) throw err;
+      if (isMatch) {
         // Need toJSON() or Error: Expected "payload" to be a plain object
         // https://github.com/bradtraversy/nodeauthapp/issues/3
         const token = jwt.sign(user.toJSON(), config.secret, {
@@ -84,59 +85,140 @@ exports.authenticate = (req, res, next) => {
         });
         res.json({
           success: true,
-          token: 'JWT ' + token,
+          token: "JWT " + token,
           user: {
             id: user._id,
             name: user.name,
             username: user.username,
             email: user.email
           }
-        })
+        });
       } else {
-        return res.json({success: false, msg: 'Wrong password'});
+        return res.json({ success: false, msg: "Wrong password" });
       }
     });
   });
-}
+};
 
 exports.profile = (req, res, next) => {
-  res.json({user: req.user});
-}
+  res.json({ user: req.user });
+};
 
 //Add the date and time of a new geolocation search carried out by a user
 exports.logSearch = (req, res) => {
-  User.getUserByUsername(req.body.username, (err, user) => {
-    if(err) throw err;
-    if(!user){
-      return res.json({success: false, msg: 'Username '+req.body.username+' does not exist'});
+  var username = req.body.username;
+  User.getUserByUsername(username, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "Username " + username + " does not exist"
+      });
     } else {
-      const query = {username: req.body.username};
-      User.updateOne(query, 
-        {$push: {searches: Date()}},
+      const query = { username: username };
+      User.updateOne(
+        query,
+        { $push: { searches: Date() } },
         (err, rawResponse) => {
-          if(err){
-            res.json({success: false, msg: 'Failed to push date of search to user'});
+          if (err) {
+            res.json({
+              success: false,
+              msg: "Failed to push date of search to user"
+            });
           } else {
-            res.json({success: true, msg: 'Successfully pushed date to searches field for user ' + req.body.username});
+            res.json({
+              success: true,
+              msg:
+                "Successfully pushed date to searches field for user " +
+                req.body.username
+            });
           }
         }
       );
     }
-  })
-}
+  });
+};
+
+//Return how often the user geolocation searches
+exports.searchstats = (req, res) => {
+  var username = req.body.username;
+  User.getUserByUsername(username, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      return res.json({
+        success: false,
+        msg: "Username " + username + " does not exist"
+      });
+    } else {
+      //Query how many searches the user did in some periods (1h, ..)
+      let now = new Date();
+      let onehourago = new Date(now.getTime() - 1000 * 3600 * 1);
+      let yesterday = new Date(now.getTime() - 1000 * 3600 * 24);
+      User.aggregate([
+        { $match: { username: username } },
+        {
+          $project: {
+            _id:0,
+            total: { $size: "$searches" },
+            lasthour: {
+              $size: {
+                $filter: {
+                  input: "$searches",
+                  as: "search",
+                  cond: {
+                    $and: [
+                      { $gte: ["$$search", onehourago] },
+                      { $lte: ["$$search", now] }
+                    ]
+                  }
+                }
+              }
+            },
+            today: {
+              $size: {
+                $filter: {
+                  input: "$searches",
+                  as: "search",
+                  cond: {
+                    $and: [
+                      { $gte: ["$$search", yesterday] },
+                      { $lte: ["$$search", now] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]).exec((err, data) => {
+        if (err) throw err;
+        if (data.length == 0) {
+          data = [{ total: 0, lasthour: 0, today: 0 }];
+        }
+        res.json({
+          success: true,
+          msg:
+            "Successfully pushed date to searches field for user " +
+            req.body.username,
+          data: data[0]
+        });
+      });
+    }
+  });
+};
 
 // Delete a store with the specified id in the request
 // Not used in front end but useful for admins
 exports.delete = (req, res) => {
-  User.findByIdAndRemove({_id: req.params.id }, (err, store) => {
+  User.findByIdAndRemove({ _id: req.params.id }, (err, store) => {
     if (err) {
       res.json(err);
     } else {
       if (store) {
-        res.json('Removed Successfully');
+        res.json("Removed Successfully");
       } else {
-        res.json('Id not found');}
+        res.json("Id not found");
       }
-     });
-  }
-  
+    }
+  });
+};
