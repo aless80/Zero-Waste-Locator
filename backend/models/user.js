@@ -20,6 +20,8 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  reset_password_token: String,
+  reset_password_expires: Date,
   date: {
     type: Date,
     default: Date.now
@@ -30,6 +32,22 @@ const UserSchema = new Schema({
     default: []},
 });
 
+/*
+UserSchema.pre('save', true, function(next) {
+  var user = this;
+  console.log('pre')
+  console.log(user.isModified('password'))
+  if (!user.isModified('password')) return next();
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) return next(err);
+    bcrypt.hash(user.password, salt, null, (err, hash) => {
+      if (err) return next(err);
+      user.password = hash;
+      next();
+    });
+  });
+});
+*/
 // module.exports so that it can be used outside this file
 const User = module.exports = mongoose.model('User', UserSchema);
 
@@ -43,18 +61,20 @@ module.exports.getUserByUsername = function(username, callback){
 }
 
 //Add user with encrypted password
-module.exports.addUser = function(newUser, callback){
+module.exports.addUser = function(userobj, callback){
   bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
+    bcrypt.hash(userobj.password, salt, (err, hash) => {
       // Store hash in the password DB
       if(err) throw err;
-      newUser.password = hash;
-      newUser.save(callback);
+      userobj.password = hash;
+      userobj.save(callback);
     });
   });
 }
 
 //Update user with encrypted password
+//Note: it sucks that this bcrypt code is duplicated, 
+//but I could not make a UserSchema.pre('save' ..) work
 module.exports.updateUser = function(userobj, callback){
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(userobj.password, salt, (err, hash) => {

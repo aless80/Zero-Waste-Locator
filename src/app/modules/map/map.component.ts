@@ -163,7 +163,6 @@ export class MapComponent implements OnInit {
     //Pass data to form component and set marker
     store.username = JSON.parse(localStorage.getItem('user')).username
     this.formResult = store;
-
     //Handle search marker
     this.removeSearchMarkers();
     this.setMarker(store, undefined, "Search result");

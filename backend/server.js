@@ -16,8 +16,8 @@ const config = require('./config/config.js');
 require('./config/passport')(passport);
 
 // Load routes
-const users = require('./routes/users');
-const storeroutes = require('./routes/stores.js');
+const users = require('./routes/users.routes');
+const storeroutes = require('./routes/stores.routes.js');
 
 // Get rid of warning thrown by mongoose
 mongoose.set('useCreateIndex', true)
@@ -51,8 +51,13 @@ app.use(function timeLog (req, res, next) {
 })
 
 // Use routes
-app.use('/users', users);
-app.use('/stores', storeroutes)
+app.use('/', users);
+app.use('/', storeroutes)
 
 // Establishes which port the backend runs on.
-app.listen(config.port, () => console.log(`Express server running on port ${config.port}`));
+app.listen(config.port, () => {
+  console.log(`Express server running on port ${config.port}`)
+  if (typeof process.env.MAILER_EMAIL_ID == 'undefined') {
+    console.log("To be able to send emails to users please remember to run: source ../app-env")
+  }
+});
