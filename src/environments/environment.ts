@@ -4,6 +4,12 @@
 
 export const environment = {
   production: false,
+  protocol: 'http',
+  host: 'localhost',
+  port: 4200,
+  node_protocol: 'http',
+  node_host: 'localhost',
+  node_port: 4000
 };
 
 /*

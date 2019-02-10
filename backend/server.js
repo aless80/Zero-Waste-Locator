@@ -4,7 +4,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import mongoose from 'mongoose';
-//import Store from './models/store';
 
 // Initialize the application
 const app = express();
@@ -23,7 +22,7 @@ const storeroutes = require('./routes/stores.routes.js');
 mongoose.set('useCreateIndex', true)
 
 //Use mongoose to connect to the stores DB in mongoDB
-mongoose.connect(config.mongoStores, { useNewUrlParser: true });
+mongoose.connect(config.mongoDB, { useNewUrlParser: true });
 mongoose.connection.once('open', () => {
     console.log('Connection to the MongoDB database established successfully!');
 });
@@ -58,6 +57,6 @@ app.use('/', storeroutes)
 app.listen(config.port, () => {
   console.log(`Express server running on port ${config.port}`)
   if (typeof process.env.MAILER_EMAIL_ID == 'undefined') {
-    console.log("To be able to send emails to users please remember to run: source ../app-env")
+    console.log("To be able to send emails to users please remember to set environmnet cariables in .env");
   }
 });

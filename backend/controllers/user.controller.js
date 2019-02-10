@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/database");
+const configdb = require("../config/database");
 const User = require("../models/user");
 const path = require('path');
 const async = require('async');
@@ -9,6 +9,9 @@ const email = process.env.MAILER_EMAIL_ID || 'AlessandroMarin80@gmail.com';
 const pass = process.env.MAILER_PASSWORD || "12345";
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
+
+//Load configurations
+const config = require('../config/config.js');
 
 // Forgot email/reset password functionalities
 var smtpTransport = nodemailer.createTransport({
@@ -28,6 +31,7 @@ var handlebarsOptions = {
   extName: '.html'
 };
 smtpTransport.use('compile', hbs(handlebarsOptions));
+
 // HTML pages for forgot/reset password functionalities
 exports.render_forgot_password_template = (req, res) => {
   return res.sendFile(path.resolve('./public/forgot-password.html'));
@@ -115,7 +119,7 @@ exports.authenticate = (req, res, next) => {
       if (isMatch) {
         // Need toJSON() or Error: Expected "payload" to be a plain object
         // https://github.com/bradtraversy/nodeauthapp/issues/3
-        const token = jwt.sign(user.toJSON(), config.secret, {
+        const token = jwt.sign(user.toJSON(), configdb.secret, {
           expiresIn: 3600
         });
         res.json({
@@ -294,8 +298,8 @@ exports.logSearch = (req, res) => {
             template: 'forgot-password-email',
             subject: 'Zero Waste Locator - Password recovery',
             context: {
-              url: 'http://localhost:4000/users/reset_password?token=' + token,
-              name: user.name
+              url: config.protocol+'://'+config.host+':'+config.port+'/users/reset_password?token=' + token,
+              name: user.name[0].toUpperCase()+user.name[0].slice(1)
             }
           };
           smtpTransport.sendMail(data, (err) => {
@@ -308,65 +312,67 @@ exports.logSearch = (req, res) => {
         }    
       ], (err) => {
         return res.status(422).json({ message: err });
-      });
-    };
-    
-    // Reset password
-    exports.reset_password = (req, res, next) => {
-      User.findOne({
-        reset_password_token: req.body.token,
-        reset_password_expires: {
-          $gt: Date.now()
-        }
-      }).exec((err, user) => {
-        if (!err && user) {
-          if (req.body.newPassword === req.body.verifyPassword) {
-            user.password = req.body.newPassword;
-            user.reset_password_token = undefined;
-            user.reset_password_expires = undefined;
-            user.name=user.name
-            //Note: it sucks that this bcrypt code is duplicated, 
-            //but I could not make a UserSchema.pre('save' ..) work
-            bcrypt.genSalt(10, (err, salt) => {
-              bcrypt.hash(user.password, salt, (err, hash) => {
-                // Store hash as the User's password DB
-                if(err) throw err;
-                user.password = hash;
-                user.save((err) => {
-                  if (err) {
-                    return res.status(422).send({
-                      message: err
-                    });
-                  } else {
-                    var data = {
-                      to: user.email,
-                      from: email,
-                      template: 'reset-password-email',
-                      subject: 'Zero Waste Locator - Password Reset Confirmation',
-                      context: {
-                        name: user.name
-                      }
-                    };
-                    smtpTransport.sendMail(data, (err) => {
-                      if (!err) {
-                        return res.json({ message: 'Password reset' });
-                      } else {
-                        return done(err);
-                      }
-                    });
-                  }
-                });
-              })
-            });
-          } else {
-            return res.status(422).send({
-              message: 'Passwords do not match'
-            });
-          }
+      }
+      );
+  };
+  
+  // Reset password
+  exports.reset_password = (req, res, next) => {
+    User.findOne({
+      reset_password_token: req.body.token,
+      reset_password_expires: {
+        $gt: Date.now()
+      }
+    }).exec((err, user) => {
+      if (!err && user) {
+        if (req.body.newPassword === req.body.verifyPassword) {
+          user.password = req.body.newPassword;
+          user.reset_password_token = undefined;
+          user.reset_password_expires = undefined;
+          user.name=user.name
+          //Note: it sucks that this bcrypt code is duplicated, 
+          //but I could not make a UserSchema.pre('save' ..) work
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+              // Store hash as the User's password DB
+              if(err) throw err;
+              user.password = hash;
+              user.save((err) => {
+                if (err) {
+                  return res.status(422).send({
+                    message: err
+                  });
+                } else {
+                  var data = {
+                    to: user.email,
+                    from: email,
+                    template: 'reset-password-email',
+                    subject: 'Zero Waste Locator - Password Reset Confirmation',
+                    context: {
+                      url: config.ngprotocol+'://'+config.nghost+':'+config.ngport,
+                      name: user.name[0].toUpperCase()+user.name[0].slice(1)
+                    }
+                  };
+                  smtpTransport.sendMail(data, (err) => {
+                    if (!err) {
+                      return res.json({ message: 'Password reset' });
+                    } else {
+                      return done(err);
+                    }
+                  });
+                }
+              });
+            })
+          });
         } else {
-          return res.status(400).send({
-            message: 'Password reset token is invalid or has expired.'
+          return res.status(422).send({
+            message: 'Passwords do not match'
           });
         }
-      });
-    };
+      } else {
+        return res.status(400).send({
+          message: 'Password reset token is invalid or has expired.'
+        });
+      }
+    });
+  };

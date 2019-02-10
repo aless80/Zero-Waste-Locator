@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertService } from "../../shared/services/alert.service";
 import { FormGroup,FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs'; //to unsubscribe
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,8 @@ import { Subscription } from 'rxjs'; //to unsubscribe
 })
 export class LoginComponent implements OnInit {
   public form: FormGroup;
-  subscription: Subscription;
+  private subscription: Subscription;
+  public node_url:string = environment.node_protocol+'://'+environment.node_host+':'+environment.node_port+'/users/forgot_password';
 
   constructor(
     private formBuilder: FormBuilder,

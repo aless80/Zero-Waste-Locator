@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Store } from "../models/store.model";
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: "root"
@@ -8,7 +9,7 @@ import { Store } from "../models/store.model";
 export class StoreService {
   // Backend Server URI
   // Set in /backend/server.js
-  uri:string = "http://localhost:4000";
+  uri:string = environment.node_protocol+'://'+environment.node_host+':'+environment.node_port;
 
   // The name of your MongoDB database collection.
   collection:string = "stores";

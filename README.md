@@ -24,6 +24,7 @@ NB: This app does not use agm-core for Google Maps as described in many tutorial
 
 ## Installation
 
+#### node, npm, mongoDB, Angular
 Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. Install the node and Angular dependencies with:
 
 ```
@@ -31,17 +32,23 @@ npm install
 ng build
 ```
 
+For deploying the front end check the [Build](#Build) section below and the Angular [deployment documentation](https://angular.io/guide/deployment)
+
+#### dotenv
+Create a .env file with environment variables for the Node.js backend. Use a template in .env_example. 
+
+```
+cp .env_example .env
+vi .env
+```
+
+#### environment*.ts
+Do something similar for the environment variables for the Angular frontend in the ./environment.ts and ./environment.prod.ts files, which are used for development and production, respectively. 
+
+#### Google Maps
 Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
 
 The code still includes my implementation of geocoding from the server backend. This implementation uses [npm-geocoder](https://www.npmjs.com/package/node-geocoder) but I commented it out in the code. To use it set up a Google Maps API key for using it on a server and see the [backend/server.js](backend/server.js) file. 
-
-<!--
-npm i --save-dev babel-cli babel-preset-env
-npm i cors --save
-npm i mongoose --save
-npm i express --save
--->
-
 
 ## Launching the app
 
@@ -49,11 +56,13 @@ Launch the MongoDB database:
 
 ```mongod --dbpath <path to data directory>```
 
-Launch NodeJS for the backend:
+Launch the Node.js backend in the ./backend directory. As an example, use one of these three commands below:
 
 ```
 cd backend
-npm start dev
+npm start       //using npm
+node start.js   //using node
+nodemon         //using nodemon
 ```
 
 Launch Angular for the frontend:

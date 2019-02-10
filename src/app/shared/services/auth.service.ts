@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   // Backend Server URI
   // Set in /backend/server.js
-  uri:string = "http://localhost:4000";
+  uri:string = environment.node_protocol+'://'+environment.node_host+':'+environment.node_port;
 
   // The name of your MongoDB database collection.
   collection:string = "users";
@@ -80,7 +81,6 @@ export class AuthService {
   //Get username from LocalStorage
   getLoggedUsername() {
     let userjson = JSON.parse(localStorage.getItem('user'));
-    console.log(userjson)
     if (userjson == null) return ''
     return userjson['username']
   }
