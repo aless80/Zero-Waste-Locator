@@ -36,8 +36,8 @@ export class GeocoderComponent implements OnInit {
   searchQuota: string = '';
 
   constructor(
-    private storeService: StoreService,
-    private authService: AuthService,
+    public storeService: StoreService,
+    public authService: AuthService,
     @Inject(forwardRef(
       () => MapComponent)) private _parent:MapComponent
       ) { }

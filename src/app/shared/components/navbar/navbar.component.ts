@@ -10,10 +10,10 @@ import { AlertService } from "../../../shared/services/alert.service";
 })
 export class NavbarComponent implements OnInit {
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router:Router,
     private alertService: AlertService,) {}
-    private username:string = this.authService.getLoggedUsername();
+    public username:string = this.authService.getLoggedUsername();
     
   ngOnInit() { }
 
