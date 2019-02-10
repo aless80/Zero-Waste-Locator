@@ -65,16 +65,14 @@ exports.update = (req, res) => {
       userobj.username = req.body.username;
       userobj.name = req.body.name;
       userobj.email = req.body.email;
-      if (req.body.password) {
-        userobj.password = req.body.password;
-        User.updateUser(userobj, (err, user) => {
-          if (err) {
-            res.json({ success: false, msg: "Failed to update user" });
-          } else {
-            res.json({ success: true, msg: "User updated" });
-          }
-        });
-      }
+      userobj.password = req.body.password;
+      User.updateUser(userobj, (err, user) => {
+        if (err) {
+          res.json({ success: false, msg: "Failed to update user" });
+        } else {
+          res.json({ success: true, msg: "User updated" });
+        }
+      });
     }
   });
 };

@@ -76,9 +76,9 @@ exports.fetchfield = (req, res) => {
   //console.log(req.params.field, req.body)
   var query = {};
   if (req.body == '*') {
-    query[req.params.field] = {$exists: true}
+    query[req.params.field] = { $exists: true }
   } else {
-    query[req.params.field] = { $in: req.body};
+    query[req.params.field] = { $in: req.body };
   }
   Store.find(query)
   .exec((err, results) => {

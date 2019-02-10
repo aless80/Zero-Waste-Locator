@@ -18,12 +18,13 @@ export class ProfileComponent implements OnInit {
     "username": "",
     "password": ""
   };
-  showChangePwd = false;
-  showNewPwds = false;
+  showChangePwd:boolean = false;
+  showNewPwds: boolean = false;
   oldpassword: string;
   newpassword: string;
   newpassword2: string;
   subscription: Subscription;
+  disableSubmit: boolean = true;
 
   constructor(
     private authService:AuthService,
@@ -31,6 +32,10 @@ export class ProfileComponent implements OnInit {
     private alertService: AlertService,
     private validateService:ValidateService
   ) { }
+
+  onProfileChange() {
+    this.disableSubmit = false
+  }
 
   // Need to load the user when initilize
   ngOnInit() {
