@@ -3,6 +3,7 @@
 /backend/data
 /backend/node_modules
 .env
+/docs
 
 # compiled output
 /dist

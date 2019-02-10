@@ -49,7 +49,7 @@ vi .env
 Similarly to dotenv, set up environment variables for the Angular frontend in the ./environment.ts and ./environment.prod.ts files, which are used for development and production, respectively. 
 
 #### Google Maps
-Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
+Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/modules/map/map.component.ts](src/app/modules/map/map.component.ts)). 
 
 The code still includes my implementation of geocoding from the server back-end. This implementation uses [npm-geocoder](https://www.npmjs.com/package/node-geocoder) but I commented it out in the code. To use it set up a Google Maps API key for using it on a server and see the [backend/server.js](backend/server.js) file. 
 
@@ -77,13 +77,13 @@ Open your browser at [http://localhost:4200/](http://localhost:4200/). The backe
 ## How it looks like
 
 ![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/gmaps-ng7.gif)
-<!--![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/02 - map search.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/03 - map saved.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/04 - profile.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/05 - form.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/06 - form.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/07 - about.png)
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/08 - register.png)
+<!--![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/02 - map search.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/03 - map saved.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/04 - profile.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/05 - form.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/06 - form.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/07 - about.png)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/08 - register.png)
 -->
 ## Some references
 
