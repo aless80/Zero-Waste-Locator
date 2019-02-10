@@ -9,12 +9,13 @@ const UserSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique : true
   },
   username: {
     type: String,
+    required: true,
     unique: true,
-    required: true
   },
   password: {
     type: String,
@@ -57,6 +58,11 @@ module.exports.getUserById = function(id, callback){
 
 module.exports.getUserByUsername = function(username, callback){
   const query = {username: username};
+  User.findOne(query, callback);
+}
+
+module.exports.getUserByEmail = function(email, callback){
+  const query = {email: email};
   User.findOne(query, callback);
 }
 

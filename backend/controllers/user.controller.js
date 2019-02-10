@@ -86,24 +86,47 @@ exports.register = (req, res, next) => {
     username: req.body.username,
     password: req.body.password
   });
-  // Check if username already exists
-  User.getUserByUsername(newUser.username, (err, user) => {
-    if (err) {
-      throw err;
-    }
-    if (user) {
-      return res.json({ success: false, msg: "Username already exists" });
-    } else {
+  async.waterfall([
+    // Check if username already exists
+    (done) => {
+      User.findOne({ username: newUser.username }).exec((err, user) => {
+        if (err) {
+          throw err;
+        }
+        if (user != null) {
+          done("Username already exists")
+        } else {
+          done(err, newUser);
+        }
+      })
+    }, 
+    // Check if email already exists
+    (newUser, done) => {
+      User.findOne({ email: newUser.email }).exec((err, user) => {
+        if (err) {
+          throw err;
+        }
+        if (user != null) {
+          done("Email already exists")
+        } else {
+          done(err, newUser);
+        }
+      }); 
+    },
+    // Go ahead with adding user
+    (newUser, done) => {
       User.addUser(newUser, (err, user) => {
         if (err) {
           console.log("Failed to register user:", err);
-          res.json({ success: false, msg: "Failed to register user" });
+          done("Failed to register user:  "+err.message)
         } else {
           res.json({ success: true, msg: "User registered" });
         }
-      });
+      })
     }
-  });
+    ], (err) => {
+    res.json({ success: false, msg: err })
+  })
 };
 
 exports.authenticate = (req, res, next) => {

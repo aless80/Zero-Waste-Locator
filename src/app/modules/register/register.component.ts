@@ -23,9 +23,9 @@ export class RegisterComponent implements OnInit {
     private alertService: AlertService
   ) {
     this.form = formBuilder.group({
-      username: 'amarin',
-      name: 'amarin',
-      email: 'defaul@email.co',
+      username: 'user',
+      name: 'user',
+      email: 'defaul@email.com',
       password: '',
     });
   }
@@ -62,11 +62,11 @@ export class RegisterComponent implements OnInit {
     // Register User
     this.subscription = this.authService.registerUser(user)
       .subscribe(data => {
-        if(data.success){
+        if(data['success']){
           this.alertService.success('You are now registered and can log in', 2500);
           setTimeout(() => this.router.navigate(['/login']), 1500);
         } else {
-          this.alertService.error(data.msg, 2500);
+          this.alertService.error(data['msg'], 2500);
           this.router.navigate(['/register']);
         }
       });
