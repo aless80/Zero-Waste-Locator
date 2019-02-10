@@ -46,7 +46,7 @@ vi .env
 ```
 
 #### environment*.ts
-Do something similar for the environment variables for the Angular frontend in the ./environment.ts and ./environment.prod.ts files, which are used for development and production, respectively. 
+Similarly to dotenv, set up environment variables for the Angular frontend in the ./environment.ts and ./environment.prod.ts files, which are used for development and production, respectively. 
 
 #### Google Maps
 Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
@@ -76,7 +76,7 @@ Open your browser at [http://localhost:4200/](http://localhost:4200/). The backe
 
 ## How it looks like
 
-![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/gmaps-ng7.gif)
+![Alt Text](https://github.com/aless80/Zero-Waste-Locator/blob/master/img/gmaps-ng7.gif)
 <!--![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/02 - map search.png)
 ![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/03 - map saved.png)
 ![Alt Text](https://github.com/aless80/gmaps-ng7/blob/master/img/04 - profile.png)
