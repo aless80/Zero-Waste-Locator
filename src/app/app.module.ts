@@ -24,7 +24,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AboutComponent } from './modules/about/pages/about.component';
 import { CardComponent } from './modules/about/components/card/card.component'
-import { SinglecontrolComponent } from './shared/components/singlecontrol/singlecontrol.component';
 
 const appRoutes: Routes = [
   {path: '', component: MapComponent},
@@ -57,7 +56,6 @@ export function tokenGetter() {
     ProfileComponent,
     AboutComponent,
     CardComponent,
-    SinglecontrolComponent
   ],
   imports: [
     BrowserModule,
