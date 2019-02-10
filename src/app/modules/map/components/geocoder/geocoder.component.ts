@@ -5,6 +5,8 @@ import { Store } from "../../../../shared/models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
 import {Inject, forwardRef} from '@angular/core';
 import { AuthService } from '../../../../shared/services/auth.service';
+import { environment } from '../../../../../environments/environment';
+
 /*
 Note for myself
 Instead of injecting parent Map in child (Geocoder), the other option is to use an emitter in child
@@ -115,16 +117,16 @@ export class GeocoderComponent implements OnInit {
 
   allowGeocodingSearchLogic(stats){
     this.searchQuota = '';
-    if (stats['total'] > 150) {
-      this.searchQuota = 'Sorry, you exceeded your search quota (150 geolocation searches).'
+    if (stats['total'] > environment.geolocation_quota) {
+      this.searchQuota = 'Sorry, you exceeded your search quota ('+environment.geolocation_quota+' geolocation searches).'
       return false
     }
-    if (stats['today'] > 40) {
-      this.searchQuota = 'Sorry, you exceeded your search quota for today (40 geolocation searches).'
+    if (stats['today'] > environment.geolocation_daily_quota) {
+      this.searchQuota = 'Sorry, you exceeded your search quota for today ('+environment.geolocation_daily_quota+' geolocation searches).'
       return false
     }
-    if (stats['lasthour'] > 6) {
-      this.searchQuota = 'Sorry, you exceeded your search quota for the last hour (6 geolocation searches).'
+    if (stats['lasthour'] > environment.geolocation_hourly_quota) {
+      this.searchQuota = 'Sorry, you exceeded your search quota for the last hour ('+environment.geolocation_hourly_quota+' geolocation searches).'
       return false
     }
     return true

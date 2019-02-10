@@ -7,18 +7,21 @@ I moved to Oslo in Norway, I realized it takes time to learn where plastic-free 
 
 For this reason I am implementing this app where users can search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up. 
 
-### Progress report
+### Technical description
 
 This is a [MEAN](https://www.mongodb.com/) app (
 [MongoDB]](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/ ), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
 
-On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and running CRUD operations. [JSON web tokens](https://jwt.io/) handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). Of course, the app uses RxJS for asynchronous or callback-based code.  
-
-This app is still under development. The frontend using Angular and the Google Maps API is fully functional, though I have a few enhancements planned. 
+On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and running CRUD operations. [JSON web tokens](https://jwt.io/) [JWT] handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). Of course, the app uses RxJS for asynchronous or callback-based code.  
 
 Through the frontend users can search an address using Google Maps' geolocation. The results are displayed as markers on the Google map.  
-I implemented a caching system that checks whether the searched address is already present in the MongoDB database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
+I implemented a "caching" system that checks whether the searched address is already present in the MongoDB database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
+
+The user has a personal quota for the number of geolocation searches they can run. The quota can be set in three environment variables (see below) as an integer for the maximum number of queries per hour, day, and total maximum. This was done to limit my bill with the Google Maps API. 
+
 A form appears when you click on a marker. This form contains user editable information on the store such as the store type, store description, etc. This form allows the user to save or update the store/location to the DB. 
+
+To use the Google Map functionality a user is required to register and login. JWT is used to transmit sensitive information (e.g. passwords, access tokens) between front-end and back-end. A password reset functionality is implemented in the back-end using [express-nodemailer](https://nodemailer.com/about/), [handlebars](https://www.npmjs.com/package/nodemailer-express-handlebars) for express and express-nodemailer, and AJAX requests.
 
 NB: This app does not use agm-core for Google Maps as described in many tutorials. IMO documentation is insufficient to extend the agm-core component and implement functionalities such as InfoWindow or callbacks from markers.
 
@@ -35,7 +38,7 @@ ng build
 For deploying the front end check the [Build](#Build) section below and the Angular [deployment documentation](https://angular.io/guide/deployment)
 
 #### dotenv
-Create a .env file with environment variables for the Node.js backend. Use a template in .env_example. 
+Create a .env file with environment variables for the Node.js back-end. Use a template in .env_example. 
 
 ```
 cp .env_example .env
@@ -48,7 +51,7 @@ Do something similar for the environment variables for the Angular frontend in t
 #### Google Maps
 Get a Google Maps API key [here](https://developers.google.com/maps/documentation/javascript/get-api-key) to use Google's geolocation service. Place the API key in the ./src/index_INSERTKEY.html file, then rename that file to index.html. This allows you to use it for geocoding from the front end (see [src/app/map/map.component.ts](src/app/map/map.component.ts)). 
 
-The code still includes my implementation of geocoding from the server backend. This implementation uses [npm-geocoder](https://www.npmjs.com/package/node-geocoder) but I commented it out in the code. To use it set up a Google Maps API key for using it on a server and see the [backend/server.js](backend/server.js) file. 
+The code still includes my implementation of geocoding from the server back-end. This implementation uses [npm-geocoder](https://www.npmjs.com/package/node-geocoder) but I commented it out in the code. To use it set up a Google Maps API key for using it on a server and see the [backend/server.js](backend/server.js) file. 
 
 ## Launching the app
 
@@ -56,7 +59,7 @@ Launch the MongoDB database:
 
 ```mongod --dbpath <path to data directory>```
 
-Launch the Node.js backend in the ./backend directory. As an example, use one of these three commands below:
+Launch the Node.js back-end in the ./backend directory. As an example, use one of these three commands below:
 
 ```
 cd backend
@@ -99,6 +102,8 @@ Here are some references I am using to develop MEAN applications:
 [Post on stackoverflow about Google Maps' infowindow](https://stackoverflow.com/a/31496676/3592827)
 
 [Create a MEAN Stack Google Map App](https://scotch.io/tutorials/making-mean-apps-with-google-maps-part-i)
+
+[How To Implement Password Reset In Node.js](http://sahatyalkabov.com/how-to-implement-password-reset-in-nodejs/)
 
 ## Generated README
 

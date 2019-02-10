@@ -9,7 +9,10 @@ export const environment = {
   port: 4200,
   node_protocol: 'http',
   node_host: 'localhost',
-  node_port: 4000
+  node_port: 4000,
+  geolocation_hourly_quota: 6,
+  geolocation_daily_quota: 40,
+  geolocation_quota: 150,
 };
 
 /*
