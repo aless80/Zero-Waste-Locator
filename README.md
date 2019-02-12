@@ -28,11 +28,12 @@ NB: This app does not use agm-core for Google Maps as described in many tutorial
 ## Installation
 
 #### node, npm, mongoDB, Angular
-Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. Install the node and Angular dependencies with:
+Install node, npm, mongoDB, Angular CLI, and see the standard [generated README](#Generated-README) below. Install the Angular and Node.js dependencies with:
 
 ```
 npm install
-ng build
+cd backend
+npm install
 ```
 
 For deploying the front end check the [Build](#Build) section below and the Angular [deployment documentation](https://angular.io/guide/deployment)
@@ -68,11 +69,15 @@ node start.js   //using node
 nodemon         //using nodemon
 ```
 
+Before launching Angular fix the index.html file as explained before: 
+
+```cp ./src/index_INSERTKEY.html ./src/index.html```
+
 Launch Angular for the frontend:
 
 ```ng serve```
 
-Open your browser at [http://localhost:4200/](http://localhost:4200/). The backend API is by default at [http://localhost:4000/](http://localhost:4000/), and you can for instance check the /users or /stores endpoints.
+Open your browser at [http://localhost:4200/](http://localhost:4200/). The backend API is by default at [http://localhost:4000/](http://localhost:4000/), and you can for instance check the [http://localhost:4000/](http://localhost:4000/users) or [http://localhost:4000/](http://localhost:4000/stores) endpoints.
 
 ## How it looks like
 
