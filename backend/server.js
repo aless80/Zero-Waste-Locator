@@ -63,7 +63,7 @@ app.use('/', storeroutes)
 
 // Establishes which port the backend runs on.
 app.listen(config.port, () => {
-  console.log(`Express server running on port ${config.port}`)
+  console.log(`Express server running with NODE_ENV=${config.NODE_ENV} on port ${config.port}`)
   if (typeof process.env.MAILER_EMAIL_ID == 'undefined') {
     console.log("To be able to send emails to users please remember to set environment variables in .env");
   }
