@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const configdb = require("../config/database");
 const User = require("../models/user");
 const path = require('path');
 const async = require('async');
@@ -140,7 +139,7 @@ exports.authenticate = (req, res, next) => {
       if (isMatch) {
         // Need toJSON() or Error: Expected "payload" to be a plain object
         // https://github.com/bradtraversy/nodeauthapp/issues/3
-        const token = jwt.sign(user.toJSON(), configdb.secret, {
+        const token = jwt.sign(user.toJSON(), config.secret, {
           expiresIn: 3600
         });
         res.json({

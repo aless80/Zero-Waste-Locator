@@ -4,9 +4,17 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
+import compression from 'compression';
 
 // Initialize the application
 const app = express();
+
+// Helmet to secure Express
+app.use(helmet());
+
+//Compress all routes
+app.use(compression());
 
 //Load configurations
 const config = require('./config/config.js');
@@ -57,6 +65,6 @@ app.use('/', storeroutes)
 app.listen(config.port, () => {
   console.log(`Express server running on port ${config.port}`)
   if (typeof process.env.MAILER_EMAIL_ID == 'undefined') {
-    console.log("To be able to send emails to users please remember to set environmnet cariables in .env");
+    console.log("To be able to send emails to users please remember to set environment variables in .env");
   }
 });
