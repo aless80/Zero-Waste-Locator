@@ -369,7 +369,7 @@ exports.logSearch = (req, res) => {
                     template: 'reset-password-email',
                     subject: 'Zero Waste Locator - Password Reset Confirmation',
                     context: {
-                      url: config.ngprotocol+'://'+config.nghost+':'+config.ngport,
+                      url: config.ng_url,
                       name: user.name[0].toUpperCase()+user.name[0].slice(1)
                     }
                   };

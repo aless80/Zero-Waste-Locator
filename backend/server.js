@@ -61,7 +61,7 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 //console.log the method and url
-app.use(function timeLog (req, res, next) {
+app.use(function logger (req, res, next) {
   console.log(req.method, req.url)  
   next()
 })

@@ -8,9 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports.port = process.env.NODE_PORT || 4000;
 module.exports.host = process.env.NODE_HOST || 'localhost';
 module.exports.protocol = process.env.NODE_PROTOCOL || 'http';
-module.exports.ngport = process.env.NG_PORT || 4200;
-module.exports.nghost = process.env.NG_HOST || 'localhost';
-module.exports.ngprotocol = process.env.NG_PROTOCOL || 'http';
+module.exports.ng_url = process.env.NG_URL || 'http://localhost:4000';
 
 // MongoDB database
 module.exports.mongoDB = process.env.MONGODB || 'mongodb://localhost:27017/stores';
