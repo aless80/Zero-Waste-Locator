@@ -1,6 +1,5 @@
 // Load environment variables
 if (process.env.NODE_ENV !== 'production') {
-    console.log('here')
     const dotenv = require('dotenv')
     const result = dotenv.config({path:'./.env'})
 }
@@ -19,6 +18,7 @@ console.log('process.env.NODE_ENV:',process.env.NODE_ENV)
 module.exports.mongoDB = process.env.MONGODB || 'mongodb://localhost:27017/stores';
 module.exports.mongoDBsecret = process.env.MONGODBsecret || 'my secret';
 
+/*
 // Connects to the MongoDB database collections
 if(process.env.NODE_ENV === 'production'){
     module.exports.port = 4000;
@@ -37,3 +37,4 @@ if(process.env.NODE_ENV === 'production'){
         secret: 'yoursecret'
     }
 }
+*/

@@ -1,7 +1,12 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "description": "",
+  "author": "Alessandro Marin",
+  "license": "MIT",
+  "version": "0.0.0",
+  "engines": {
+    "node": "8.10.0"
+  },
+  "description": "Backend for the zero-waste-locator MEAN app",
   "main": "start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +14,6 @@
     "dev": "babel-watch start.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",

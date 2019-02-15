@@ -26,7 +26,7 @@ var smtpTransport = nodemailer.createTransport({
 // Handlebars provides html templates for forgot/reset password functionalities
 var handlebarsOptions = {
   viewEngine: 'handlebars',
-  viewPath: path.resolve('./templates/'),
+  viewPath: path.resolve('./views/templates/'),
   extName: '.html'
 };
 smtpTransport.use('compile', hbs(handlebarsOptions));

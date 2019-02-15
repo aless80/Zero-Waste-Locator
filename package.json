@@ -1,6 +1,8 @@
 {
-  "name": "gmaps-ng7",
-  "version": "0.0.0",
+  "name": "zero-waste-locator",
+  "author": "Alessandro Marin",
+  "license": "MIT",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
