@@ -52,6 +52,14 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve Angular
+if (process.env.NODE_ENV == 'production') {
+  app.use(express.static("../dist/"));
+  app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html')); 
+  });
+}
+
 //console.log the method and url
 app.use(function timeLog (req, res, next) {
   console.log(req.method, req.url)  
@@ -64,7 +72,7 @@ app.use('/', storeroutes)
 
 // Establishes which port the backend runs on.
 app.listen(config.port, () => {
-  console.log(`Express server running with NODE_ENV=${config.NODE_ENV} on port ${config.port}`)
+  console.log(`Express server running with NODE_ENV=${process.env.NODE_ENV} on port ${config.port}`)
   if (typeof process.env.MAILER_EMAIL_ID == 'undefined') {
     console.log("To be able to send emails to users please remember to set environment variables in .env");
   }
