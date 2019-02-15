@@ -87,7 +87,10 @@ Build the Angular app into the /dist folder:
 ng build --prod
 ```
 The /dist folder is served by Node.js when the environment variable NODE_ENV is set to 'production', so do that before launching the backend with e.g.:
+
+```
 NODE_ENV=production node server.js
+```
 
 ## How it looks like
 
