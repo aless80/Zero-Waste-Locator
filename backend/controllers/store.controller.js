@@ -1,5 +1,5 @@
 const Store = require("../models/store");
-
+console.log(typeof Store)
 // Retrieve all stores from the database.
 exports.findAll = (req, res) => {
   Store.find((err, stores) => {

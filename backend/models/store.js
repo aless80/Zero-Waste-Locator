@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
-//Issue changed to -> Store
-let Store = new Schema({
+
+//Create store schema
+let StoreSchema = new Schema({
     coords: {type: [Number], required: true},
     address: {type: String, required: true},
     street_num: {type: String},
@@ -23,4 +23,5 @@ let Store = new Schema({
 // Indexes this schema in 2dsphere format (critical for running proximity searches)
 //Store.index({location: '2dsphere'});
 
-module.export = mongoose.model('Store', Store);
+var Store = mongoose.model('Store', StoreSchema);
+module.exports = Store;
