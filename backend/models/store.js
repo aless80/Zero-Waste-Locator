@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 //Issue changed to -> Store
@@ -23,4 +23,4 @@ let Store = new Schema({
 // Indexes this schema in 2dsphere format (critical for running proximity searches)
 //Store.index({location: '2dsphere'});
 
-export default mongoose.model('Store', Store);
+module.export = mongoose.model('Store', Store);

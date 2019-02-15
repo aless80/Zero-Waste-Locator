@@ -1,4 +1,4 @@
-import Store from '../models/store';
+const Store = require("../models/store");
 
 // Retrieve all stores from the database.
 exports.findAll = (req, res) => {

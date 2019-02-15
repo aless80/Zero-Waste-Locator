@@ -12,8 +12,6 @@ module.exports.ngport = process.env.NG_PORT || 4200;
 module.exports.nghost = process.env.NG_HOST || 'localhost';
 module.exports.ngprotocol = process.env.NG_PROTOCOL || 'http';
 
-console.log('process.env.NODE_ENV:',process.env.NODE_ENV)
-
 // MongoDB database
 module.exports.mongoDB = process.env.MONGODB || 'mongodb://localhost:27017/stores';
 module.exports.mongoDBsecret = process.env.MONGODBsecret || 'my secret';
@@ -27,14 +25,5 @@ if(process.env.NODE_ENV === 'production'){
     module.exports.ngport = 4200;
     module.exports.nghost = 'myhost.com';
     module.exports.ngprotocol = 'https';
-    module.exports.mongoAuth = {
-        URI: 'mongodb://abcdefg:abcdefg@ds215961.mlab.com:15961/meanauth-dev',
-        secret: 'yoursecret'
-    }
-} else {
-    module.exports.mongoAuth = {
-        URI: 'mongodb://localhost:27017/meanauth',
-        secret: 'yoursecret'
-    }
 }
 */

@@ -65,7 +65,7 @@ Launch the Node.js back-end in the ./backend directory. As an example, use one o
 ```
 cd backend
 npm start       //using npm
-node start.js   //using node
+node server.js  //using node
 nodemon         //using nodemon
 ```
 
@@ -78,6 +78,16 @@ Launch Angular for the frontend:
 ```ng serve```
 
 Open your browser at [http://localhost:4200/](http://localhost:4200/). The backend API is by default at [http://localhost:4000/](http://localhost:4000/), and you can for instance check the [http://localhost:4000/](http://localhost:4000/users) or [http://localhost:4000/](http://localhost:4000/stores) endpoints.
+
+## Prepare for production
+
+Compiles the Angular
+Build the Angular app into the /dist folder: 
+```
+ng build --prod
+```
+The /dist folder is served by Node.js when the environment variable NODE_ENV is set to 'production', so do that before launching the backend with e.g.:
+NODE_ENV=production node server.js
 
 ## How it looks like
 
