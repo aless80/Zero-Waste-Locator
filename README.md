@@ -81,8 +81,7 @@ Open your browser at [http://localhost:4200/](http://localhost:4200/). The backe
 
 ## Prepare for production
 
-Compiles the Angular
-Build the Angular app into the /dist folder: 
+In addition to the previous steps compile the Angular app into the /dist folder: 
 ```
 ng build --prod
 ```

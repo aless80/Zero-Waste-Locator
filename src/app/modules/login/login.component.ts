@@ -14,7 +14,7 @@ import { environment } from '../../../environments/environment';
 export class LoginComponent implements OnInit {
   public form: FormGroup;
   private subscription: Subscription;
-  public node_url:string = environment.node_protocol+'://'+environment.node_host+':'+environment.node_port+'/users/forgot_password';
+  public node_url:string = environment.node_url+'/users/forgot_password';
 
   constructor(
     private formBuilder: FormBuilder,

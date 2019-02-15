@@ -19,11 +19,5 @@ module.exports.mongoDBsecret = process.env.MONGODBsecret || 'my secret';
 /*
 // Connects to the MongoDB database collections
 if(process.env.NODE_ENV === 'production'){
-    module.exports.port = 4000;
-    module.exports.host = 'myhost.com';
-    module.exports.protocol = 'https';
-    module.exports.ngport = 4200;
-    module.exports.nghost = 'myhost.com';
-    module.exports.ngprotocol = 'https';
 }
 */

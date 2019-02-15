@@ -4,12 +4,8 @@
 
 export const environment = {
   production: false,
-  protocol: 'http',
-  host: 'localhost',
-  port: 4200,
-  node_protocol: 'http',
-  node_host: 'localhost',
-  node_port: 4000,
+  url: 'http://localhost:4200',
+  node_url: 'http://localhost:4000',
   geolocation_hourly_quota: 6,
   geolocation_daily_quota: 40,
   geolocation_quota: 150,

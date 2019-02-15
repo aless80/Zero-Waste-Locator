@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
   // Backend Server URI
   // Set in /backend/server.js
-  uri:string = environment.node_protocol+'://'+environment.node_host+':'+environment.node_port;
+  uri:string = environment.node_url;
 
   // The name of your MongoDB database collection.
   collection:string = "users";
