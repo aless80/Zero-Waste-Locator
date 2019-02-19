@@ -52,15 +52,6 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve Angular
-if (process.env.NODE_ENV == 'production') {
-  app.use(express.static("../dist/"));
-  /*app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html')); 
-  });
-  */
-}
-
 //console.log the method and url
 app.use(function logger (req, res, next) {
   console.log(req.method, req.url)  
@@ -70,6 +61,16 @@ app.use(function logger (req, res, next) {
 // Use routes
 app.use('/', users);
 app.use('/', storeroutes)
+
+// Serve Angular's static assets
+if (process.env.NODE_ENV == 'production') {
+  // Set static folder
+  app.use(express.static("../dist/"));
+  // Any request that is not the /users/ or /stores/ above goes to Angular client
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../dist','index.html')); 
+  });
+}
 
 // Establishes which port the backend runs on.
 app.listen(config.port, () => {
