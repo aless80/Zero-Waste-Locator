@@ -13,6 +13,8 @@ export interface Store {
   username: string;
   rating: {
     total: number,
-    count: number
+    count: number,
+    raters: string[],
+    rates: number[]
   }
 }

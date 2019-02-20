@@ -64,7 +64,6 @@ export class FormComponent implements OnChanges {
   ///Handling the new store type checkbox
   //User clicks on text of new type
   clickNewtypeText(event: any){
-    //console.log('clickNewtypeText',event)
     //If the user clicks on the default placeholder for the new type, edit it
     if (this.authService.isTokenExp()) return
     if (this.newType==FormComponent.NEWTYPE_PLACEHOLDER)
@@ -136,8 +135,14 @@ export class FormComponent implements OnChanges {
     this.checked_newType = false
     //Update formResult.rating with user_rating
     if (this.user_rating !== undefined) {
+      if(typeof this.formResult.rating.count == 'undefined') {
+        this.formResult.rating.count = 0;
+        this.formResult.rating.total = 0;
+      }
       this.formResult.rating.total += this.user_rating;
-      this.formResult.rating.count += 1
+      this.formResult.rating.count += 1;
+      this.formResult.rating.raters.push(this.authService.getLoggedUsername());
+      this.formResult.rating.rates.push(this.user_rating);
     }    
     //Let Map parent save the form to DB
     this.toMapService.sendFormSubmit(null)

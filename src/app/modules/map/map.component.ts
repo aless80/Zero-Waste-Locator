@@ -85,7 +85,7 @@ export class MapComponent implements OnInit {
       descr: "This is just an example to populate the form component",
       types: ["Charity shop"],
       username: "aless80",
-      rating: {total: 10, count: 3}
+      rating: {total: 10, count: 3, raters:['aless80']}
     };*/
     //Load stores
     this.showAllStores();

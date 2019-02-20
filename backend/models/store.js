@@ -16,7 +16,9 @@ let StoreSchema = new Schema({
     username: {type: String, default: 'admin'},
     rating: {
         total: {type: Number, default: 0},
-        count: {type: Number, default: 0}
+        count: {type: Number, default: 0},
+        raters: {type: [String], default: ''},
+        rates: {type: [Number], default: 0}
       }
 });
 

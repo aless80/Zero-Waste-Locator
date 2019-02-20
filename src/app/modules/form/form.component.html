@@ -39,19 +39,16 @@
           <div class="col-md-2 mb-3">
             <label for="username">Added by:</label>
             <div class="input-group">
-              <input class="form-control" [(ngModel)]="formResult.username" name="username" placeholder="Username" required="" type="text">
+              <input class="form-control" [(ngModel)]="formResult.username" name="username" placeholder="Username" required="" type="text" readonly>
             </div>
           </div>
           <div class="col-md-3 mb-3">
             <label for="googlemaps">Link to Google Maps 
-              <!--<span class="text-muted">(Optional)</span>-->
             </label>
             <div class="input-group">
               <div class="input-group-append">
                 <button type="submit" class="btn btn-dark" (click)="goToGoogleMaps($event)">Go to Google Maps</button>
               </div>
-              <!--<input class="form-control" [(ngModel)]="formResult.url" name="url" placeholder="Url to Google Maps" type="text">
-                -->
             </div>
           </div>
           <div class="col-md-4 mb-3">
