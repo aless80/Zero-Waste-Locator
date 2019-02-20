@@ -73,18 +73,16 @@ export class FormComponent implements OnChanges {
   }
   //Edit the new type
   editNewStoreTypeInput(event: KeyboardEvent) {
-    //console.log('editNewStoreTypeInput',event)
+    //Remove previously inserted type
+    this.removeFromTypesArray(this.newType);
     //Show the text input with the previous new type or empty if none
     this.show_newtype_editor = !this.show_newtype_editor;
     this.newType = '';
-    //Remove previously inserted type
-    this.removeFromTypesArray(this.newType);
     //Hide the "Edit" text
     this.hide_edit = true;
   }
   //User clicks on "Add" or press enter to confirm the new type
   confirmNewType(value: string, event:KeyboardEvent) {
-    //console.log("confirmNewType", event.type,  "value=-", value,  event);
     //Behavior depends on whether there is any text in the input box
     if (value) {
       //Hide new type editor
