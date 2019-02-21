@@ -139,8 +139,6 @@ export class FormComponent implements OnChanges {
       }
       this.formResult.rating.total += this.user_rating;
       this.formResult.rating.count += 1;
-      this.formResult.rating.raters.push(this.authService.getLoggedUsername());
-      this.formResult.rating.rates.push(this.user_rating);
     }    
     //Let Map parent save the form to DB
     this.toMapService.sendFormSubmit(null)

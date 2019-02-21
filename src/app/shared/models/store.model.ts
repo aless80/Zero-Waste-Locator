@@ -14,7 +14,5 @@ export interface Store {
   rating: {
     total: number,
     count: number,
-    raters: string[],
-    rates: number[]
   }
 }

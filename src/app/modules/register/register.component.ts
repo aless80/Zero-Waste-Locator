@@ -16,18 +16,19 @@ export class RegisterComponent implements OnInit {
   subscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder,
+    //private formBuilder: FormBuilder,
     private validateService:ValidateService, 
     private authService:AuthService,
     private router:Router,
     private alertService: AlertService
   ) {
-    this.form = formBuilder.group({
+    /*this.form = formBuilder.group({
       username: 'user',
       name: 'user',
       email: 'defaul@email.com',
       password: '',
     });
+    */
   }
 
   //Unsubscribe

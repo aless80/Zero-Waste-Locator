@@ -51,9 +51,7 @@ export class StoreService {
       username: store.username,
       rating: {
         total: store.rating.total,
-        count: store.rating.count,
-        raters: store.rating.raters,
-        rates: store.rating.rates
+        count: store.rating.count
       }
     };
     return this.http.post(`${this.uri}/${this.collection}/update/${store._id}`, newstore);
@@ -101,9 +99,7 @@ export class StoreService {
       username: "",
       rating: {
         total: undefined,
-        count: undefined,
-        raters: [],
-        rates: []
+        count: undefined
       }
     };
     for (var i = 0; i < result.address_components.length; i++) {
@@ -144,9 +140,7 @@ export class StoreService {
       username: "", 
       rating: {
         total: undefined,
-        count: undefined,
-        raters: [],
-        rates: []
+        count: undefined
       }
     };
     return store;
