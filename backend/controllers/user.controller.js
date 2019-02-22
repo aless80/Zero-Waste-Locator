@@ -286,7 +286,6 @@ exports.rating = (req, res) => {
       return res.json({ success: false, msg: "Username " + username + " does not exist" });
     }
     // Get the index position of the user's rating on the store
-    let ratedStoreId = req.body.ratedStoreId
     var o = {}; 
     o.scope = {   //make variable available in map (and reduce, finalize)
       "ratedStoreId": req.body.ratedStoreId
@@ -298,6 +297,7 @@ exports.rating = (req, res) => {
     o.query = { "username": req.body.username, "ratedStoreId": req.body.ratedStoreId};
     o.out = { "inline": 1 };
     var msg;
+    var old_user_rating = 0;
     User.mapReduce(o, (err, model) => {
       if(err) throw err;
       if (model.results.length == 0) {
@@ -308,11 +308,27 @@ exports.rating = (req, res) => {
       } else {
         //Edit existing rating
         let position = model.results[0]['value']['position'];
+        old_user_rating = user.rating[position];
         user.rating[position] = req.body.rating;
         //Notify Schema that array has been modified
         user.markModified('rating') 
         msg = "User's rating on store " + req.body.ratedStoreId + " updated";
       }
+      // Update global rating on store
+      Store.findById(req.body.ratedStoreId, (err, store) => {
+        if (!store) {
+          res.json(err);
+        } else {
+          store.rating.total = store.rating.total + req.body.rating - old_user_rating;
+          if (old_user_rating == 0) store.rating.count = store.rating.count + 1;
+          store.save()
+            .then(console.log('Store update Complete'))
+            .catch(err => {
+              res.status(400).send('Store update failed\n' + err);
+            });
+        }
+      });
+      // Save the user with the new rating
       user.save((err, user) => {
         if (err) {
           res.json({ success: false, msg: msg });

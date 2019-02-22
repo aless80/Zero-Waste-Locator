@@ -22,13 +22,13 @@
     [rate]="rating.total/rating.count" 
     (hover)="hovered=$event" 
     (leave)="hovered=0" 
-    [readonly]="readonly" 
+    [readonly]="!(!this.authService.isTokenExp() && this.storeId)" 
     max="5">
   </ngb-rating>
   
   
-  <b *ngIf="rating.count==1; else goTemplate">(1 rating of {{rating.total}})</b>
+  <b *ngIf="rating.count==1; else goTemplate">({{rating.total}} stars, 1 rating)</b>
   <ng-template #goTemplate>
-    <b>({{rating.count}} ratings with average {{rating.total/rating.count | number : '1.1-1'}})</b>
+    <b>({{rating.total/rating.count | number : '1.1-1'}} stars, {{rating.count}} ratings)</b>
   </ng-template>
 </p>

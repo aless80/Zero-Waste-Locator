@@ -9,7 +9,7 @@ router.get('/stores/', controller.findAll);
 router.get('/stores/get/:id', controller.findOne);
 
 // Create a new store
-router.post('/stores/add', controller.create);
+router.post('/stores/add', controller.add);
 
 // Deletes a single store by _id.
 router.get('/stores/delete/:id', controller.delete);

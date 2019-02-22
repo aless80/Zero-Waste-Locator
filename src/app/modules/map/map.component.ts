@@ -126,7 +126,7 @@ export class MapComponent implements OnInit {
           position,
           "http://maps.google.com/mapfiles/kml/pal3/icon28.png"
         );
-        this.map.setZoom(12);
+        this.map.setZoom(13);
       });
     } else {
       alert("Geolocation is not supported by this browser.");
@@ -286,7 +286,7 @@ export class MapComponent implements OnInit {
     } else {
       this.storeService.addStore(this.formResult)
         .subscribe(
-            res => this.afterSaving(),
+            store => this.afterSaving(store),
             err => this.error(err, 2500)
         );
     }
@@ -316,17 +316,7 @@ export class MapComponent implements OnInit {
     if (this.formResult._id != undefined) {
       this.storeService.updateStore(this.formResult)
         .subscribe(
-            res => {
-              //Close search marker
-              this.removeSearchMarkers(); //not sure it is needed 
-              //Remove the searched location searchResult
-              this.searchResult = undefined;
-              //Refresh distinct types
-              this.loadDistinctTypes();
-              //Refresh Filter tab: refresh stores and current types
-              this.searchType(this.storetypes)
-              this.alertService.success("Store updated in database", 2500)
-            },
+            store => this.afterUpdatingStore,
             err => this.alertService.error(err, 2500)
         );
 
@@ -334,13 +324,28 @@ export class MapComponent implements OnInit {
       //Handle adding a new searched store
       this.storeService.addStore(this.formResult)
         .subscribe(          
-            res => this.afterSavingNewStore(),
+            store => this.afterSavingNewStore(store),
             err => this.alertService.error(err, 2500)
         );
     }
   }
 
-  afterSavingNewStore(){
+  //
+  afterUpdatingStore(storeobj) {
+    //Close search marker
+    this.removeSearchMarkers(); //not sure it is needed 
+    //Remove the searched location searchResult
+    this.searchResult = undefined;
+    //Refresh distinct types (usefule when updating)
+    this.loadDistinctTypes();
+    //Refresh Filter tab: refresh stores and current types
+    this.searchType(this.storetypes)
+    //Show message
+    this.alertService.success("Store updated in database", 2500)
+  }
+
+  //Yes, different than afterUpdatingStore
+  afterSavingNewStore(storeobj){
     //Close search marker
     this.removeSearchMarkers();
     //Remove the searched location searchResult
@@ -349,10 +354,12 @@ export class MapComponent implements OnInit {
     var callback = () => {
       //After stores have been loaded, open the store saved last
       this.openInfoWindow(this.markers.length-1)
+      //Refresh Filter tab: refresh stores and current types
+      //this.searchType(this.storetypes)
       //Show message
       this.alertService.success("Store saved in database", 2500)
-      //Refresh Filter tab: refresh stores and current types
-      this.searchType(this.storetypes)
+      //Refresh form to allow rating (useful when saving)
+      this.formResult = storeobj;
     }
     //Reload stores from DB
     this.showAllStores(callback);    

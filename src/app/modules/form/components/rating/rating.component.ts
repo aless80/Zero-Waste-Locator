@@ -13,21 +13,21 @@ export class RatingComponent {
   constructor(
     private authService: AuthService,
     private rateService: RateService) { }
+
   @Input() rating;
   @Input() user_rating: number;
-  @Input() storeId: string
+  @Input() storeId: string = '';
   @Output() user_ratingChange = new EventEmitter<string>();
   
   hovered = 0;
-  readonly = this.authService.isTokenExp();
-
+  
   setRating(value) {
-    if (!this.readonly) {
-      if (this.user_rating == value) return
-      this.user_rating = value;
-      this.user_ratingChange.emit(value);
-      this.storeRating(value)
-    }
+    if (this.authService.isTokenExp() || this.storeId == '' || this.user_rating == value) return
+    //Send change in rating to form component. It will be stored on Save
+    this.user_rating = value;
+    this.user_ratingChange.emit(value);
+    //Store rating in user's DB
+    this.storeRating(value)
   }
 
   storeRating(value) {

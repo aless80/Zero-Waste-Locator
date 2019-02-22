@@ -23,15 +23,16 @@ exports.findOne = (req, res) => {
 }
 
 //Create new store
-exports.create = (req, res) => {
+exports.add = (req, res) => {
   let store = new Store(req.body);
     store.save()
-  .then(store => {
-    res.status(200).json('Document Added Successfully');
-      })
-      .catch(err => {
-        res.status(400).send('Failed to create new record\n' + err);
-      });
+    .then(store => {
+      //res.status(200).json('Document Added Successfully');
+      res.status(200).json(store)
+    })
+    .catch(err => {
+      res.status(400).send('Failed to create new record\n' + err);
+    });
 }
 
 // Delete a store with the specified id in the request
@@ -63,7 +64,8 @@ exports.update = (req, res) => {
       store.rating = req.body.rating;
       store.save()
         .then(store => {
-          res.json('Update Complete');
+          //res.status(200).json('Update Complete');
+          res.status(200).json(store);
         }).catch(err => {
           res.status(400).send('Update failed\n' + err);
         });
@@ -82,7 +84,7 @@ exports.fetchfield = (req, res) => {
     query[req.params.field] = { $in: req.body };
   }
   Store.find(query)
-  .exec((err, results) => {
+    .exec((err, results) => {
       if (err) {
       res.status(400).send('Failed to fetch documents\n' + err);
     } else {
@@ -95,7 +97,7 @@ exports.fetchfield = (req, res) => {
 //It also works with "types" files, which is an array
 exports.distinct = (req, res) => {
   Store.distinct(req.params.field)
-  .exec((err, results) => {
+    .exec((err, results) => {
     if (err) {
       res.status(400).send('Failed to fetch distinct fields\n' + err);
     } else {
