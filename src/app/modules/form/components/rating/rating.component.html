@@ -27,7 +27,7 @@
   </ngb-rating>
   
   
-  <b *ngIf="rating.count==1; else goTemplate">({{rating.total}} stars, 1 rating)</b>
+  <b *ngIf="rating.count<2; else goTemplate">({{rating.total}} stars, {{rating.count}} rating)</b>
   <ng-template #goTemplate>
     <b>({{rating.total/rating.count | number : '1.1-1'}} stars, {{rating.count}} ratings)</b>
   </ng-template>

@@ -60,20 +60,15 @@ module.exports.getUserById = function(id, callback){
 }
 
 module.exports.getUserByUsername = function(username, callback){
-  const query = {username: username};
-  User.findOne(query, callback);
-}
-/*
-module.exports.getUserByUsername = function(username, errmsg, callback){
   const query = { username: username };
   User.findOne(query, (err, user) => {
     if (err) throw err;
     if (!user) {
-      return res.json({ success: false, msg: "Username does not exist" });
+      return res.json({ success: false, msg: "Username " + username + "does not exist" });
     } 
-    callback()
+    callback(user)
   });
-}*/
+}
 
 module.exports.getUserByEmail = function(email, callback){
   const query = {email: email};

@@ -39,7 +39,7 @@
           <div class="col-md-2 mb-3">
             <label for="username">Added by:</label>
             <div class="input-group">
-              <input class="form-control" [(ngModel)]="formResult.username" name="username" placeholder="Username" required="" type="text" readonly>
+              <input class="form-control" [ngModel]="formResult._id ? formResult.username : ''" (ngModel)="formResult.username" name="username" placeholder="" required="" type="text" readonly>
             </div>
           </div>
           <div class="col-md-3 mb-3">

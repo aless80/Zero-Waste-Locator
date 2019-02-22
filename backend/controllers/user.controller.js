@@ -56,11 +56,7 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
   // Check if username already exists
   const username = req.body.username;
-  User.getUserByUsername(username, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "Username " + username + " does not exist" });
-    } 
+  const callback = (user) => {
     //Cannot use spread operator/deep cloning
     var userobj = {};
     userobj.id = user.id;
@@ -77,7 +73,8 @@ exports.update = (req, res) => {
         res.json({ success: true, msg: "User updated" });
       }
     });
-  });
+  }
+  User.getUserByUsername(username, callback);
 };
 
 exports.register = (req, res, next) => {
@@ -133,11 +130,7 @@ exports.register = (req, res, next) => {
 exports.authenticate = (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-  User.getUserByUsername(username, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "Username " + username + " does not exist" });
-    }
+  const callback = (user) => {
     User.comparePassword(password, user.password, (err, isMatch) => {
       if (err) throw err;
       if (isMatch) {
@@ -160,7 +153,8 @@ exports.authenticate = (req, res, next) => {
         return res.json({ success: false, msg: "Wrong password" });
       }
     });
-  });
+  }
+  User.getUserByUsername(username, callback);
 };
 
 exports.profile = (req, res, next) => {
@@ -170,11 +164,7 @@ exports.profile = (req, res, next) => {
 //Add the date and time of a new geolocation search carried out by a user
 exports.logSearch = (req, res) => {
   var username = req.body.username;
-  User.getUserByUsername(username, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "Username " + username + " does not exist" });
-    } 
+  const callback = (user) => {
     const query = { username: username };
     User.updateOne(
       query,
@@ -195,17 +185,14 @@ exports.logSearch = (req, res) => {
         }
       }
     );
-    });
-  };
+    }
+  User.getUserByUsername(username, callback);
+};
   
 //Return how often the user geolocation searches
 exports.searchstats = (req, res) => {
   var username = req.body.username;
-  User.getUserByUsername(username, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "Username " + username + " does not exist" });
-    }
+  const callback = (user) => {
     //Query how many searches the user did in some periods (1h, ..)
     let now = new Date();
     let onehourago = new Date(now.getTime() - 1000 * 3600 * 1);
@@ -259,7 +246,8 @@ exports.searchstats = (req, res) => {
         data: data[0]
       });
     });
-  });
+  }
+  User.getUserByUsername(username, callback);
 };
 
 // Delete a store with the specified id in the request
@@ -280,11 +268,7 @@ exports.delete = (req, res) => {
 
 exports.rating = (req, res) => {
   const username = req.body.username;
-  User.getUserByUsername(username, (err, user) => {
-    if (err) throw err;
-    if (!user) {
-      return res.json({ success: false, msg: "Username " + username + " does not exist" });
-    }
+  const callback = (user) => {  
     // Get the index position of the user's rating on the store
     var o = {}; 
     o.scope = {   //make variable available in map (and reduce, finalize)
@@ -337,7 +321,8 @@ exports.rating = (req, res) => {
         }
       });
     });  
-  });
+  };
+  User.getUserByUsername(username, callback);  
 }
 
 // Forgot password functionality
