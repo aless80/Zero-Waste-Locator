@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { MapComponent } from './modules/map/map.component';
 import { FormComponent } from './modules/form/form.component';
 import { StoreService } from './shared/services/store.service';
+import { RateService } from './shared/services/rate.service';
 //import { SaveComponent } from './modules/map/components/save/save.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AlertComponent } from './shared/alert/alert.component';
@@ -75,6 +76,7 @@ export function tokenGetter() {
   ],
   providers: [
     StoreService,
+    RateService,
     AlertService
   ],
   bootstrap: [AppComponent]

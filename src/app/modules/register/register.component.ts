@@ -3,7 +3,7 @@ import { ValidateService} from '../../shared/services/validate.service';
 import { AuthService} from '../../shared/services/auth.service';
 import { AlertService } from "../../shared/services/alert.service";
 import { Router } from '@angular/router';
-import { FormGroup,FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs'; //to unsubscribe
 
 @Component({
@@ -16,19 +16,18 @@ export class RegisterComponent implements OnInit {
   subscription: Subscription;
 
   constructor(
-    //private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, //FormBuilder is necessary otherwise error in browser
     private validateService:ValidateService, 
     private authService:AuthService,
     private router:Router,
     private alertService: AlertService
   ) {
-    /*this.form = formBuilder.group({
+    this.form = formBuilder.group({
       username: 'user',
       name: 'user',
       email: 'defaul@email.com',
       password: '',
     });
-    */
   }
 
   //Unsubscribe

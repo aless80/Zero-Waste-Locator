@@ -14,6 +14,7 @@ import { AuthService } from '../../shared/services/auth.service';
 export class FormComponent implements OnChanges {
   @Input() formResult: Store;
   @Input() storetypes: string[];
+  @Input() storeId: string;
   @Output() submit = new EventEmitter<boolean>();
   user_rating: number;
   

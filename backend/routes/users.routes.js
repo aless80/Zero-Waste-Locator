@@ -22,18 +22,21 @@ router.post('/users/authenticate', controller.authenticate)
 // NB: to test this use token gotten from /authenticate, and put it in headers
 router.get('/users/profile', passport.authenticate('jwt', {session: false}), controller.profile)
 
-//Log geolocation search from user
+// Log geolocation search from user
 router.post('/users/logsearch', controller.logSearch)
 
-//Log geolocation search from user
+// Log geolocation search from user
 router.post('/users/searchstats', controller.searchstats)
 
-//Forgot password functionality
+// Forgot password functionality
 router.get('/users/forgot_password', controller.render_forgot_password_template);
 router.post('/users/forgot_password', controller.forgot_password);
 
-//Reset password functionality
+// Reset password functionality
 router.get('/users/reset_password', controller.render_reset_password_template);
 router.post('/users/reset_password', controller.reset_password);
+
+// Store rating
+router.post('/users/rating', controller.rating);
 
 module.exports = router;

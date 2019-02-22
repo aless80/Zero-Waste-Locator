@@ -48,9 +48,9 @@ exports.delete = (req, res) => {
 // Update a store
 exports.update = (req, res) => {
   Store.findById(req.params.id, (err, store) => {
-      if (!store) {
-        res.json(err);
-      } else {
+    if (!store) {
+      res.json(err);
+    } else {
       store.coords = req.body.coords;
       store.address = req.body.address;
       store.street_num = req.body.street_num;
@@ -61,11 +61,12 @@ exports.update = (req, res) => {
       store.types = req.body.types;
       store.username = req.body.username;
       store.rating = req.body.rating;
-            store.save().then(store => {
-              res.json('Update Complete');
-            }).catch(err => {
-              res.status(400).send('Update failed\n' + err);
-            });
+      store.save()
+        .then(store => {
+          res.json('Update Complete');
+        }).catch(err => {
+          res.status(400).send('Update failed\n' + err);
+        });
     }
   });
 }

@@ -30,7 +30,10 @@ const UserSchema = new Schema({
   searches: {
     type: [Date], 
     requires: false,
-    default: []},
+    default: []
+  },
+  ratedStoreId: [String],
+  rating: [Number]
 });
 
 /*
@@ -60,6 +63,17 @@ module.exports.getUserByUsername = function(username, callback){
   const query = {username: username};
   User.findOne(query, callback);
 }
+/*
+module.exports.getUserByUsername = function(username, errmsg, callback){
+  const query = { username: username };
+  User.findOne(query, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      return res.json({ success: false, msg: "Username does not exist" });
+    } 
+    callback()
+  });
+}*/
 
 module.exports.getUserByEmail = function(email, callback){
   const query = {email: email};

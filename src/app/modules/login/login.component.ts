@@ -17,15 +17,15 @@ export class LoginComponent implements OnInit {
   public node_url:string = environment.node_url+'/users/forgot_password';
 
   constructor(
-    //private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, //FormBuilder is necessary otherwise error in browser
     private authService:AuthService,
     private router:Router,
     private alertService: AlertService,
   ) {
-    /*this.form = formBuilder.group({
+    this.form = formBuilder.group({
       username: '',
       password: '',
-    });*/
+    });
    }
 
   //Unsubscribe

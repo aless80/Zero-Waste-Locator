@@ -6,9 +6,9 @@ export const environment = {
   production: false,
   url: 'http://localhost:4200',
   node_url: 'http://localhost:4000',
-  geolocation_hourly_quota: 666,
-  geolocation_daily_quota: 6460,
-  geolocation_quota: 6150,
+  geolocation_hourly_quota: 6,
+  geolocation_daily_quota: 40,
+  geolocation_quota: 150,
 };
 
 /*

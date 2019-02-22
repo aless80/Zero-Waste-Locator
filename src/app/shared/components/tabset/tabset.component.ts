@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class TabsetComponent implements OnDestroy {
   @Input() storetypes: string[];  
   @Input() formResult: Store;
+  @Input() storeId: string;
   subscription: Subscription;
 
   constructor(private toMapService: ToMapService) { }

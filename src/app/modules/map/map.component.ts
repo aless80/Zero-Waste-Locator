@@ -32,7 +32,8 @@ export class MapComponent implements OnInit {
   formResult: Store;    //Location of the searched location or clicked marker
   searchResult: Store;  //The searched location
   storetypes: string[]; //All types of store present in DB
-  
+  storeId: string;      //Reference to the store ID. used for the rating component
+
   //Message component
   //msgText: string = "";
 
@@ -163,6 +164,7 @@ export class MapComponent implements OnInit {
     //Pass data to form component and set marker
     store.username = JSON.parse(localStorage.getItem('user')).username
     this.formResult = store;
+    this.storeId = store._id;
     //Handle search marker
     this.removeSearchMarkers();
     this.setMarker(store, undefined, "Search result");
@@ -219,6 +221,7 @@ export class MapComponent implements OnInit {
       this.infowindow.open(this.map, marker);
       this.selectedMarkerIndex = this.markers.indexOf(marker);
       this.formResult = store;
+      this.storeId = store._id;
     });
     //Push marker to markers
     this.markers.push(marker);
@@ -239,6 +242,7 @@ export class MapComponent implements OnInit {
   removeMarker(_id) {
     //Close the form
     this.formResult = undefined;
+    this.storeId = undefined;
     //If search marker, remove it and return
     if (this.markers[this.selectedMarkerIndex].title == 'Search result') {
       this.removeSearchMarkers();
@@ -329,7 +333,7 @@ export class MapComponent implements OnInit {
     } else {
       //Handle adding a new searched store
       this.storeService.addStore(this.formResult)
-        .subscribe(
+        .subscribe(          
             res => this.afterSavingNewStore(),
             err => this.alertService.error(err, 2500)
         );
