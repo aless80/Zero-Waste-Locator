@@ -38,15 +38,17 @@ export class FormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     //console.log("form - ngOnChanges", changes);
     //Uncheck new type cause there is a new form
-    this.checked_newType = false
+    this.checked_newType = false;
+    this.user_rating = undefined;
+    this.user_rating = undefined;
   }
 
-  ///Handling the store types checkboxes
-  //Check if store is of a certain store type
+  /// Handling the store types checkboxes
+  // Check if store is of a certain store type
   hasType(type: string){
     return this.formResult.types.includes(type)
   } 
-  //Check/uncheck new type
+  // Check/uncheck new type
   toggleType(event: any){
     if (event.target.checked)
       this.formResult.types.push(event.target.name)
@@ -62,8 +64,8 @@ export class FormComponent implements OnChanges {
         this.formResult.types.splice(ind,1);
   }
   
-  ///Handling the new store type checkbox
-  //User clicks on text of new type
+  /// Handling the new store type checkbox
+  // User clicks on text of new type
   clickNewtypeText(event: any){
     //If the user clicks on the default placeholder for the new type, edit it
     if (this.authService.isTokenExp()) return
@@ -72,7 +74,7 @@ export class FormComponent implements OnChanges {
     if (event.target == 'input')
       this.checked_newType = event.target.checked;
   }
-  //Edit the new type
+  // Edit the new type
   editNewStoreTypeInput(event: KeyboardEvent) {
     //Remove previously inserted type
     this.removeFromTypesArray(this.newType);
@@ -82,7 +84,7 @@ export class FormComponent implements OnChanges {
     //Hide the "Edit" text
     this.hide_edit = true;
   }
-  //User clicks on "Add" or press enter to confirm the new type
+  // User clicks on "Add" or press enter to confirm the new type
   confirmNewType(value: string, event:KeyboardEvent) {
     //Behavior depends on whether there is any text in the input box
     if (value) {
@@ -109,7 +111,7 @@ export class FormComponent implements OnChanges {
     }
   }
 
-
+  // Callback for links to google maps
   goToGoogleMaps(event: KeyboardEvent) {
     //console.log('goToGoogleMaps', event.type, event);
     if (event.type != "click") return;

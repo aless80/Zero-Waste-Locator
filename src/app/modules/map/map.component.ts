@@ -34,9 +34,6 @@ export class MapComponent implements OnInit {
   storetypes: string[]; //All types of store present in DB
   storeId: string;      //Reference to the store ID. used for the rating component
 
-  //Message component
-  //msgText: string = "";
-
   constructor(
     private storeService: StoreService,
     private alertService: AlertService,
@@ -117,8 +114,8 @@ export class MapComponent implements OnInit {
       this.storeListSub.unsubscribe();
     }
   }
-  ///Get position of client
-  //https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
+  /// Get position of client
+  // https://medium.com/@balramchavan/display-and-track-users-current-location-using-google-map-geolocation-in-angular-5-c259ec801d58
   findMe() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -159,7 +156,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  ///Handle markers of stores from geocoding search or from DB
+  // Helper method. Handle store markers from geocoding search or DB to set a marker on map
   process_results(store) {
     //Pass data to form component and set marker
     store.username = JSON.parse(localStorage.getItem('user')).username
@@ -172,7 +169,7 @@ export class MapComponent implements OnInit {
       new google.maps.LatLng(store.coords[0], store.coords[1])
     );
   }
-  //Create marker with InfoWindow. Push marker to this.markers
+  // Create marker with InfoWindow. Push marker to this.markers
   setMarker(store, icon?: string, title?: string) {
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(
@@ -229,16 +226,16 @@ export class MapComponent implements OnInit {
     //Close InfoWindow
     this.hideInfoWindow();
   }
-  //User closes a marker's InfoWindow
+  // User closes a marker's InfoWindow
   hideInfoWindow() {
     this.infowindow.close();
   }
-  //Opens a marker's InfoWindow
+  // Opens a marker's InfoWindow
   openInfoWindow(marker_ind: number){
     google.maps.event.trigger(this.markers[marker_ind], 'click');
   }
-  //User clicked on "Remove" in marker's InfoWindow. 
-  //Delete from map and from storage, if applicable
+  // User clicked on "Remove" in marker's InfoWindow. 
+  // Delete from map and from storage, if applicable
   removeMarker(_id) {
     //Close the form
     this.formResult = undefined;
@@ -266,51 +263,9 @@ export class MapComponent implements OnInit {
     } else console.log('No markers to remove')
   }
   
-    
-  ///Process emitters: OBSOLETE
-  /*//Get emitter to save form
-  getSaveEmitter(event:KeyboardEvent){
-    if (event == undefined) return
-    console.log('getSaveEmitter:',event.type)
-    //Handle Update and Save
-    if (this.formResult._id != undefined) {
-      this.storeService.updateStore(this.formResult)
-        .subscribe(
-            res => {
-              //Close search marker
-              this.removeSearchMarkers(); //not sure it is needed 
-              this.alertService.success("Store updated in database",2500)
-            },
-            err => this.error(err, 2500)
-        );
-    } else {
-      this.storeService.addStore(this.formResult)
-        .subscribe(
-            store => this.afterSaving(store),
-            err => this.error(err, 2500)
-        );
-    }
-  }
-  //OBSOLETE Get emitter to search on types
-  getEventToggleEmitter(event:any){
-    if (event == undefined) return
-    //console.log('getEventToggleEmitter:',event)
-    if (event.checked) {
-      this.searchtypes.push(event.name);
-    } else if (!event.checked) {
-      this.searchtypes.splice(this.searchtypes.indexOf(event.name), 1);
-    }    
-    //Query DB, plot all stores
-    this.fetchField((data: Store[]) => {
-      //Delete all markers
-      this.deleteAllMarkers()
-      console.log(data)
-      this.updateMap(data);
-    })
-  }*/
-
-  ///Communication from family components via service
-  //User clicked on save or update button in the form
+  
+  /// Communication from family components via service
+  // User clicked on save or update button in the form
   save(){
     //Handle Update and Save
     if (this.formResult._id != undefined) {
@@ -330,7 +285,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  //
+  // Yes, different than afterSavingNewStore
   afterUpdatingStore(storeobj) {
     //Close search marker
     this.removeSearchMarkers(); //not sure it is needed 
@@ -344,7 +299,7 @@ export class MapComponent implements OnInit {
     this.alertService.success("Store updated in database", 2500)
   }
 
-  //Yes, different than afterUpdatingStore
+  // Yes, different than afterUpdatingStore
   afterSavingNewStore(storeobj){
     //Close search marker
     this.removeSearchMarkers();
@@ -365,7 +320,7 @@ export class MapComponent implements OnInit {
     this.showAllStores(callback);    
   }
   
-  //Get emitter to search on types
+  // Get emitter to search on types
   searchType(array: string[]){
     //console.log('map searchType:',array)
     //Query DB, plot all stores
@@ -376,35 +331,9 @@ export class MapComponent implements OnInit {
       this.updateMap(data);
     })
   }
+
   
-  /*Other implementation of tabs
-  searchType(obj: any){
-    if (obj == undefined) return
-    console.log('map searchType obj:',obj)
-    if (obj.name == "*") {
-      if (obj.checked) {
-        this.searchtypes = ["*"];
-      } else {
-        this.searchtypes = obj.name;
-      }
-    } else {
-      if (obj.checked) {
-        this.searchtypes.push(obj.name);
-      } else if (!obj.checked) {
-        this.searchtypes.splice(this.searchtypes.indexOf(obj.name), 1);
-      }
-    }    
-    //Query DB, plot all stores
-    this.fetchField('types', this.searchtypes, (data: Store[]) => {
-      //Delete all markers
-      this.deleteAllMarkers()
-      console.log('map searchType data:',data)
-      this.updateMap(data);
-    })
-  }
-  */
-  
-  ///Methods using API calls through service
+  /// Methods using API calls through service
   // Fetch all documents.
   showAllStores(callback?:Function) {
     //Delete all markers
@@ -419,6 +348,15 @@ export class MapComponent implements OnInit {
         err => console.error(err)
     );
   }
+  // Helper method
+  deleteAllMarkers() {
+    // Sets the map on all markers in the array
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+    this.markers = [];
+  }
+
   // Get all store types present in all documents in DB
   loadDistinctTypes() {
     this.storeService.getDistinctValues('types')
@@ -449,7 +387,7 @@ export class MapComponent implements OnInit {
   }
 
 
-  //Plot the given Store data
+  // Plot the given Store data
   updateMap(data:Store[]) {
     data.forEach(element => {
       this.setMarker(
@@ -460,27 +398,12 @@ export class MapComponent implements OnInit {
     });
   }
 
-  ///Messages
+  /// Messages
   showAlert(text: string): void {
-    /*if (this.msgText != "") return;
-    this.msgText = text;
-    setTimeout(() => {
-      this.msgText = "";
-    }, 2000);*/
     this.alertService.warn(text)
   }
-
-  //
-  deleteAllMarkers() {
-    // Sets the map on all markers in the array
-    for (var i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
-    }
-    this.markers = [];
-  }
   
-  
-  ///This is for periodic tracking. Useful for mobiles
+  /// This is for periodic tracking. Useful for mobiles
   /*trackMe() {
     if (navigator.geolocation) {
       this.isTracking = true;
@@ -510,8 +433,36 @@ export class MapComponent implements OnInit {
       this.marker.setPosition(location);
     }
   }*/
+    
+  /// Other implementation of tabs
+  /*
+  searchType(obj: any){
+    if (obj == undefined) return
+    console.log('map searchType obj:',obj)
+    if (obj.name == "*") {
+      if (obj.checked) {
+        this.searchtypes = ["*"];
+      } else {
+        this.searchtypes = obj.name;
+      }
+    } else {
+      if (obj.checked) {
+        this.searchtypes.push(obj.name);
+      } else if (!obj.checked) {
+        this.searchtypes.splice(this.searchtypes.indexOf(obj.name), 1);
+      }
+    }    
+    //Query DB, plot all stores
+    this.fetchField('types', this.searchtypes, (data: Store[]) => {
+      //Delete all markers
+      this.deleteAllMarkers()
+      console.log('map searchType data:',data)
+      this.updateMap(data);
+    })
+  }
+  */
 
-    /*Moved to geocoder component
+  /*Moved to geocoder component
   //Geocoding using in node-geocoder in backend
   geocode() {
     console.log("map geocode clicked");
