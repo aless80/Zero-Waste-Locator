@@ -1,7 +1,7 @@
 import { Component, Input, Output } from '@angular/core';
 import { EventEmitter } from "@angular/core";
-import { AuthService } from '../../../../shared/services/auth.service';
-import { RateService } from '../../../../shared/services/rate.service';
+import { AuthService } from '../../../../../../shared/services/auth.service';
+import { RateService } from '../../../../../../shared/services/rate.service';
 
 @Component({
   selector: 'app-rating',

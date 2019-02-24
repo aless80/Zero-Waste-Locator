@@ -5,4 +5,6 @@ export const environment = {
   geolocation_hourly_quota: 6,
   geolocation_daily_quota: 40,
   geolocation_quota: 150,
+  geolocation_restriction: 'NO', //Norway
+  geolocation_regionBias: 'NO' //Norway
 };

@@ -2,8 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { MapComponent } from './modules/map/map.component';
-import { FormComponent } from './modules/form/form.component';
+import { HomeComponent } from './modules/home/home.component';
+import { MapComponent } from './modules/home/components/map/map.component';
+import { FormComponent } from './modules/home/components/form/form.component';
 import { StoreService } from './shared/services/store.service';
 import { RateService } from './shared/services/rate.service';
 //import { SaveComponent } from './modules/map/components/save/save.component';
@@ -11,9 +12,9 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AlertComponent } from './shared/alert/alert.component';
 import { AlertService } from './shared/services/alert.service';
 import { TabsetComponent } from './shared/components/tabset/tabset.component';
-import { GeocoderComponent } from './modules/map/components/geocoder/geocoder.component';
-import { RatingComponent } from './modules/form/components/rating/rating.component';
-import { SearchtypesComponent } from './modules/map/components/searchtypes/searchtypes.component';
+import { GeocoderComponent } from './modules/home/components/geocoder/geocoder.component';
+import { RatingComponent } from './modules/home/components/form/components/rating/rating.component';
+import { SearchtypesComponent } from './modules/home/components/searchtypes/searchtypes.component';
 import { LoginComponent } from './modules/login/login.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { ProfileComponent } from './modules/profile/profile.component';
@@ -27,7 +28,7 @@ import { AboutComponent } from './modules/about/pages/about.component';
 import { CardComponent } from './modules/about/components/card/card.component'
 
 const appRoutes: Routes = [
-  {path: '', component: MapComponent},
+  {path: '', component: HomeComponent},
   {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
@@ -43,6 +44,7 @@ export function tokenGetter() {
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     MapComponent,
     FormComponent,
     //SaveComponent,

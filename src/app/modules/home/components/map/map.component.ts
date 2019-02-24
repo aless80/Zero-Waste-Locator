@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ViewChild } from "@angular/core";
-import { StoreService } from "../../shared/services/store.service";
-import { Store } from "../../shared/models/store.model";
+import { StoreService } from "../../../../shared/services/store.service";
+import { Store } from "../../../../shared/models/store.model";
 import { Subscription } from "rxjs"; //to unsubscribe
-import { AlertService } from "../../shared/services/alert.service";
-import { ToMapService } from '../../shared/services/to-map.service'
-import { ValidateService } from '../../shared/services/validate.service';
-import { AuthService } from '../../shared/services/auth.service';
+import { AlertService } from "../../../../shared/services/alert.service";
+import { ToMapService } from '../../../../shared/services/to-map.service'
+//import { ValidateService } from '../../../../shared/services/validate.service';
+//import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: "app-map",
@@ -25,8 +25,6 @@ export class MapComponent implements OnInit {
   //Default settings for map and search. They can be removed
   public static readonly DEFAULT_LAT = 49.935;
   public static readonly DEFAULT_LNG = 10.79;
-  componentRestrictions: string = "NO"; //Restrict search to Norway. Used in Geocoder
-  regionBias: string = "no"; //region bias to Norway
 
   //Communication between Map and Form
   formResult: Store;    //Location of the searched location or clicked marker
@@ -37,36 +35,29 @@ export class MapComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private alertService: AlertService,
-    private toMapService: ToMapService,
-    private validateService: ValidateService,
-    private authService: AuthService
-  ) {
-    toMapService.typeToggle$.subscribe(
-      obj => this.searchType(obj)        
-    );
-    toMapService.formSubmit$.subscribe(
-      obj => this.save()
-    );
-    toMapService.searchTab$.subscribe(
-      tab => {
-        //User changed tabs
-        if (tab == 'search') {
-          //If search was used, show it
-          var callback;
-          if (this.searchResult) {
-            callback = () => {
-              this.process_results(this.searchResult)
-              //Open marker's InfoWindow not working
-              this.openInfoWindow(this.markers.length-1)
-            }
-          }
-          this.showAllStores(callback);          
-        } else if (tab == 'filter') {
-          this.removeSearchMarkers();
+    //private validateService: ValidateService,
+    //private authService: AuthService,
+    private toMapService: ToMapService
+  ) {  
+      toMapService.typeToggle$.subscribe(
+        obj => this.searchType(obj)        
+      );
+      toMapService.formSubmit$.subscribe(
+        obj => this.save()
+      );
+      toMapService.searchTab$.subscribe(
+        tab => {
+          this.sendChangeTab(tab)
         }
-      }
-    );      
+      );
+      toMapService.processGeocodingResults$.subscribe(
+        store => {
+          this.searchResult = store;
+          this.process_results(store);
+        }
+      )
   }
+
   ngOnInit() {
     //Some addresses that work
     //Sylvia Mølleren: Hegdehaugsveien 12, 0167 Oslo
@@ -319,8 +310,10 @@ export class MapComponent implements OnInit {
     //Reload stores from DB
     this.showAllStores(callback);    
   }
+
   
-  // Get emitter to search on types
+  /// Get emitters
+  // Get emitter for searching on types
   searchType(array: string[]){
     //console.log('map searchType:',array)
     //Query DB, plot all stores
@@ -332,6 +325,24 @@ export class MapComponent implements OnInit {
     })
   }
 
+  // Get emitter for changing tab
+  sendChangeTab(tab: string){
+    //User changed tabs
+    if (tab == 'search') {
+    //If search was used, show it
+    var callback;
+    if (this.searchResult) {
+      callback = () => {
+        this.process_results(this.searchResult)
+        //Open marker's InfoWindow not working
+        this.openInfoWindow(this.markers.length-1)
+      }
+    }
+    this.showAllStores(callback);          
+    } else if (tab == 'filter') {
+      this.removeSearchMarkers();
+    }
+  }
   
   /// Methods using API calls through service
   // Fetch all documents.

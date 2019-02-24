@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { StoreService } from "../../../../shared/services/store.service";
-import { MapComponent } from '../../map.component'
 import { Store } from "../../../../shared/models/store.model";
 //Not sure forwaredRef is needed to inject parent (Map) in child (Geocoder) class
-import {Inject, forwardRef} from '@angular/core';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { environment } from '../../../../../environments/environment';
+import { ToMapService } from '../../../../shared/services/to-map.service'
 
 /*
 Note for myself
-Instead of injecting parent Map in child (Geocoder), the other option is to use an emitter in child
+
+I used to inject parent (Map component) to child (Geocoder) as follows: 
+ @Inject(forwardRef(() => MapComponent)) private _parent:MapComponent
+ ..
+ this._parent.process_results(store);
+ ..
+Now I use the toMapService service to let child communicate with parent.  
+Another option is to use an emitter in child
 import { EventEmitter, Output } from "@angular/core";
 ..
 export class SaveComponent implements OnInit {
@@ -38,8 +44,7 @@ export class GeocoderComponent implements OnInit {
   constructor(
     public storeService: StoreService,
     public authService: AuthService,
-    @Inject(forwardRef(
-      () => MapComponent)) private _parent:MapComponent
+    private toMapService: ToMapService
       ) { }
 
   ngOnInit() {
@@ -58,8 +63,8 @@ export class GeocoderComponent implements OnInit {
             this.allowGeocodingSearch(this.geocoding.bind(this)) //need to either bind this
           } else {
             console.log(store.length + " match"+(store.length != 1 ? 'es' : '') + ". Loading address from database", store);
-            this._parent.searchResult = store[0];
-            this._parent.process_results(store[0]);
+            //Send to Home/Map component
+            this.toMapService.processGeocodingResults(store[0])
           }
         },
         err => console.error("Search err:", err)
@@ -73,17 +78,16 @@ export class GeocoderComponent implements OnInit {
     this.geocoder.geocode(
       {
         address: this.search_string,
-        region: this._parent.regionBias,
-        componentRestrictions: { country: this._parent .componentRestrictions } 
+        region: environment.geolocation_region_bias,
+        componentRestrictions: { country: environment.geolocation_restriction } 
       },
       (results, status) => {
         console.log("Geocoding status:", status, " results:", results);
         if (status == google.maps.GeocoderStatus.OK) {
           //Transform google maps result to Store type
           var store:Store = this.storeService.result2Store(results[0]);
-          //Send to parent Map component
-          this._parent.searchResult = store;
-          this._parent.process_results(store);
+          //Send to Home/Map component
+          this.toMapService.processGeocodingResults(store)
           //Log that the user carried out a search
           this.logUserSearch();
         }
@@ -146,7 +150,7 @@ export class GeocoderComponent implements OnInit {
       }
     });
   }
-  
+  /*
   //Not used and obsolete but good stuff
   //Geocoding using in node-geocoder in backend
   node_geocode() {
@@ -164,5 +168,5 @@ export class GeocoderComponent implements OnInit {
       err => console.error("Geocoding err:", err),
       () => console.log("Completed")
     );
-  }  
+  }  */
 }
