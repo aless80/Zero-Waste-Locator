@@ -10,7 +10,7 @@ For this reason I am implementing this app where users can search and log stores
 ### Technical description
 
 This is a [MEAN](https://www.mongodb.com/) app (
-[MongoDB]](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/ ), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
+[MongoDB](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/ ), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
 
 On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and running CRUD operations. [JSON web tokens](https://jwt.io/) [JWT] handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). Of course, the app uses RxJS for asynchronous or callback-based code.  
 
