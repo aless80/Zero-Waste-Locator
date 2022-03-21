@@ -3,16 +3,15 @@
 ## What this App is about
 
 I try to live a [Zero Waste](https://www.goingzerowaste.com/zero-waste-1/) lifestyle. In brief, Zero Waste for me is about reducing consumption, in particular plastic products. 
-I moved to Oslo in Norway, I realized it takes time to learn where plastic-free products are sold. 
+I relocated to Norway, I realized it takes time to find out where plastic-free products are sold. 
 
 For this reason I am implementing this app where users can search and log stores selling Zero Waste or Less Waste products. This app uses Google Maps to search for stores, and will allow you to save them together with their products so that you or other users can look them up. 
 
 ### Technical description
 
-This is a [MEAN](https://www.mongodb.com/) app (
-[MongoDB](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/ ), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
+This is a [MEAN](https://www.mongodb.com/) app ([MongoDB](href=https://www.mongodb.com/), [Express](https://expressjs.com/), [Angular CLI 7.0.6](https://angular.io/), [Node.js](https://nodejs.org)) using the [Google Maps API](https://cloud.google.com/maps-platform/) to show store locations on an embedded Google map. 
 
-On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and running CRUD operations. [JSON web tokens](https://jwt.io/) [JWT] handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). Of course, the app uses RxJS for asynchronous or callback-based code.  
+On the back-end a server is based on Node.js/Express server. The [Mongoose ODM](https://mongoosejs.com/) is used to connect Node.js and the MongoDB database. It provides a schema based solution to organize models and run CRUD operations. [JSON web tokens](https://jwt.io/) [JWT] handle user authentication and identity management. The front-end is built with Angular-CLI 7, [Bootstrap](https://getbootstrap.com/), and [Angular Bootstrap](https://ng-bootstrap.github.io). The app uses RxJS for asynchronous or callback-based code.  
 
 Through the frontend users can search an address using Google Maps' geolocation. The results are displayed as markers on the Google map.  
 I implemented a "caching" system that checks whether the searched address is already present in the MongoDB database [DB]. This allows the app to call Google Maps less often, and to load a store/location already present in the DB.  
@@ -23,7 +22,7 @@ A form appears when you click on a marker. This form contains user editable info
 
 To use the Google Map functionality a user is required to register and login. JWT is used to transmit sensitive information (e.g. passwords, access tokens) between front-end and back-end. A password reset functionality is implemented in the back-end using [express-nodemailer](https://nodemailer.com/about/), [handlebars](https://www.npmjs.com/package/nodemailer-express-handlebars) for express and express-nodemailer, and AJAX requests.
 
-NB: This app does not use agm-core for Google Maps as described in many tutorials. IMO documentation is insufficient to extend the agm-core component and implement functionalities such as InfoWindow or callbacks from markers.
+NB: This app does not use agm-core for Google Maps as described in many tutorials. IMO at the time of writing the documentation is insufficient to extend the agm-core component and implement functionalities such as InfoWindow or callbacks from markers.
 
 ## Installation
 
